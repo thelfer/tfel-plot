@@ -62,4 +62,34 @@ set key right center
 plot cos(x), diff(cos(x),x)
 ~~~~
 
+### Importing functions from shared libraries using the `import` keyword
+
+Consider the following `C++` file, which defines the `cos_wrapper`
+function:
+
+~~~~{.cpp}
+#include<cmath>
+
+extern "C" {
+
+  double cos_wrapper(const double x){
+    return std::cos(x);
+  }
+  
+}
+~~~~
+
+This file can be used to create a shared library:
+
+~~~~{.bash}
+g++ -fPIC -DPIC cos_wrapport.cxx -o libExternalFunction.so --shared
+~~~~
+
+The `cos_wrapper` function can now be called directly from `tplot`:
+
+~~~~{.gnuplot}
+import<c> cos_wrapper(x) 'libExternalFunction.so'
+plot cos_wrapper(x)
+~~~~
+
 <!-- Local IspellDict: english -->
