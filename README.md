@@ -18,13 +18,19 @@ features:
   [`MFront` code generator](http://tfel.sourceforge.net).
 - Usage of some features introduced by the `TFEL` project such as:
 	- kriging interpolation.
-	- the ability to differentiate functions.
+	- the ability to differentiate functions using the `diff`
+      operator.
 - The ability to use `tplot` from the command line.
 - Support for themes.
 
-## Example of 
+## Examples 
+
+### The `diff` operator for function differentiation
+
+[](docs/img/diff.svg)
 
 ~~~~{.gnuplot}
+set key right center
 plot cos(x), diff(cos(x),x)
 ~~~~
 
