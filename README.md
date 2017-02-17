@@ -47,6 +47,12 @@ set ylabel "Ordinate"
 plot g(x) t "sin(2 cos<sup>2</sup>(x)+1)"
 ~~~~
 
+The same plot can also be generated directly from the command line:
+
+~~~~{.bash}
+tplot f:"sin(2*cos(x)**2+1)" -t "sin(2 cos<sup>2</sup>(x)+1)" -kh center --with-grid --upperTitle="A first example" --xlabel="Abscissa" --ylabel="Ordinate" -o example1.png
+~~~~
+
 ### The `diff` operator for function differentiation
 
 ![](docs/img/diff.png)
