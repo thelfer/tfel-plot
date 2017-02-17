@@ -1,6 +1,6 @@
-# The `tfel-graphics` project
+# The `tfel-plot` project
 
-The `tfel-graphics` project is meant to create:
+The `tfel-plot` project is meant to create:
 
 - a `C++11` library for generating `2D` plots.
 - a drop-in replacement of `gnuplot` called `tplot`.
@@ -25,7 +25,7 @@ features:
 ## Example of 
 
 ~~~~{.gnuplot}
-plot cos(x)
+plot cos(x), diff(cos(x),x)
 ~~~~
 
 <!-- Local IspellDict: english -->
