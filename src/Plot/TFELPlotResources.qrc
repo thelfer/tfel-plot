@@ -1,0 +1,8 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+   <qresource prefix="/">
+     <file alias="mfront-en.svg">images/mfront-en.svg</file>
+     <file alias="CEALogo2012.svg">images/CEALogo2012.svg</file>
+     <file alias="CEABanner2012.svg">images/CEABanner2012.svg</file>
+     <file alias="CEABanner2012-2.svg">images/CEABanner2012-2.svg</file>
+   </qresource>
+ </RCC>
