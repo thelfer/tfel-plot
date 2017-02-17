@@ -27,7 +27,7 @@ features:
 
 ### The `diff` operator for function differentiation
 
-[](docs/img/diff.svg)
+[](https://github.com/thelfer/tfel-plot/tree/master/docs/img/diff.svg)
 
 ~~~~{.gnuplot}
 set key right center
