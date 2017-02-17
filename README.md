@@ -27,7 +27,7 @@ features:
 
 ### The `diff` operator for function differentiation
 
-![](docs/img/diff.svg)
+![](docs/img/diff.png)
 
 ~~~~{.gnuplot}
 set key right center
