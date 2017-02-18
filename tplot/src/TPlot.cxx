@@ -88,8 +88,7 @@ namespace tfel
 			       "input has no curve options"));
     }
 
-    unsigned short
-    TPlot::convertToUnsignedShort(const QString& qvalue)
+    unsigned short TPlot::convertToUnsignedShort(const QString& qvalue)
     {
       const auto value = qvalue.toStdString();
       for(const auto& c : value){
@@ -107,8 +106,7 @@ namespace tfel
       return u;
     } // end of TPlot::convertToUnsignedShort
 
-    bool
-    TPlot::isUnsignedShort(const QString& qs)
+    bool TPlot::isUnsignedShort(const QString& qs)
     {
       const auto s = qs.toStdString();
       for(const auto& c : s){
@@ -118,8 +116,7 @@ namespace tfel
       }
       return true;
     } // end of TPlot::isUnsignedShort
-
-    TPlot::TPlot(const int argc,
+ TPlot::TPlot(const int argc,
 		 const char * const * const argv)
       : tfel::utilities::ArgumentParserBase<TPlot>(argc,argv),
 	g(new Graph(this)),
@@ -243,8 +240,7 @@ namespace tfel
       }
     }
 
-    void
-    TPlot::createActions(void)
+    void TPlot::createActions(void)
     {
       this->epdfa = new QAction(tr("Export to pdf"), this);
       this->epdfa->setIcon(QIcon::fromTheme("document-save-as"));
@@ -550,8 +546,7 @@ namespace tfel
 			    "widget."));
     }
 
-    void
-    TPlot::keyPressEvent(QKeyEvent *ev)
+    void TPlot::keyPressEvent(QKeyEvent *ev)
     {
       QString k = ev->text();
       if(k=="g"){
@@ -582,8 +577,7 @@ namespace tfel
       }
     }
 
-    const std::vector<std::string>
-    TPlot::tokenize(const std::string& s,
+    const std::vector<std::string> TPlot::tokenize(const std::string& s,
 		    const char c)
     {
       std::vector<std::string> res;
@@ -597,12 +591,10 @@ namespace tfel
       }
       return res;
     } // end of TPlot::tokenize
-
-    TPlot::~TPlot()
+ TPlot::~TPlot()
     {} // end of TPlot::TPlot
 
-    void
-    TPlot::registerArgumentCallBacks(void)
+    void TPlot::registerArgumentCallBacks(void)
     {
       this->registerNewCallBack("--noborder",&TPlot::treatNoBorder,
 				"don't show the graph border");
@@ -720,8 +712,7 @@ namespace tfel
       return this->goutput;
     }
 
-    void
-    TPlot::getStringFromArgs(QString& w,
+    void TPlot::getStringFromArgs(QString& w,
 			     const std::string& method,
 			     const std::string& key)
     {
@@ -749,8 +740,7 @@ namespace tfel
       return QString::fromUtf8(&o[0],o.size());
     }
 
-    double
-    TPlot::getDoubleOption()
+    double TPlot::getDoubleOption()
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::getDoubleOption: "+std::string(m))));
@@ -810,8 +800,7 @@ namespace tfel
       this->g->setTheme(thm.getTheme(this->getStringOption()),false);
     } // end of TPlot::treatTheme
 
-    void
-    TPlot::treatTitle(void)
+    void TPlot::treatTitle(void)
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatTitle: "+std::string(m))));
@@ -1077,8 +1066,7 @@ namespace tfel
       this->hasY2MaxValue = true;
     } // end of TPlot::treatY2Max
 
-    void
-    TPlot::treatUsing(void)
+    void TPlot::treatUsing(void)
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatUsing: "+std::string(m))));
@@ -1179,47 +1167,34 @@ namespace tfel
       }
     } // end of TPlot::treatUnknownArgument(void)
 
-    std::string 
-    TPlot::getVersionDescription(void) const
+    std::string TPlot::getVersionDescription(void) const
     {
       return "1.0";
     }
 
-    std::string 
-    TPlot::getUsageDescription(void) const
+    std::string TPlot::getUsageDescription(void) const
     {
-      std::string usage("Usage : ");
-      usage += this->programName;
-      usage += " [options] [files]";
-      return usage;
+      return "Usage: "+this->programName+" [options] [files]";
     }
 
-    void
-    TPlot::initialize(void)
+    void TPlot::initialize(void)
     {
-      using namespace tfel::plot;
       std::string extension;
-
       if(this->inputs.empty()){
 	return;
       }
-
       if(!this->upperTitle.isEmpty()){
 	this->g->setUpperTitle(this->upperTitle,false);
       }
-
       if(!this->downTitle.isEmpty()){
 	this->g->setDownTitle(this->downTitle,false);
       }
-
       if(!this->leftTitle.isEmpty()){
 	this->g->setLeftTitle(this->leftTitle,false);
       }
-
       if(!this->rightTitle.isEmpty()){
 	this->g->setRightTitle(this->rightTitle,false);
       }
-
       if (this->keyVerticalPosition=="top"){
 	this->g->setKeyVerticalPosition(Graph::TOP,false);
       } else if (this->keyVerticalPosition=="bottom"){
@@ -1227,7 +1202,6 @@ namespace tfel
       } else if (this->keyVerticalPosition=="center"){
 	this->g->setKeyVerticalPosition(Graph::VCENTER,false);
       }
-
       if (this->keyHorizontalPosition=="left"){
 	this->g->setKeyHorizontalPosition(Graph::LEFT,false);
       } else if (this->keyHorizontalPosition=="right"){
@@ -1235,7 +1209,6 @@ namespace tfel
       } else if (this->keyHorizontalPosition=="center"){
 	this->g->setKeyHorizontalPosition(Graph::HCENTER,false);
       }
-
       if(!this->upperLabel.isEmpty()){
 	this->g->setX2Label(this->upperLabel,false);
       } else {
@@ -1247,7 +1220,7 @@ namespace tfel
 	      assert(p2!=this->dataSources.end());
 	      if(!d.xvalues.isEmpty()){
 		if(TPlot::isUnsignedShort(d.xvalues)){
-		  unsigned short c = TPlot::convertToUnsignedShort(d.xvalues);
+		  auto c = TPlot::convertToUnsignedShort(d.xvalues);
 		  this->g->setX2Label(p2->second->getLegend(c),false);
 		}
 	      } else {
@@ -1269,7 +1242,7 @@ namespace tfel
 	      assert(p2!=this->dataSources.end());
 	      if(!d.xvalues.isEmpty()){
 		if(TPlot::isUnsignedShort(d.xvalues)){
-		  unsigned short c = TPlot::convertToUnsignedShort(d.xvalues);
+		  auto c = TPlot::convertToUnsignedShort(d.xvalues);
 		  this->g->setXLabel(p2->second->getLegend(c),false);
 		}
 	      } else {
@@ -1290,7 +1263,7 @@ namespace tfel
 	      auto p2 = this->dataSources.find(d.fileName);
 	      if(!d.yvalues.isEmpty()){
 		if(TPlot::isUnsignedShort(d.yvalues)){
-		  unsigned short c = TPlot::convertToUnsignedShort(d.yvalues);
+		  auto c = TPlot::convertToUnsignedShort(d.yvalues);
 		  this->g->setYLabel(p2->second->getLegend(c),false);
 		}
 	      } else {
@@ -1311,7 +1284,7 @@ namespace tfel
 	      auto p2 = this->dataSources.find(d.fileName);
 	      if(!d.yvalues.isEmpty()){
 		if(TPlot::isUnsignedShort(d.yvalues)){
-		  unsigned short c = TPlot::convertToUnsignedShort(d.yvalues);
+		  auto c = TPlot::convertToUnsignedShort(d.yvalues);
 		  this->g->setY2Label(p2->second->getLegend(c),false);
 		}
 	      } else {
@@ -1347,8 +1320,7 @@ namespace tfel
       this->g->replot();
     } // end of TPlot::initialize
 
-    void
-    TPlot::treatPendingInputs()
+    void TPlot::treatPendingInputs()
     {
       for(const auto& i : this->inputs){
 	if(i.is<TextDataInput>()){
@@ -1396,8 +1368,7 @@ namespace tfel
       }
     } // end of TPlot::treatPendingInputs
 
-    void
-    TPlot::treatDataInput(const TPlot::Data& d)
+    void TPlot::treatDataInput(const TPlot::Data& d)
     {
       auto p2 = this->dataSources.find(d.fileName);
       assert(p2!=this->dataSources.end());
@@ -1465,8 +1436,7 @@ namespace tfel
       this->g->addCurve(std::shared_ptr<Curve>(curve),d.axis);
     }
 
-    void
-    TPlot::treatFunctionInput(const TPlot::Function& f)
+    void TPlot::treatFunctionInput(const TPlot::Function& f)
     {
       using namespace tfel::math;
       auto ev = std::make_shared<Evaluator>(f.f.toStdString());
@@ -1487,18 +1457,15 @@ namespace tfel
       this->g->addCurve(curve,f.axis);
     } // end of TPlot::treatFunctionInput
 
-    void
-    TPlot::treatFontSize(void){
+    void TPlot::treatFontSize(void){
       this->g->setGraphFontSize(this->getDoubleOption());
     }
 
-    void
-    TPlot::treatFontFamily(void){
+    void TPlot::treatFontFamily(void){
       this->g->setGraphFontFamily(this->getStringOption());
     }
 
-    void
-    TPlot::paste()
+    void TPlot::paste()
     {
       const auto* m =  QApplication::clipboard()->mimeData();
       if(m->hasText()){
@@ -1572,8 +1539,7 @@ namespace tfel
       }
     } // end of TPlot::insertImageFromFile
 
-    void
-    TPlot::exportToPDF()
+    void TPlot::exportToPDF()
     {
       const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
 						  "",tr("Adobe Portable Document Format (*.pdf)"));
@@ -1583,8 +1549,7 @@ namespace tfel
       this->g->exportToPDF(f);
     }
 
-    void
-    TPlot::exportToSVG()
+    void TPlot::exportToSVG()
     {
       const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
 						  "",tr("Scalable Vector Plot Format (*.svg)"));
@@ -1594,8 +1559,7 @@ namespace tfel
       this->g->exportToSVG(f);
     }
 
-    void
-    TPlot::exportToPNG()
+    void TPlot::exportToPNG()
     {
       const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
 						  "",tr("Portable Network Plot Format (*.png)"));
@@ -1605,8 +1569,7 @@ namespace tfel
       this->g->exportToPNG(f);
     }
 
-    void
-    TPlot::exportToTable()
+    void TPlot::exportToTable()
     {
       const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
 						  "",tr("Text (*.txt)"));
@@ -1617,8 +1580,7 @@ namespace tfel
     }
 
 #ifdef TFEL_QT4
-    void
-    TPlot::exportToPostScript()
+    void TPlot::exportToPostScript()
     {
       const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
 						  "",tr("PostScript Format (*.ps)"));
@@ -1629,8 +1591,7 @@ namespace tfel
     }
 #endif /* TFEL_QT4 */
 
-    void
-    TPlot::print()
+    void TPlot::print()
     {
       QPrinter printer(QPrinter::HighResolution);
       QPrintDialog printDialog(&printer,this);
@@ -1639,8 +1600,7 @@ namespace tfel
       }
     }
 
-    void
-    TPlot::setRanges()
+    void TPlot::setRanges()
     {
       using namespace std;
       if(this->hasXMinValue||this->hasXMaxValue){
@@ -1689,8 +1649,7 @@ namespace tfel
       }
     } // end of TPlot::setRanges
 
-    void
-    TPlot::showGraphConfigurationDialog()
+    void TPlot::showGraphConfigurationDialog()
     {
       auto& gcd = this->g->getConfigurationDialog();
       if(!gcd.isVisible()){
@@ -1698,8 +1657,7 @@ namespace tfel
       }
     } // end of TPlot::showGraphConfigurationDialog
 
-    void
-    TPlot::selectFontDialog()
+    void TPlot::selectFontDialog()
     {
       bool ok;
       auto f  = QFontDialog::getFont(&ok,this->g->getGraphFont(),this,"Select graph font");
@@ -1708,14 +1666,12 @@ namespace tfel
       }
     } // end of TPlot::selectFontDialog
   
-    void
-    TPlot::showShell(void)
+    void TPlot::showShell(void)
     {
       this->shell->setHidden(!this->shell->isHidden());
     }
 
-    void
-    TPlot::newWindow(void)
+    void TPlot::newWindow(void)
     {
       QProcess::startDetached(this->name);
     } // end of TPlot::newWindow

@@ -106,13 +106,14 @@ percent.commands = @echo -n "\$(\$(@))\ "
 QMAKE_EXTRA_TARGETS += percent
 EOF
     qmake $am_have_qt_pro -o $am_have_qt_makefile
-    QT_CXXFLAGS=`make -f $am_have_qt_makefile CXXFLAGS INCPATH`
-    QT_LIBS=`make -f $am_have_qt_makefile LIBS`
+    QT_CXXFLAGS=`make -s -f $am_have_qt_makefile CXXFLAGS INCPATH`
+    QT_LIBS=`make -s -f $am_have_qt_makefile LIBS`
     rm $am_have_qt_pro $am_have_qt_makefile
 
     # Look for specific tools in $PATH
     QT_MOC=`which moc`
     QT_UIC=`which uic`
+    QT_RCC=`which rcc`
     QT_LRELEASE=`which lrelease`
     QT_LUPDATE=`which lupdate`
 
@@ -125,6 +126,7 @@ EOF
     QT_DIR=$QT_DIR
     QT_LIBS=$QT_LIBS
     QT_UIC=$QT_UIC
+    QT_RCC=$QT_RCC
     QT_MOC=$QT_MOC
     QT_LRELEASE=$QT_LRELEASE
     QT_LUPDATE=$QT_LUPDATE])
@@ -135,6 +137,7 @@ EOF
     QT_DIR=
     QT_LIBS=
     QT_UIC=
+    QT_RCC=
     QT_MOC=
     QT_LRELEASE=
     QT_LUPDATE=
@@ -144,6 +147,7 @@ EOF
   AC_SUBST(QT_DIR)
   AC_SUBST(QT_LIBS)
   AC_SUBST(QT_UIC)
+  AC_SUBST(QT_RCC)
   AC_SUBST(QT_MOC)
   AC_SUBST(QT_LRELEASE)
   AC_SUBST(QT_LUPDATE)

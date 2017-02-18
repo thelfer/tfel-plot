@@ -33,7 +33,7 @@ qt_sources(TFELPlot_SOURCES
   ImportTextDataDialog
   ImportLicosResultsDialog)
 
-tfel_graphics_library(TFELPlot
+tfel_plot_library(TFELPlot
   ${TFELPlot_SOURCES}
   ArrowStyle.cxx
   GraphCoordinates.cxx
@@ -77,7 +77,7 @@ qt_sources(TFELGnuplotInterpreter_SOURCES
   GnuplotInterpreter
   GraphShell)
 
-tfel_graphics_library(TFELGnuplotInterpreter
+tfel_plot_library(TFELGnuplotInterpreter
   GnuplotPlotInterpreter.cxx
   GnuplotSetInterpreter.cxx
   GnuplotUnSetInterpreter.cxx

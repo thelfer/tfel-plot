@@ -11,7 +11,7 @@ link_directories("${TFEL_LIBRARY_PATH}")
 
 qt_sources(TPlot_SOURCES 
   "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot" TPlot)
-tfel_graphics_executable(tplot
+tfel_plot_executable(tplot
   tplot.cxx
   ${TPlot_SOURCES})
 

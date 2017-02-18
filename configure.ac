@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Process this file with automake to produce Makefile.in files.
 
-AC_INIT(tfel-graphics,1.1,thomas.helfer@cea.fr)
+AC_INIT(tfel-plot,1.1,thomas.helfer@cea.fr)
 AC_CONFIG_SRCDIR([include/TFEL/Plot/Curve.hxx])
 AC_CONFIG_COMMANDS
 AC_CONFIG_MACRO_DIR([m4])
@@ -187,6 +187,7 @@ then
     echo "qt5 C++ flags: $QT_CXXFLAGS"
     echo "qt5 libraries: $QT_LIBS"
     echo "qt5 moc      : $QT_MOC"
+    AC_DEFINE(TFEL_QT5,"","")
     AM_CONDITIONAL([TFEL_QT4],[false])
     AM_CONDITIONAL([TFEL_QT5],[true])
 fi
@@ -199,7 +200,8 @@ AC_CONFIG_FILES([Makefile
 		 src/Plot/Makefile
 		 tplot/Makefile
 		 tplot/src/Makefile
-		 tplot/include/Makefile])
+		 tplot/include/Makefile
+		 tests/Makefile])
 
 AC_OUTPUT
 

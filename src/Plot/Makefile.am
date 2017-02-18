@@ -1,8 +1,16 @@
 ## Makefile.am -- Process this file with automake to produce a Makefile.in file.
 
+if TFEL_QT4
 AM_CPPFLAGS = -I$(top_srcdir)/include             \
 	      @QT4_CFLAGS@                        \
 	     `@TFELCONFIG@ --includes --cppflags`
+endif
+
+if TFEL_QT5
+AM_CPPFLAGS = -I$(top_srcdir)/include             \
+	      @QT_CXXFLAGS@                       \
+	     `@TFELCONFIG@ --includes --cppflags`
+endif
 
 lib_LTLIBRARIES = libTFELPlot.la               \
 		  libTFELGnuplotInterpreter.la
@@ -72,14 +80,26 @@ nodist_libTFELGnuplotInterpreter_la_SOURCES = moc_GnuplotInterpreterBase.cxx \
 
 libTFELGnuplotInterpreter_la_DEPENDENCIES = libTFELPlot.la
 
+if TFEL_QT4
 libTFELPlot_la_LIBADD = @QT4_LIBS@                      \
-			    -L@TFELHOME@/lib                \
-			    -lTFELMathParser                \
-			    -lTFELMath                      \
-			    -lTFELUtilities                 \
-			    -lTFELSystem                    \
-			    -lTFELException
+			-L@TFELHOME@/lib                \
+			-lTFELMathParser                \
+			-lTFELMath                      \
+			-lTFELUtilities                 \
+			-lTFELSystem                    \
+			-lTFELException
+endif
+if TFEL_QT5
+libTFELPlot_la_LIBADD = @QT_LIBS@                       \
+			-L@TFELHOME@/lib                \
+			-lTFELMathParser                \
+			-lTFELMath                      \
+			-lTFELUtilities                 \
+			-lTFELSystem                    \
+			-lTFELException
+endif
 
+if TFEL_QT4
 libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la    \
 			    	      @QT4_LIBS@            \
 			    	      -L@TFELHOME@/lib      \
@@ -89,17 +109,43 @@ libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la    \
 			    	      -lTFELUtilities       \
 			    	      -lTFELSystem          \
 			    	      -lTFELException
+endif
+if TFEL_QT5
+libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la        \
+			    	      @QT_LIBS@             \
+			    	      -L@TFELHOME@/lib      \
+			    	      -lTFELMathKriging     \
+			    	      -lTFELMathParser      \
+			    	      -lTFELMath            \
+			    	      -lTFELUtilities       \
+			    	      -lTFELSystem          \
+			    	      -lTFELException
+endif TFEL_QT5
 
 TFELGRAPHICSRESOURCES=images/CEABanner2012.svg   \
 		      images/CEABanner2012-2.svg \
 		      images/CEALogo2012.svg     \
 		      images/mfront-en.svg
 
+if TFEL_QT4
 moc_%.cxx : @top_srcdir@/include/TFEL/Plot/%.hxx
 	@MOC@ $< -o $@	
+endif
 
+if TFEL_QT5
+moc_%.cxx : @top_srcdir@/include/TFEL/Plot/%.hxx
+	@QT_MOC@ $< -o $@	
+endif TFEL_QT5
+
+if TFEL_QT4
 TFELPlotResources.cxx : TFELPlotResources.qrc $(TFELGRAPHICSRESOURCES)
 	@RCC@ -name TFELPlotResources @srcdir@/TFELPlotResources.qrc -o TFELPlotResources.cxx
+endif
+
+if TFEL_QT5
+TFELPlotResources.cxx : TFELPlotResources.qrc $(TFELGRAPHICSRESOURCES)
+	@QT_RCC@ -name TFELPlotResources @srcdir@/TFELPlotResources.qrc -o TFELPlotResources.cxx
+endif
 
 clean-local:
 	$(RM) $(nodist_libTFELPlot_la_SOURCES)

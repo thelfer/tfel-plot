@@ -49,8 +49,7 @@ namespace tfel
       this->registerCallBacks();
     } // end of GnuplotInterpreter::GnuplotInterpreter
 
-    void
-    GnuplotInterpreter::setDummyVariable(const std::string& n)
+    void GnuplotInterpreter::setDummyVariable(const std::string& n)
     {
       using namespace std;
       if(!GnuplotInterpreterBase::isValidIdentifier(n)){
@@ -61,14 +60,12 @@ namespace tfel
       this->dummyVariable = n;
     }// end of GnuplotInterpreter::setDummyVariable
     
-    const std::string&
-    GnuplotInterpreter::getDummyVariable() const
+    const std::string& GnuplotInterpreter::getDummyVariable() const
     {
       return this->dummyVariable;
     }
 
-    void
-    GnuplotInterpreter::registerCallBacks()
+    void GnuplotInterpreter::registerCallBacks()
     {
       this->registerCallBack(this->callBacks,"import",
 			     &GnuplotInterpreter::treatImport);
@@ -100,8 +97,7 @@ namespace tfel
 			     &GnuplotInterpreter::treatFit);
     } // end of GnuplotInterpreter::registerCallBacks()
 
-    bool
-    GnuplotInterpreter::parseFile(QString& e,
+    bool GnuplotInterpreter::parseFile(QString& e,
 				  const QString& f)
     {
       QFile file(f);
@@ -156,10 +152,9 @@ namespace tfel
       return true;
     } // end of GnuplotInterpreter::parseFile
     
-    bool
-    GnuplotInterpreter::eval(QString& error,
-			     const QString& l,
-			     const bool b)
+    bool GnuplotInterpreter::eval(QString& error,
+				  const QString& l,
+				  const bool b)
     {
       using namespace std;
       using namespace tfel::utilities;
@@ -172,14 +167,11 @@ namespace tfel
       }
       this->currentLine = s;
       try{
-	map<string,MemFuncPtr>::const_iterator pf;
 	CxxTokenizer tokenizer;
 	tokenizer.treatCharAsString(true);
-	CxxTokenizer::const_iterator p;
-	CxxTokenizer::const_iterator pe;
 	tokenizer.parseString(s.toStdString());
-	p=tokenizer.begin();
-	pe=tokenizer.end();
+	auto p  = tokenizer.begin();
+	auto pe = tokenizer.end();
 	vector<TokensContainer> i(1u);
 	while(p!=pe){
 	  if(p->value!=";"){
@@ -189,16 +181,14 @@ namespace tfel
 	  }
 	  ++p;
 	}
-	vector<TokensContainer>::const_iterator pi;
-	for(pi=i.begin();pi!=i.end();++pi){
-	  const TokensContainer& tokens = *pi;
+	for(const auto& tokens : i){
 	  p=tokens.begin();
 	  pe=tokens.end();
 	  if(tokens.empty()){
 	    continue;
 	  }
 	  while(p!=pe){
-	    pf = this->callBacks.find(p->value);
+	    auto pf = this->callBacks.find(p->value);
 	    if(pf==this->callBacks.end()){
 	      this->analyseFunctionDefinition(p,pe,false,false);
 	    } else {
@@ -228,34 +218,26 @@ namespace tfel
       return true;
     }
 
-    void
-    GnuplotInterpreter::setTerminal(const std::string& t,
+    void GnuplotInterpreter::setTerminal(const std::string& t,
 				    const std::vector<std::string>&)
     {
-      using namespace std;
-      if((t=="eps")||(t=="pdf")||	 
-	 (t=="table")||(t=="svg")||
-	 (t=="bmp")||(t=="png")||
-	 (t=="jpg")||(t=="jpeg")||
-	 (t=="ppm")||(t=="xbm")||
-	 (t=="xpm")||(t=="x11")){
+      if((t=="eps")||(t=="pdf")||(t=="table")||(t=="svg")||
+	 (t=="bmp")||(t=="png")||(t=="jpg")||(t=="jpeg")||
+	 (t=="ppm")||(t=="xbm")||(t=="xpm")||(t=="x11")){
 	this->terminal=t;
       } else {
-	string msg("Analyser::treatSetTerminal : ");
-	msg += "unsupported terminal '"+t+"'";
-	throw(runtime_error(msg));
+	throw(std::runtime_error("GnuplotInterpreter::treatSetTerminal: "
+				 "unsupported terminal '"+t+"'"));
       }
     } // end of GnuplotInterpreter::setTerminal
 
-    void
-    GnuplotInterpreter::setOutput(const std::string& o)
+    void GnuplotInterpreter::setOutput(const std::string& o)
     {
       this->output = o;
     }
 
-    void
-    GnuplotInterpreter::treatRePlot(const_iterator& p,
-				    const const_iterator pe)
+    void GnuplotInterpreter::treatRePlot(const_iterator& p,
+					 const const_iterator pe)
     {
       using namespace std;
       if(this->previousPlot.isEmpty()){
@@ -272,9 +254,8 @@ namespace tfel
       this->eval(e,this->previousPlot);
     } // end of 
 
-    void
-    GnuplotInterpreter::treatPlot(const_iterator& p,
-				  const const_iterator pe)
+    void GnuplotInterpreter::treatPlot(const_iterator& p,
+				       const const_iterator pe)
     {
       using namespace std;
       PlotInterpreter i(*this,this->g);
@@ -336,48 +317,42 @@ namespace tfel
       this->previousPlot = this->currentLine;
     }
 
-    void
-    GnuplotInterpreter::treatSet(const_iterator& p,
-				 const const_iterator pe)
+    void GnuplotInterpreter::treatSet(const_iterator& p,
+				      const const_iterator pe)
     {
       SetInterpreter i(*this,this->g);
       i.eval(p,pe);
     }
 
-    void
-    GnuplotInterpreter::treatUnSet(const_iterator& p,
+    void GnuplotInterpreter::treatUnSet(const_iterator& p,
 				   const const_iterator pe)
     {
       UnSetInterpreter i(this->g);
       i.eval(p,pe);
     }
 
-    void
-    GnuplotInterpreter::treatReset(const_iterator&, 
+    void GnuplotInterpreter::treatReset(const_iterator&, 
 				   const const_iterator)
     {
       this->g.reset();
     } // end of GnuplotInterpreter::treatReset
 
-    void
-    GnuplotInterpreter::treatInclude(const_iterator& p, 
+    void GnuplotInterpreter::treatInclude(const_iterator& p, 
 				     const const_iterator pe)
     {
-      QString f = this->readQString(p,pe);
+      const auto f = this->readQString(p,pe);
       QString e;
       this->parseFile(e,f);
     } // end of GnuplotInterpreter::treatInclude
 
-    std::shared_ptr<tfel::math::Evaluator>
-    GnuplotInterpreter::readFunction(const_iterator& p, 
+    std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(const_iterator& p, 
     				     const const_iterator pe,
 				     const std::string& delim)
     {
       return this->readFunction(p,pe,{delim});
     }
 
-    std::shared_ptr<tfel::math::Evaluator>
-    GnuplotInterpreter::readFunction(const_iterator& p, 
+    std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(const_iterator& p, 
     				     const const_iterator pe,
 				     const std::vector<std::string>& delim)
     {
@@ -437,8 +412,7 @@ namespace tfel
       return std::make_shared<Evaluator>(vars,f,this->functions);
     } // end of GnuplotInterpreter::readFunction
 
-    void
-    GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
+    void GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
 					const_iterator& p, 
 					const const_iterator pe,
 					const std::string& delim)
@@ -447,8 +421,7 @@ namespace tfel
       this->readCoordinates(c,p,pe,vector<string>(1u,delim));
     } // end of GnuplotInterpreter::readCoordinates
 
-    void
-    GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
+    void GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
 					const_iterator& p, 
 					const const_iterator pe,
 					const std::vector<std::string>& delim)
@@ -469,42 +442,37 @@ namespace tfel
     } // end of GnuplotInterpreter::readCoordinates
 
 
-    void
-    GnuplotInterpreter::treatQuit(const_iterator&, 
+    void GnuplotInterpreter::treatQuit(const_iterator&, 
 				  const const_iterator)
     {
       QApplication::exit(EXIT_SUCCESS);
     } // end of GnuplotInterpreter::treatQuit
     
-    void
-    GnuplotInterpreter::treatImport(const_iterator& p,
+    void GnuplotInterpreter::treatImport(const_iterator& p,
 				    const const_iterator pe)
     {
       ImportInterpreter i(*this,this->g);
       i.treatImport(p,pe,false);
     } // end of GnuplotInterpreter::treatImport
 
-    void
-    GnuplotInterpreter::treatKriging(const_iterator& p,
+    void GnuplotInterpreter::treatKriging(const_iterator& p,
 				    const const_iterator pe)
     {
       KrigingInterpreter i(*this,this->g);
       i.eval(p,pe);
     } // end of GnuplotInterpreter::treatKriging
 
-    void
-    GnuplotInterpreter::treatFit(const_iterator& p,
+    void GnuplotInterpreter::treatFit(const_iterator& p,
 				    const const_iterator pe)
     {
       FitInterpreter i(*this,this->g);
       i.eval(p,pe);
     } // end of GnuplotInterpreter::treatFit
 
-    std::string
-    GnuplotInterpreter::gatherTokenGroup(const_iterator& p,
+    std::string GnuplotInterpreter::gatherTokenGroup(const_iterator& p,
 					 const const_iterator pe)
     {
-      auto all =  std::string{};
+      auto all = std::string{};
       while(p!=pe){
 	all += p->value;
 	++p;
@@ -512,8 +480,7 @@ namespace tfel
       return all;
     } // end of GnuplotInterpreter::gatherTokenGroup
 
-    void
-    GnuplotInterpreter::addFunction(const std::string& name,
+    void GnuplotInterpreter::addFunction(const std::string& name,
 				    std::shared_ptr<tfel::math::parser::ExternalFunction> pev,
 				    const bool b1,
 				    const bool b2)
@@ -546,8 +513,7 @@ namespace tfel
       }
     } // end of GnuplotInterpreter::addFunction
 
-    void
-    GnuplotInterpreter::analyseFunctionDefinition(const_iterator& p,
+    void GnuplotInterpreter::analyseFunctionDefinition(const_iterator& p,
 						  const const_iterator pe,
 						  const bool b1,
 						  const bool b2)
@@ -579,21 +545,21 @@ namespace tfel
 	  msg += "unexpected end of line";
 	  throw(runtime_error(msg));
 	}
-	string group = this->gatherTokenGroup(p,pe);
+	const auto group = this->gatherTokenGroup(p,pe);
 	if(group.empty()){
 	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
 	  msg += "invalid declaraction of variable "+var;
 	  throw(runtime_error(msg));
 	}
-	shared_ptr<tfel::math::parser::ExternalFunction> pev(new Evaluator(vars,group,functions));
-	Evaluator* ev = static_cast<Evaluator *>(pev.get());
+	shared_ptr<tfel::math::parser::ExternalFunction> pev = std::make_shared<Evaluator>(vars,group,functions);
+	auto* ev = static_cast<Evaluator *>(pev.get());
 	if(ev->getNumberOfVariables()!=0u){
 	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
 	  msg += "error while declaring variable "+var;
 	  if(ev->getNumberOfVariables()==1u){
 	    msg += ", unknown variable "+ev->getVariablesNames()[0];
 	  } else {
-	    const std::vector<string>& evars = ev->getVariablesNames();		
+	    const auto& evars = ev->getVariablesNames();		
 	    std::vector<string>::const_iterator pv;
 	    msg += ", unknown variables ";
 	    for(pv=evars.begin();pv!=evars.end();){
@@ -649,9 +615,8 @@ namespace tfel
       }
     } // end of GnuplotInterpreter::analyseFunctionDefinition
 
-    std::vector<std::string>
-    GnuplotInterpreter::tokenize(const std::string& s,
-				 const char c)
+    std::vector<std::string> GnuplotInterpreter::tokenize(const std::string& s,
+							  const char c)
     {
       using namespace std;
       using std::vector;
@@ -667,29 +632,25 @@ namespace tfel
       return res;
     } // end of GnuplotInterpreter::tokenize
 
-    void
-    GnuplotInterpreter::treatConst(const_iterator& p,
-				   const const_iterator pe)
+    void GnuplotInterpreter::treatConst(const_iterator& p,
+					const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,true,true);
     } // end of GnuplotInterpreter::treatConst
 
-    void
-    GnuplotInterpreter::treatLock(const_iterator& p,
-				  const const_iterator pe)
+    void GnuplotInterpreter::treatLock(const_iterator& p,
+				       const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,true,false);
     } // end of GnuplotInterpreter::treatLock
 
-    void
-    GnuplotInterpreter::treatNoDeps(const_iterator& p,
-				    const const_iterator pe)
+    void GnuplotInterpreter::treatNoDeps(const_iterator& p,
+					 const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,false,true);
     } // end of GnuplotInterpreter::treatNoDeps
 
-    void
-    GnuplotInterpreter::treatPrint(const_iterator& p,
+    void GnuplotInterpreter::treatPrint(const_iterator& p,
 				   const const_iterator pe)
     {
       using namespace std;
@@ -739,8 +700,7 @@ namespace tfel
       emit outputMsg(QString::fromStdString(res.str()));
     } // end of GnuplotInterpreter::treatPrint
 
-    tfel::math::parser::ExternalFunctionManagerPtr
-    GnuplotInterpreter::getExternalFunctionManager()
+    tfel::math::parser::ExternalFunctionManagerPtr GnuplotInterpreter::getExternalFunctionManager()
     {
       return this->functions;
     }

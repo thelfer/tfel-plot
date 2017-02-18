@@ -10,5 +10,5 @@ EXTRA_DIST=OptimizeForArchitecture.cmake \
 	   qt.cmake			 \
 	   pandoc.cmake			 \
 	   tfel.cmake			 \
-	   tfel-graphics.cmake
+	   tfel-plot.cmake
 

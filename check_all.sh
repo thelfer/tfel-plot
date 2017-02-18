@@ -13,7 +13,7 @@ do_test(){
     fi
     mkdir build-autotools
     pushd build-autotools
-    $src/configure --enable-$qt --prefix=$build/build-check/autotools/install-autotools 
+    $src/configure --enable-$qt --prefix=$build/build-check/$qt/autotools/install-autotools 
     $make_exec
     $make_exec check
     $make_exec distcheck
@@ -23,7 +23,7 @@ do_test(){
     then
 	mkdir build-autotools-debug
 	pushd build-autotools-debug
-	$src/configure --enable-debug --enable-$qt --prefix=$build/build-check/autotools/install-autotools-debug 
+	$src/configure --enable-debug --enable-$qt --prefix=$build/build-check/$qt/autotools/install-autotools-debug 
 	$make_exec
 	$make_exec check
 	$make_exec distcheck
@@ -33,7 +33,7 @@ do_test(){
     popd # from autotools
     mkdir cmake
     pushd cmake
-    tar -xvjf $build/build-check/$qt/autotools/build-autotools/tfel-graphics-$pkg_name.tar.bz2
+    tar -xvjf $build/build-check/$qt/autotools/build-autotools/tfel-plot-$pkg_name.tar.bz2
     mkdir install-cmake
     mkdir build-cmake
     if test "x$fcheck" == "xno" ;
@@ -44,7 +44,7 @@ do_test(){
 	mkdir build-cmake-debug
     fi
     pushd build-cmake
-    cmake ../tfel-graphics-$pkg_name/ -Denable-$qt=ON -DCMAKE_INSTALL_PREFIX=$build/build-check/cmake/install-cmake
+    cmake ../tfel-plot-$pkg_name/ -Denable-$qt=ON -DCMAKE_INSTALL_PREFIX=$build/build-check/$qt/cmake/install-cmake
     $make_exec 
     # if test "x$pbuild" == "xyes" ;
     # then
@@ -57,7 +57,7 @@ do_test(){
     if test "x$fcheck" == "xno" ;
     then
 	pushd build-cmake-release
-	cmake ../tfel-graphics-$pkg_name/ -DCMAKE_BUILD_TYPE=Release -Denable-$qt=ON -DCMAKE_INSTALL_PREFIX=$build/build-check/cmake/install-cmake-release
+	cmake ../tfel-plot-$pkg_name/ -DCMAKE_BUILD_TYPE=Release -Denable-$qt=ON -DCMAKE_INSTALL_PREFIX=$build/build-check/$qt/cmake/install-cmake-release
 	$make_exec
 	# if [ test "x$pbuild" == "xyes" ];
 	# then
@@ -68,7 +68,7 @@ do_test(){
 	$make_exec install
 	popd #from build-cmake-release
 	pushd build-cmake-debug
-	cmake ../tfel-graphics-$pkg_name/ -DCMAKE_BUILD_TYPE=Debug -Denable-$qt=ON
+	cmake ../tfel-plot-$pkg_name/ -DCMAKE_BUILD_TYPE=Debug -Denable-$qt=ON -Denable-$qt=ON -DCMAKE_INSTALL_PREFIX=$build/build-check/$qt/cmake/install-cmake-debug
 	$make_exec
 	# if [ test "x$pbuild" == "xyes" ];
 	# then
@@ -79,6 +79,7 @@ do_test(){
 	$make_exec install
 	popd #from build-cmake-debug
     fi
+    popd
     popd
 }
 

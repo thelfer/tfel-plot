@@ -231,7 +231,7 @@ namespace tfel
     } // end of GnuplotInterpreter::SetInterpreter::treatOutput
 
     void GnuplotInterpreter::SetInterpreter::treatTerminal(const_iterator& p, 
-						      const const_iterator pe)
+							   const const_iterator pe)
     {
       std::vector<std::string> options;
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::SetInterpreter::treatTerminal",
