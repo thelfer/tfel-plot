@@ -74,6 +74,7 @@ libTFELGnuplotInterpreter_la_SOURCES = GraphShell.cxx                 \
 			               GnuplotFitInterpreter.cxx      \
 			               GnuplotKrigingInterpreter.cxx
 
+libTFELGnuplotInterpreter_la_CPPFLAGS = $(AM_CPPFLAGS) -DTFELGnuplotInterpreter_EXPORTS
 nodist_libTFELGnuplotInterpreter_la_SOURCES = moc_GnuplotInterpreterBase.cxx \
 					      moc_GnuplotInterpreter.cxx     \
 				       	      moc_GraphShell.cxx

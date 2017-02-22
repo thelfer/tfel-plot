@@ -20,6 +20,7 @@
 #include<QtCore/QObject>
 #include<QtCore/QString>
 
+#include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/GnuplotInterpreterBase.hxx"
 
 namespace tfel
@@ -41,7 +42,7 @@ namespace tfel
     /*!
      * class in charge of interpreting gnuplot main commands.
      */
-    class GnuplotInterpreter
+    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GnuplotInterpreter
       : public GnuplotInterpreterBase
     {
 
@@ -54,7 +55,13 @@ namespace tfel
 
       bool parseFile(QString&,
 		     const QString&);
-      
+      /*!
+       * \brief evaluate a string
+       * \return true if the string has been evaluated correctly
+       * \param[out] emsg: error message in case of failure
+       * \param[in]  l:    string to be evaluated
+       * \param[in]  b:    if true, emit the errorMsg signal
+       */
       bool eval(QString&,
 		const QString&,
 		const bool = true);
@@ -85,15 +92,9 @@ namespace tfel
       setTerminal(const std::string&,
 		  const std::vector<std::string>&);
 
-      void
-      setOutput(const std::string&);
+      void setOutput(const std::string&);
 
-      void
-      registerCallBacks();
-
-      std::vector<std::string>
-      tokenize(const std::string&,
-	       const char);
+      void registerCallBacks();
 
       std::shared_ptr<tfel::math::Evaluator>
       readFunction(const_iterator&, 
@@ -105,29 +106,47 @@ namespace tfel
 		   const const_iterator,
 		   const std::vector<std::string>&);
 	
-      void
-      readCoordinates(GraphCoordinates&,
-		      const_iterator&, 
-		      const const_iterator,
-		      const std::string&);
+      void readCoordinates(GraphCoordinates&,
+			   const_iterator&, 
+			   const const_iterator,
+			   const std::string&);
 
-      void
-      readCoordinates(GraphCoordinates&,
-		      const_iterator&, 
-		      const const_iterator,
-		      const std::vector<std::string>&);
-
-      void
-      analyseFunctionDefinition(const_iterator&,
-				const const_iterator,
-				const bool,
-				const bool);
-
-      void
-      addFunction(const std::string&,
-		  std::shared_ptr<tfel::math::parser::ExternalFunction>,
-		  const bool,
-		  const bool);
+      void readCoordinates(GraphCoordinates&,
+			   const_iterator&, 
+			   const const_iterator,
+			   const std::vector<std::string>&);
+      /*!
+       * \brief analyse a new function or variable definition
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       * \param[in]     b1: if true, lock the function definition
+       * \param[in]     b2: if true, the dependencies are removed
+       *
+       * Locking a function `f` means that its definition can't be
+       * changed. However, if the function `f` calls another function
+       * `g`, the definition of `g` can be changed and that will
+       * affect the results returned by `f`.
+       *
+       * Removing the dependencies means that if `f` depends on
+       * another function `g`, the current definition of `g` will be
+       * copied locally. Further changes to `g` will no more affect
+       * the results returned by `f`.
+       *
+       * A function defined as `const` is both "locked" and "nodeps".
+       */
+      void analyseFunctionDefinition(const_iterator&,
+				     const const_iterator,
+				     const bool,const bool);
+      /*!
+       * \brief analyse a new function or variable definition
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       * \param[in]     b1: if true, lock the function definition
+       * \param[in]     b2: if true, the dependencies are removed
+       */
+      void addFunction(const std::string&,
+		       std::shared_ptr<tfel::math::parser::ExternalFunction>,
+		       const bool,const bool);
 
       void
       readDataFunctionInUsingDeclaration(std::string&,

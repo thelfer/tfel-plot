@@ -152,13 +152,14 @@ namespace tfel
       return true;
     } // end of GnuplotInterpreter::parseFile
     
-    bool GnuplotInterpreter::eval(QString& error,
+    bool GnuplotInterpreter::eval(QString& emsg,
 				  const QString& l,
 				  const bool b)
     {
       using namespace std;
       using namespace tfel::utilities;
-      const QString s = l.trimmed();
+      const auto s = l.trimmed();
+      emsg.clear();
       if(s.isEmpty()){
 	return true;
       }
@@ -203,15 +204,15 @@ namespace tfel
 	  }
 	}
       } catch(std::exception& e){
-	error = e.what();
+	emsg = e.what();
 	if(b){
 	  emit errorMsg(e.what());
 	}
 	return false;
       } catch(...){
-	error = QObject::tr("unknown exception"); 
+	emsg = QObject::tr("unknown exception"); 
 	if(b){
-	  emit errorMsg(error);
+	  emit errorMsg(emsg);
 	}
 	return false;
       }
@@ -481,9 +482,9 @@ namespace tfel
     } // end of GnuplotInterpreter::gatherTokenGroup
 
     void GnuplotInterpreter::addFunction(const std::string& name,
-				    std::shared_ptr<tfel::math::parser::ExternalFunction> pev,
-				    const bool b1,
-				    const bool b2)
+					 std::shared_ptr<tfel::math::parser::ExternalFunction> pev,
+					 const bool b1,
+					 const bool b2)
     {
       using namespace std;
       if(!this->isValidIdentifier(name)){
@@ -514,9 +515,9 @@ namespace tfel
     } // end of GnuplotInterpreter::addFunction
 
     void GnuplotInterpreter::analyseFunctionDefinition(const_iterator& p,
-						  const const_iterator pe,
-						  const bool b1,
-						  const bool b2)
+						       const const_iterator pe,
+						       const bool b1,
+						       const bool b2)
     {
       using namespace std;
       using namespace tfel::utilities;
@@ -615,23 +616,6 @@ namespace tfel
       }
     } // end of GnuplotInterpreter::analyseFunctionDefinition
 
-    std::vector<std::string> GnuplotInterpreter::tokenize(const std::string& s,
-							  const char c)
-    {
-      using namespace std;
-      using std::vector;
-      vector<string> res;
-      string::size_type b = 0u;
-      string::size_type e = s.find_first_of(c, b);
-      while (string::npos != e || string::npos != b){
-	// Found a token, add it to the vector.
-	res.push_back(s.substr(b, e - b));
-	b = s.find_first_not_of(c, e);
-	e = s.find_first_of(c, b);
-      }
-      return res;
-    } // end of GnuplotInterpreter::tokenize
-
     void GnuplotInterpreter::treatConst(const_iterator& p,
 					const const_iterator pe)
     {
@@ -651,7 +635,7 @@ namespace tfel
     } // end of GnuplotInterpreter::treatNoDeps
 
     void GnuplotInterpreter::treatPrint(const_iterator& p,
-				   const const_iterator pe)
+					const const_iterator pe)
     {
       using namespace std;
       using namespace tfel::utilities;

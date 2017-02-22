@@ -14,6 +14,7 @@
 
 #include"TFEL/Utilities/CxxTokenizer.hxx"
 #include"TFEL/Math/Parser/ExternalFunctionManager.hxx"
+#include"TFEL/Plot/Config.hxx"
 
 namespace tfel
 {
@@ -31,7 +32,7 @@ namespace tfel
      * base class for classes in charge of interpreting gnuplot
      * commands
      */
-    class GnuplotInterpreterBase
+    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GnuplotInterpreterBase
       : public QObject
     {
       
