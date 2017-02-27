@@ -6,8 +6,8 @@
  * \date   03 jan 2008
  */
 
-#ifndef _LIB_TFEL_PLOT_GRID_HXX_
-#define _LIB_TFEL_PLOT_GRID_HXX_ 
+#ifndef LIB_TFEL_PLOT_GRID_HXX_
+#define LIB_TFEL_PLOT_GRID_HXX_ 
 
 namespace tfel{
 
@@ -27,4 +27,4 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /*_LIB_TFEL_PLOT_GRID_HXX_ */
+#endif /*LIB_TFEL_PLOT_GRID_HXX_ */

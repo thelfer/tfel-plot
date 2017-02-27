@@ -5,8 +5,8 @@
  * \brief 31 mai 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H_
-#define _LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H_ 
+#ifndef LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H_
+#define LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H_ 
 
 #include<TFEL/Plot/Config.hxx>
 #include"TFEL/Plot/CurveConfigurationDialogBase.hxx"
@@ -51,5 +51,5 @@ namespace tfel
   
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H */
+#endif /* LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOG_H */
 

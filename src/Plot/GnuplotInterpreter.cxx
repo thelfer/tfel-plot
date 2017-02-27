@@ -98,7 +98,7 @@ namespace tfel
     } // end of GnuplotInterpreter::registerCallBacks()
 
     bool GnuplotInterpreter::parseFile(QString& e,
-				  const QString& f)
+				       const QString& f)
     {
       QFile file(f);
       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -121,7 +121,7 @@ namespace tfel
 	}
 	if(!line.endsWith('\\')){
 	  QString le;
-	  if(!this->eval(le,line,false)){
+	  if(!this->parseString(le,line,false)){
 	    QString msg("GnuplotInterpreter::parseFile : ");
 	    msg += QObject::tr("error at line '%1' while parsing file '%2'\n").arg(pos).arg(f);
 	    msg += le;
@@ -152,9 +152,9 @@ namespace tfel
       return true;
     } // end of GnuplotInterpreter::parseFile
     
-    bool GnuplotInterpreter::eval(QString& emsg,
-				  const QString& l,
-				  const bool b)
+    bool GnuplotInterpreter::parseString(QString& emsg,
+					 const QString& l,
+					 const bool b)
     {
       using namespace std;
       using namespace tfel::utilities;
@@ -220,7 +220,7 @@ namespace tfel
     }
 
     void GnuplotInterpreter::setTerminal(const std::string& t,
-				    const std::vector<std::string>&)
+					 const std::vector<std::string>&)
     {
       if((t=="eps")||(t=="pdf")||(t=="table")||(t=="svg")||
 	 (t=="bmp")||(t=="png")||(t=="jpg")||(t=="jpeg")||
@@ -252,7 +252,7 @@ namespace tfel
 	throw(runtime_error(msg));
       }
       QString e;
-      this->eval(e,this->previousPlot);
+      this->parseString(e,this->previousPlot);
     } // end of 
 
     void GnuplotInterpreter::treatPlot(const_iterator& p,
@@ -326,20 +326,20 @@ namespace tfel
     }
 
     void GnuplotInterpreter::treatUnSet(const_iterator& p,
-				   const const_iterator pe)
+					const const_iterator pe)
     {
       UnSetInterpreter i(this->g);
       i.eval(p,pe);
     }
 
     void GnuplotInterpreter::treatReset(const_iterator&, 
-				   const const_iterator)
+					const const_iterator)
     {
       this->g.reset();
     } // end of GnuplotInterpreter::treatReset
 
     void GnuplotInterpreter::treatInclude(const_iterator& p, 
-				     const const_iterator pe)
+					  const const_iterator pe)
     {
       const auto f = this->readQString(p,pe);
       QString e;
@@ -347,15 +347,15 @@ namespace tfel
     } // end of GnuplotInterpreter::treatInclude
 
     std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(const_iterator& p, 
-    				     const const_iterator pe,
-				     const std::string& delim)
+									    const const_iterator pe,
+									    const std::string& delim)
     {
       return this->readFunction(p,pe,{delim});
     }
 
     std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(const_iterator& p, 
-    				     const const_iterator pe,
-				     const std::vector<std::string>& delim)
+									    const const_iterator pe,
+									    const std::vector<std::string>& delim)
     {
       using namespace std;
       using namespace tfel::math;
@@ -414,18 +414,18 @@ namespace tfel
     } // end of GnuplotInterpreter::readFunction
 
     void GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
-					const_iterator& p, 
-					const const_iterator pe,
-					const std::string& delim)
+					     const_iterator& p, 
+					     const const_iterator pe,
+					     const std::string& delim)
     {
       using namespace std;
       this->readCoordinates(c,p,pe,vector<string>(1u,delim));
     } // end of GnuplotInterpreter::readCoordinates
 
     void GnuplotInterpreter::readCoordinates(GraphCoordinates& c,
-					const_iterator& p, 
-					const const_iterator pe,
-					const std::vector<std::string>& delim)
+					     const_iterator& p, 
+					     const const_iterator pe,
+					     const std::vector<std::string>& delim)
     {
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::readCoordinates","",p,pe);
       if(p->value=="first"){
@@ -444,34 +444,34 @@ namespace tfel
 
 
     void GnuplotInterpreter::treatQuit(const_iterator&, 
-				  const const_iterator)
+				       const const_iterator)
     {
       QApplication::exit(EXIT_SUCCESS);
     } // end of GnuplotInterpreter::treatQuit
     
     void GnuplotInterpreter::treatImport(const_iterator& p,
-				    const const_iterator pe)
+					 const const_iterator pe)
     {
       ImportInterpreter i(*this,this->g);
       i.treatImport(p,pe,false);
     } // end of GnuplotInterpreter::treatImport
 
     void GnuplotInterpreter::treatKriging(const_iterator& p,
-				    const const_iterator pe)
+					  const const_iterator pe)
     {
       KrigingInterpreter i(*this,this->g);
       i.eval(p,pe);
     } // end of GnuplotInterpreter::treatKriging
 
     void GnuplotInterpreter::treatFit(const_iterator& p,
-				    const const_iterator pe)
+				      const const_iterator pe)
     {
       FitInterpreter i(*this,this->g);
       i.eval(p,pe);
     } // end of GnuplotInterpreter::treatFit
 
     std::string GnuplotInterpreter::gatherTokenGroup(const_iterator& p,
-					 const const_iterator pe)
+						     const const_iterator pe)
     {
       auto all = std::string{};
       while(p!=pe){
@@ -486,31 +486,24 @@ namespace tfel
 					 const bool b1,
 					 const bool b2)
     {
-      using namespace std;
-      if(!this->isValidIdentifier(name)){
-	string msg("GnuplotInterpreter::addFunction : ");
-	msg += "name '"+name+"' is not valid.";
-	throw(runtime_error(msg));
-      }
+      auto throw_if = [](const bool c,const std::string& m){
+	if(c){throw(std::runtime_error("GnuplotInterpreter::addFunction: "+m));}
+      };
+      throw_if(!this->isValidIdentifier(name),"name '"+name+"' is not valid.");
       if(this->locks.find(name)!=this->locks.end()){
-	if((*(this->functions)).find(name)==(*(this->functions)).end()){
-	  string msg("GnuplotInterpreter::addFunction : ");
-	  msg += "internal error, a lock has been posed for a variable called '";
-	  msg += name;
-	  msg += "' that apparently don't exist";
-	  throw(runtime_error(msg));
-	}
-	string msg("GnuplotInterpreter::addFunction : ");
-	msg += "a variable '"+name+"' has already been declared, with const attribute";
-	throw(runtime_error(msg));
-      }
-      if(b1){
-	this->locks.insert(name);
+	throw_if((*(this->functions)).find(name)==(*(this->functions)).end(),
+		 "internal error, a lock has been posed for a variable called '"
+		 "'"+name+"' that apparently don't exist");
+	throw_if(true,"a variable '"+name+"' has already been declared, "
+		 "with const or lock attribute");
       }
       if(b2){
 	(*(this->functions))[name]=pev->resolveDependencies();
       } else {
 	(*(this->functions))[name]=pev;
+      }
+      if(b1){
+	this->locks.insert(name);
       }
     } // end of GnuplotInterpreter::addFunction
 
@@ -634,17 +627,57 @@ namespace tfel
       this->analyseFunctionDefinition(p,pe,false,true);
     } // end of GnuplotInterpreter::treatNoDeps
 
+    double GnuplotInterpreter::eval(const QString& l)
+    {
+      using namespace tfel::utilities;
+      auto throw_if = [](const bool c,const std::string& m){
+	if(c){throw(std::runtime_error("GnuplotInterpreter::eval: "+m));}
+      };
+      const auto s = l.trimmed();
+      throw_if(s.isEmpty(),"empty string");
+      CxxTokenizer tokenizer;
+      tokenizer.treatCharAsString(true);
+      tokenizer.parseString(s.toStdString());
+      auto p = tokenizer.begin();
+      return this->eval(p,tokenizer.end());
+    }
+    
+    double GnuplotInterpreter::eval(const_iterator& p,
+				    const const_iterator pe)
+    {
+      using namespace tfel::math;
+      using namespace tfel::math::parser;
+      auto vars = std::vector<std::string>{};
+      const auto gr = this->readNextGroup(p,pe);
+      if(gr.empty()){
+	throw(std::runtime_error("GnuplotInterpreter::eval: "
+				 "invalid expression"));
+      }
+      auto ev = std::make_shared<Evaluator>(vars,gr,this->functions);
+      ev->removeDependencies();
+      if(ev->getNumberOfVariables()!=0u){
+	const auto& ev_vars = ev->getVariablesNames();
+	std::ostringstream msg;
+	if(ev_vars.size()!=1u){
+	  msg << "GnuplotInterpreter::eval : invalid declaration (unknown variables ";
+	  std::copy(ev_vars.begin(),ev_vars.end(),
+		    std::ostream_iterator<std::string>(msg," "));
+	  msg << ")";
+	} else {
+	  msg << "GnuplotInterpreter::eval : invalid declaration (unknown variable "
+	      << ev_vars[0] << ")";
+	}
+	throw(std::runtime_error(msg.str()));
+      }
+      return ev->getValue();
+    } // end of GnuplotInterpreter::eval
+    
     void GnuplotInterpreter::treatPrint(const_iterator& p,
 					const const_iterator pe)
     {
-      using namespace std;
       using namespace tfel::utilities;
-      using namespace tfel::math;
-      using namespace tfel::math::parser;
-      using std::vector;
-      vector<string> vars;
       bool cont = true;
-      ostringstream res;
+      std::ostringstream res;
       res.precision(15);
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint","",p,pe);
       while((p!=pe)&&(cont)){
@@ -652,28 +685,7 @@ namespace tfel
 	  res << p->value.substr(1,p->value.size()-2);
 	  ++p;
 	} else {
-	  string group = this->readNextGroup(p,pe);
-	  if(group.empty()){
-	    string msg("GnuplotInterpreter::treatPrint : ");
-	    msg += "invalid expression";
-	    throw(runtime_error(msg));
-	  }
-	  shared_ptr<Evaluator> ev(new Evaluator(vars,group,this->functions));
-	  ev->removeDependencies();
-	  if(ev->getNumberOfVariables()!=0u){
-	    const vector<string>& ev_vars = ev->getVariablesNames();
-	    ostringstream msg;
-	    if(ev_vars.size()!=1u){
-	      msg << "GnuplotInterpreter::treatPrint : invalid print declaration (unknown variables ";
-	      copy(ev_vars.begin(),ev_vars.end(),ostream_iterator<string>(msg," "));
-	      msg << ")";
-	    } else {
-	      msg << "GnuplotInterpreter::treatPrint : invalid print declaration (unknown variable "
-		  << ev_vars[0] << ")";
-	    }
-	    throw(runtime_error(msg.str()));
-	  }
-	  res << ev->getValue();
+	  res << this->eval(p,pe);
 	}
 	if(p!=pe){
 	  CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatPrint : ",

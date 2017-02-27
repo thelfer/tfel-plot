@@ -5,8 +5,8 @@
  * \brief 13 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H_
-#define _LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H_ 
+#ifndef LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H_
+#define LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H_ 
 
 #include<QtCore/QObject>
 #include<QtCore/QString>
@@ -138,4 +138,4 @@ namespace tfel
 
 #include"TFEL/Plot/GnuplotInterpreterBase.ixx"
 
-#endif /* _LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H */
+#endif /* LIB_TFEL_PLOT_GNUPLOTINTERPRETERBASE_H */

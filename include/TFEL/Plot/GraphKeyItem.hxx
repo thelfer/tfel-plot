@@ -5,8 +5,8 @@
  * \brief 07 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_GRAPHKEYITEM_H_
-#define _LIB_TFEL_PLOT_GRAPHKEYITEM_H_ 
+#ifndef LIB_TFEL_PLOT_GRAPHKEYITEM_H_
+#define LIB_TFEL_PLOT_GRAPHKEYITEM_H_ 
 
 #ifdef TFEL_QT4
 #include<QtGui/QGraphicsTextItem>
@@ -55,5 +55,5 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_GRAPHKEYITEM_H */
+#endif /* LIB_TFEL_PLOT_GRAPHKEYITEM_H */
 

@@ -5,8 +5,8 @@
  * \brief 26 janvier 2016
  */
 
-#ifndef _LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_
-#define _LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_ 
+#ifndef LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_
+#define LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_ 
 
 #include<TFEL/Plot/Config.hxx>
 #include<TFEL/Plot/ImportLicosCurveDialog.hxx>
@@ -40,4 +40,4 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H */
+#endif /* LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H */

@@ -6,8 +6,8 @@
  * \date   13 jan 2008
  */
 
-#ifndef _LIB_TFEL_GRAPHLAYOUT_HXX_
-#define _LIB_TFEL_GRAPHLAYOUT_HXX_ 
+#ifndef LIB_TFEL_PLOT_GRAPHLAYOUT_HXX_
+#define LIB_TFEL_PLOT_GRAPHLAYOUT_HXX_ 
 
 namespace tfel{
 
@@ -54,5 +54,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_GRAPHLAYOUT_HXX */
+#endif /* LIB_TFEL_PLOT_GRAPHLAYOUT_HXX */
 

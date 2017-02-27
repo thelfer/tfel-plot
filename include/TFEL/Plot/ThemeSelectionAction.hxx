@@ -5,8 +5,8 @@
  * \brief 29 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_THEMESELECTIONACTION_H_
-#define _LIB_TFEL_PLOT_THEMESELECTIONACTION_H_ 
+#ifndef LIB_TFEL_PLOT_THEMESELECTIONACTION_H_
+#define LIB_TFEL_PLOT_THEMESELECTIONACTION_H_ 
 
 #ifdef TFEL_QT4
 #include<QtGui/QAction>
@@ -55,5 +55,4 @@ namespace tfel
   
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_THEMESELECTIONACTION_H */
-
+#endif /* LIB_TFEL_PLOT_THEMESELECTIONACTION_H */

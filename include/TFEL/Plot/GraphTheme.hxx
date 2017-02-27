@@ -6,8 +6,8 @@
  * \date   03 jan 2008
  */
 
-#ifndef _LIB_TFEL_GRAPHTHEME_HXX_
-#define _LIB_TFEL_GRAPHTHEME_HXX_ 
+#ifndef LIB_TFEL_PLOT_GRAPHTHEME_HXX_
+#define LIB_TFEL_PLOT_GRAPHTHEME_HXX_ 
 
 #include<QtCore/QMap>
 
@@ -188,5 +188,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_GRAPHTHEME_HXX */
+#endif /* LIB_TFEL_PLOT_GRAPHTHEME_HXX */
 

@@ -6,8 +6,8 @@
  * \date   13 jan 2008
  */
 
-#ifndef _LIB_TFEL_STANDARDGRAPHTHEME_HXX_
-#define _LIB_TFEL_STANDARDGRAPHTHEME_HXX_ 
+#ifndef LIB_TFEL_PLOT_STANDARDGRAPHTHEME_HXX_
+#define LIB_TFEL_PLOT_STANDARDGRAPHTHEME_HXX_ 
 
 #ifdef TFEL_QT4
 #include <QtGui/QGraphicsView>
@@ -437,5 +437,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_STANDARDGRAPHTHEME_HXX */
+#endif /* LIB_TFEL_PLOT_STANDARDGRAPHTHEME_HXX */
 

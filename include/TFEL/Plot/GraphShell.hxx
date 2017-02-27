@@ -5,8 +5,8 @@
  * \brief 15 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_GNUPLOTSHELL_H_
-#define _LIB_TFEL_PLOT_GNUPLOTSHELL_H_ 
+#ifndef LIB_TFEL_PLOT_GRAPHSHELL_H_
+#define LIB_TFEL_PLOT_GRAPHSHELL_H_ 
 
 #include<QtCore/QObject>
 #include<QtCore/QStringList>
@@ -125,5 +125,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_GNUPLOTSHELL_H */
+#endif /* LIB_TFEL_PLOT_GRAPHSHELL_H */
 

@@ -13,7 +13,7 @@ macro(tests_plot test_arg)
     set_property(TEST ${test_arg}
   	         PROPERTY ENVIRONMENT "PATH=$<TARGET_FILE_DIR:TFELPlot>\;$ENV{PATH}")
   endif((CMAKE_HOST_WIN32) AND (NOT MSYS))
-  target_link_libraries(${test_arg} TFELGnuplotInterpreter TFELTests)
+  target_link_libraries(${test_arg} TFELGnuplotInterpreter TFELPlot TFELTests)
 endmacro(tests_plot)
 
 tests_plot(GnuplotInterpreterTest)

@@ -5,8 +5,8 @@
  * \brief  12 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_
-#define _LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_ 
+#ifndef LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_
+#define LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_ 
 
 // we use STL's containers instead of Qt's since we rely on
 // CxxTokenizer which works with string's (of course, it results from
@@ -62,9 +62,15 @@ namespace tfel
        * \param[in]  l:    string to be evaluated
        * \param[in]  b:    if true, emit the errorMsg signal
        */
-      bool eval(QString&,
-		const QString&,
-		const bool = true);
+      bool parseString(QString&,
+		       const QString&,
+		       const bool = true);
+      /*!
+       * \brief evaluate a string
+       * \return the result of the evaluation.
+       * \param[in] l: string to be evaluated
+       */
+      double eval(const QString&);
 
     signals:
 
@@ -83,28 +89,33 @@ namespace tfel
 
       typedef void (GnuplotInterpreter::* MemFuncPtr)(const_iterator&,
 						      const const_iterator);
-
+      /*!
+       * \brief evaluate the next group 
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      double eval(const_iterator&,
+		  const const_iterator);
       /*!
        * \param[in] t : terminal type
        * \param[in] o : options
        */
-      void
-      setTerminal(const std::string&,
-		  const std::vector<std::string>&);
+      void setTerminal(const std::string&,
+		       const std::vector<std::string>&);
 
       void setOutput(const std::string&);
 
       void registerCallBacks();
 
       std::shared_ptr<tfel::math::Evaluator>
-      readFunction(const_iterator&, 
-		   const const_iterator,
-		   const std::string&);
+	readFunction(const_iterator&, 
+		     const const_iterator,
+		     const std::string&);
 
       std::shared_ptr<tfel::math::Evaluator>
-      readFunction(const_iterator&, 
-		   const const_iterator,
-		   const std::vector<std::string>&);
+	readFunction(const_iterator&, 
+		     const const_iterator,
+		     const std::vector<std::string>&);
 	
       void readCoordinates(GraphCoordinates&,
 			   const_iterator&, 
@@ -148,87 +159,125 @@ namespace tfel
 		       std::shared_ptr<tfel::math::parser::ExternalFunction>,
 		       const bool,const bool);
 
-      void
-      readDataFunctionInUsingDeclaration(std::string&,
-					 const_iterator&,
-					 const const_iterator);
-
-      void
-      treatInclude(const_iterator&, 
-		   const const_iterator);
-
-      void
-      treatImport(const_iterator&, 
-		  const const_iterator);
-
-      void
-      treatRePlot(const_iterator&, 
-		  const const_iterator);
-
-      void
-      treatPlot(const_iterator&, 
-		const const_iterator);
-
-      void
-      treatSet(const_iterator&, 
-	       const const_iterator);
-
-      void
-      treatUnSet(const_iterator&, 
-		 const const_iterator);
-
-      // void
-      // treatKriging(const_iterator&, 
-      // 		   const const_iterator);
-
-      // void
-      // treatFit(const_iterator&, 
-      // 	       const const_iterator);
-
-      void
-      treatPrint(const_iterator&, 
-		 const const_iterator);
-
-      void
-      treatQuit(const_iterator&, 
-		const const_iterator);
-
-      void
-      treatReset(const_iterator&, 
-		 const const_iterator);
-
-      void
-      treatConst(const_iterator&, 
-		 const const_iterator);
-
-      void
-      treatLock(const_iterator&, 
-		const const_iterator);
-
-      void
-      treatNoDeps(const_iterator&, 
-		  const const_iterator);
-
-      void
-      treatKriging(const_iterator&, 
-		   const const_iterator);
-
-      void
-      treatFit(const_iterator&, 
-	       const const_iterator);
+      void readDataFunctionInUsingDeclaration(std::string&,
+					      const_iterator&,
+					      const const_iterator);
+      /*!
+       * \brief treat the `include` keyword
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatInclude(const_iterator&, 
+			const const_iterator);
+      /*!
+       * \brief treat the `import` keyword. The treatment of this
+       * keyword is in fact handled by the `ImportInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatImport(const_iterator&, 
+		       const const_iterator);
+      /*!
+       * \brief treat the `replot` keyword
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatRePlot(const_iterator&, 
+		       const const_iterator);
+      /*!
+       * \brief treat the `plot` keyword. The treatment of this
+       * keyword is in fact handled by the `PlotInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatPlot(const_iterator&, 
+		     const const_iterator);
+      /*!
+       * \brief treat the `set` keyword. The treatment of this
+       * keyword is in fact handled by the `SetInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatSet(const_iterator&, 
+		    const const_iterator);
+      /*!
+       * \brief treat the `unset` keyword. The treatment of this
+       * keyword is in fact handled by the `UnSetInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatUnSet(const_iterator&, 
+		      const const_iterator);
+      /*!
+       * \brief treat the `print` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatPrint(const_iterator&, 
+		      const const_iterator);
+      /*!
+       * \brief treat the `quit` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatQuit(const_iterator&, 
+		     const const_iterator);
+      /*!
+       * \brief treat the `reset` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatReset(const_iterator&, 
+		      const const_iterator);
+      /*!
+       * \brief treat the `const` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatConst(const_iterator&, 
+		      const const_iterator);
+      /*!
+       * \brief treat the `lock` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatLock(const_iterator&, 
+		     const const_iterator);
+      /*!
+       * \brief treat the `nodeps` keyword.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatNoDeps(const_iterator&, 
+		       const const_iterator);
+      /*!
+       * \brief treat the `kriging` keyword. The treatment of this
+       * keyword is in fact handled by the `KrigingInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatKriging(const_iterator&, 
+			const const_iterator);
+      /*!
+       * \brief treat the `fit` keyword. The treatment of this
+       * keyword is in fact handled by the `FitInterpreter` class.
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatFit(const_iterator&, 
+		    const const_iterator);
 
       std::string
-      gatherTokenGroup(const_iterator&, 
-		       const const_iterator);
+	gatherTokenGroup(const_iterator&, 
+			 const const_iterator);
 
-      void
-      setDummyVariable(const std::string&);
+      void setDummyVariable(const std::string&);
 
       const std::string&
-      getDummyVariable(void) const;
+	getDummyVariable(void) const;
 
       tfel::math::parser::ExternalFunctionManagerPtr
-      getExternalFunctionManager();
+	getExternalFunctionManager();
 
       QString currentLine;
       QString previousPlot;
@@ -248,5 +297,5 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H */
+#endif /* LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H */
 

@@ -5,8 +5,8 @@
  * \date   13 Nov 2007
  */
 
-#ifndef _LIB_TFEL_UTILITIES_TEXTDATAREADER_H_
-#define _LIB_TFEL_UTILITIES_TEXTDATAREADER_H_ 
+#ifndef LIB_TFEL_PLOT_TEXTDATAREADER_H_
+#define LIB_TFEL_PLOT_TEXTDATAREADER_H_ 
 
 #include<QtCore/QVector>
 #include<QtCore/QString>
@@ -138,4 +138,4 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_UTILITIES_TEXTDATAREADER_H */
+#endif /* LIB_TFEL_PLOT_TEXTDATAREADER_H */

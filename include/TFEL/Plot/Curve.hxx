@@ -6,8 +6,8 @@
  * \date   04 jan 2008
  */
 
-#ifndef _LIB_TFEL_CURVES_HXX_
-#define _LIB_TFEL_CURVES_HXX_ 
+#ifndef LIB_TFEL_PLOT_CURVES_HXX_
+#define LIB_TFEL_PLOT_CURVES_HXX_ 
 
 #include<cmath>
 #include<stdexcept>
@@ -30,6 +30,11 @@ namespace tfel{
 
   namespace plot{
 
+    /*!
+     * \brief base class describing a curve.
+     * \see the `DataCurve` and the `EvaluatedCurve` classes for
+     * details.
+     */
     class Curve
       : public QObject
     {
@@ -38,6 +43,9 @@ namespace tfel{
 
     public:
 
+      /*!
+       * \brief list of all available styles for drawing a curve
+       */
       enum Style{
 	SOLIDLINE      =  0u,
 	DOTLINE        =  1u,
@@ -87,6 +95,7 @@ namespace tfel{
       virtual Curve::Style   getStyle(void)  const = 0;
       virtual unsigned short getNumberOfSamples(void) const = 0;
       virtual unsigned short getWidth() const = 0;
+      //! destructor
       virtual ~Curve();
 
     public slots:
@@ -119,5 +128,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_CURVES_HXX */
+#endif /* LIB_TFEL_PLOT_CURVES_HXX */
 

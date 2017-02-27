@@ -12,9 +12,16 @@ AM_CPPFLAGS = -I$(top_srcdir)/include             \
 	     `@TFELCONFIG@ --includes --cppflags`
 endif
 
-LDADD = -L$(top_builddir)/src/Plot -lTFELGnuplotInterpreter \
+LDADD = -L$(top_builddir)/src/Plot   \
+	-lTFELPlot                   \
+	-lTFELGnuplotInterpreter     \
 	-L@TFELHOME@/lib -lTFELTests 
-
+if TFEL_QT4
+LDADD += @QT4_LIBS@
+endif
+if TFEL_QT5
+LDADD += @QT_LIBS@
+endif
 
 testdir = $(pkgdatadir)/tests/
 test_PROGRAMS = GnuplotInterpreterTest

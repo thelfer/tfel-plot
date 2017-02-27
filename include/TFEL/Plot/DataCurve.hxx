@@ -6,8 +6,8 @@
  * \date   19 jan 2008
  */
 
-#ifndef _LIB_TFEL_DATACURVE_HXX_
-#define _LIB_TFEL_DATACURVE_HXX_ 
+#ifndef LIB_TFEL_PLOT_DATACURVE_HXX_
+#define LIB_TFEL_PLOT_DATACURVE_HXX_ 
 
 #include<memory>
 #include<QtCore/QVector>
@@ -125,5 +125,5 @@ namespace tfel{
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_DATACURVE_HXX */
+#endif /* LIB_TFEL_PLOT_DATACURVE_HXX */
 

@@ -6,8 +6,8 @@
  * \date   12 fév 2008
  */
 
-#ifndef _LIB_TFEL_THEMEMANAGER_HXX_
-#define _LIB_TFEL_THEMEMANAGER_HXX_ 
+#ifndef LIB_TFEL_PLOT_THEMEMANAGER_HXX_
+#define LIB_TFEL_PLOT_THEMEMANAGER_HXX_ 
 
 #include<QtCore/QMap>
 #include<QtCore/QString>
@@ -90,5 +90,5 @@ namespace tfel
 
 #include"TFEL/Plot/ThemeManager.ixx"
 
-#endif /* _LIB_TFEL_THEMEMANAGER_HXX */
+#endif /* LIB_TFEL_PLOT_THEMEMANAGER_HXX */
 

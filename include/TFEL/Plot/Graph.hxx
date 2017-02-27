@@ -6,8 +6,8 @@
  * \date   04 jan 2008
  */
 
-#ifndef _LIB_TFEL_PLOT_GRAPH_HXX_
-#define _LIB_TFEL_PLOT_GRAPH_HXX_ 
+#ifndef LIB_TFEL_PLOT_GRAPH_HXX_
+#define LIB_TFEL_PLOT_GRAPH_HXX_ 
 
 #include<QtCore/QVector>
 #include<QtCore/QMap>
@@ -680,4 +680,4 @@ namespace tfel
 
 } // end of namespace tfel
   
-#endif /* _LIB_TFEL_PLOT_GRAPH_HXX */
+#endif /* LIB_TFEL_PLOT_GRAPH_HXX */

@@ -5,8 +5,8 @@
  * \date   09 févr. 2016
  */
 
-#ifndef _LIB_TFEL_PLOT_CONFIG_HXX_
-#define _LIB_TFEL_PLOT_CONFIG_HXX_
+#ifndef LIB_TFEL_PLOT_CONFIG_HXX_
+#define LIB_TFEL_PLOT_CONFIG_HXX_
 
 #include"TFEL/Config/TFELConfig.hxx"
 
@@ -38,4 +38,4 @@
 #  define TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT TFEL_VISIBILITY_EXPORT
 #endif
 
-#endif /* _LIB_TFEL_PLOT_CONFIG_HXX_ */
+#endif /* LIB_TFEL_PLOT_CONFIG_HXX_ */

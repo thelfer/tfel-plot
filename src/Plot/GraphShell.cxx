@@ -33,8 +33,7 @@ namespace tfel{
 
   namespace plot{
 
-    QString
-    GraphShell::getModifier(const QKeyEvent& e)
+    QString GraphShell::getModifier(const QKeyEvent& e)
     {
       QString m;
       if(e.modifiers()&Qt::ControlModifier){
@@ -83,17 +82,15 @@ namespace tfel{
       this->displayPrompt();
     }
 
-    void
-    GraphShell::treatNewCommand(const QString& l)
+    void GraphShell::treatNewCommand(const QString& l)
     {
       QString e;
-      gi.eval(e,l);
+      this->gi.parseString(e,l);
       this->history.append(l);
       this->pHistory = this->history.size();
     } // end of GraphShell::treatNewCommand
 
-    void
-    GraphShell::importGnuplotFile(const QString& f)
+    void GraphShell::importGnuplotFile(const QString& f)
     {
       QFile file(f);
       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -189,8 +186,7 @@ namespace tfel{
       }
     }
 
-    void
-    GraphShell::mousePressEvent(QMouseEvent *e)
+    void GraphShell::mousePressEvent(QMouseEvent *e)
     {
       if(e->button()==Qt::LeftButton){
 	this->bscursor = this->cursorForPosition (e->pos());
@@ -202,8 +198,7 @@ namespace tfel{
       }
     } // end of GraphShell::mousePressEvent
 
-    void
-    GraphShell::mouseMoveEvent(QMouseEvent *e)
+    void GraphShell::mouseMoveEvent(QMouseEvent *e)
     {
       if(s){
 	QTextCursor n = this->cursorForPosition (e->pos());
@@ -230,8 +225,7 @@ namespace tfel{
       }
     }      
 
-    void
-    GraphShell::mouseReleaseEvent(QMouseEvent *e)
+    void GraphShell::mouseReleaseEvent(QMouseEvent *e)
     {
       if(e->button()==Qt::LeftButton){
 	s = false;
@@ -240,8 +234,7 @@ namespace tfel{
       }
     } // end of GraphShell::mouseReleaseEvent
 
-    void
-    GraphShell::keyPressEvent(QKeyEvent *e)
+    void GraphShell::keyPressEvent(QKeyEvent *e)
     {
       int ps = this->getPrompt().length();
       QTextCursor c = this->textCursor();
@@ -386,44 +379,38 @@ namespace tfel{
       }
     }
 
-    void
-    GraphShell::displayPrompt()
+    void GraphShell::displayPrompt()
     {
       this->setTextColor(Qt::blue);
       this->textCursor().insertText(this->getPrompt());
       this->setTextColor(this->getUserInputTextColor());
     }
 
-    QColor
-    GraphShell::getUserInputTextColor()
+    QColor GraphShell::getUserInputTextColor()
     {
       return Qt::black;
     }
 
-    const QString&
-    GraphShell::getPrompt() const
+    const QString& GraphShell::getPrompt() const
     {
       return this->prompt;
     }
 
-    void
-    GraphShell::displayOutputMsg(const QString& m)
+    void GraphShell::displayOutputMsg(const QString& m)
     {
       this->setTextColor(Qt::green);
       this->append(m);
       this->setTextColor(this->getUserInputTextColor());
     }
 
-    void
-    GraphShell::displayErrorMsg(const QString& m)
+    void GraphShell::displayErrorMsg(const QString& m)
     {
       this->setTextColor(Qt::red);
       this->append(m);
       this->setTextColor(this->getUserInputTextColor());
     }
 
-    void
-    GraphShell::saveBuffer()
+    void GraphShell::saveBuffer()
     {
       const QString& f = QFileDialog::getSaveFileName(this,
 						      tr("Save File"),

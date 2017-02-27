@@ -6,8 +6,8 @@
  * \date   22 jan 2009
  */
 
-#ifndef _LIB_TFEL_ARROWSTYLE_HXX_
-#define _LIB_TFEL_ARROWSTYLE_HXX_ 
+#ifndef LIB_TFEL_PLOT_ARROWSTYLE_HXX_
+#define LIB_TFEL_PLOT_ARROWSTYLE_HXX_ 
 
 #include"TFEL/Plot/Config.hxx"
 
@@ -33,4 +33,4 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_ARROWSTYLE_HXX */
+#endif /* LIB_TFEL_PLOT_ARROWSTYLE_HXX */

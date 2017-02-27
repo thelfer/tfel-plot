@@ -6,8 +6,8 @@
  * \date   06 jan 2009
  */
 
-#ifndef _LIB_TFEL_GRAPHCOORDINATES_HXX_
-#define _LIB_TFEL_GRAPHCOORDINATES_HXX_ 
+#ifndef LIB_TFEL_PLOT_GRAPHCOORDINATES_HXX_
+#define LIB_TFEL_PLOT_GRAPHCOORDINATES_HXX_ 
 
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Math/Evaluator.hxx"
@@ -38,4 +38,4 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_GRAPHCOORDINATES_HXX_ */
+#endif /* LIB_TFEL_PLOT_GRAPHCOORDINATES_HXX_ */

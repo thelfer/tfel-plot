@@ -5,8 +5,8 @@
  * \brief 13 juin 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H_
-#define _LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H_ 
+#ifndef LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H_
+#define LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H_ 
 
 #include"TFEL/Plot/GnuplotInterpreter.hxx"
 
@@ -54,5 +54,5 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H */
+#endif /* LIB_TFEL_PLOT_GNUPLOTIMPORTINTERPRETER_H */
 

@@ -6,8 +6,8 @@
  * \date   14 fév 2008
  */
 
-#ifndef _LIB_TFEL_EVALUATEDCURVE_HXX_
-#define _LIB_TFEL_EVALUATEDCURVE_HXX_ 
+#ifndef LIB_TFEL_PLOT_EVALUATEDCURVE_HXX_
+#define LIB_TFEL_PLOT_EVALUATEDCURVE_HXX_ 
 
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Math/Evaluator.hxx"
@@ -57,5 +57,5 @@ namespace tfel
 
 } // end of namespace tfel
 
-#endif /* _LIB_TFEL_EVALUATEDCURVE_HXX */
+#endif /* LIB_TFEL_PLOT_EVALUATEDCURVE_HXX */
 
