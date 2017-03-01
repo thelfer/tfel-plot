@@ -7,6 +7,7 @@
 
 #include<cstdlib>
 #include<sstream>
+#include<fstream>
 #include<stdexcept>
 #include<algorithm>
 
@@ -23,6 +24,7 @@
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Utilities/CxxTokenizer.hxx"
 
+#include"TFEL/Plot/Config/GetInstallPath.hxx"
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/GraphCoordinates.hxx"
 #include"TFEL/Plot/GnuplotImportInterpreter.hxx"
@@ -39,6 +41,23 @@ namespace tfel
   namespace plot
   {
 
+    /*!
+     * \return the path to the documentation file if available.
+     * If not, an empty string is returned
+     * \param[in] k  : keyword
+     */
+    static std::string
+    getDocumentationFilePath(const std::string& k)
+    {
+      const auto root = getInstallPath();
+      auto fn = root+"/share/doc/tfel-plot/tplot/gp/"+k+".md";
+      std::ifstream desc{fn};
+      if(desc){
+	return fn;
+      }
+      return "";
+    }
+    
     GnuplotInterpreter::GnuplotInterpreter(Graph& graph,
 					   QObject *const p)
       : GnuplotInterpreterBase(graph,p),
@@ -93,6 +112,8 @@ namespace tfel
 			     &GnuplotInterpreter::treatRePlot);
       this->registerCallBack(this->callBacks,"kriging",
 			     &GnuplotInterpreter::treatKriging);
+      this->registerCallBack(this->callBacks,"help",
+			     &GnuplotInterpreter::treatHelp);
       this->registerCallBack(this->callBacks,"fit",
 			     &GnuplotInterpreter::treatFit);
     } // end of GnuplotInterpreter::registerCallBacks()
@@ -227,11 +248,34 @@ namespace tfel
 	 (t=="ppm")||(t=="xbm")||(t=="xpm")||(t=="x11")){
 	this->terminal=t;
       } else {
-	throw(std::runtime_error("GnuplotInterpreter::treatSetTerminal: "
+	throw(std::runtime_error("GnuplotInterpreter::setTerminal: "
 				 "unsupported terminal '"+t+"'"));
       }
     } // end of GnuplotInterpreter::setTerminal
 
+    void GnuplotInterpreter::treatHelp(const_iterator& p,
+				       const const_iterator pe)
+    {
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatHelp","",p,pe);
+      const auto k = p->value;
+      const auto f = getDocumentationFilePath(k);      
+      ++p;
+      if(f.empty()){
+	emit outputMsg(QString::fromStdString("no help available for "
+					      "'"+k+"'"));
+      } else {
+	std::ifstream desc(f);
+	std::ostringstream o;
+	if(!desc){
+	  // note, this shall never append...
+	  o << "can't access to the description '" << k << "'";
+	} else {
+	  o << desc.rdbuf();
+	}
+	emit outputMsg(QString::fromStdString(o.str()));
+      }
+    } // end of GnuplotInterpreter::treatHelp
+    
     void GnuplotInterpreter::setOutput(const std::string& o)
     {
       this->output = o;

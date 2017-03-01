@@ -163,6 +163,13 @@ namespace tfel
 					      const_iterator&,
 					      const const_iterator);
       /*!
+       * \brief treat the `help` keyword
+       * \param[in,out] p:  iterator to the current position
+       * \param[in]     pe: iterator past the end of line
+       */
+      void treatHelp(const_iterator&, 
+		     const const_iterator);
+      /*!
        * \brief treat the `include` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line

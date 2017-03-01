@@ -198,10 +198,15 @@ AC_CONFIG_FILES([Makefile
 		 include/Makefile
 		 src/Makefile
 		 src/Plot/Makefile
+ 		 src/Plot/GetInstallPath-Prefix.hxx
 		 tplot/Makefile
 		 tplot/src/Makefile
 		 tplot/include/Makefile
-		 tests/Makefile])
+		 tests/Makefile
+		 docs/Makefile
+		 docs/tplot/Makefile
+		 docs/tplot/gp/Makefile		 
+		 ])
 
 AC_OUTPUT
 

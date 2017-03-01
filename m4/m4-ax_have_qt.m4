@@ -64,7 +64,7 @@ AC_DEFUN([AX_HAVE_QT],
 
   AC_MSG_CHECKING(for Qt)
   # If we have Qt5 or later in the path, we're golden
-  ver=`qmake --version | grep -o "Qt version ."`
+  ver=`QT_SELECT=qt5 qmake --version | grep -o "Qt version ."`
   if test "$ver" ">" "Qt version 4"; then
     have_qt=yes
     # This pro file dumps qmake's variables, but it only works on Qt 5 or later
@@ -105,20 +105,20 @@ percent.target = %
 percent.commands = @echo -n "\$(\$(@))\ "
 QMAKE_EXTRA_TARGETS += percent
 EOF
-    qmake $am_have_qt_pro -o $am_have_qt_makefile
+    QT_SELECT=qt5 qmake $am_have_qt_pro -o $am_have_qt_makefile
     QT_CXXFLAGS=`make -s -f $am_have_qt_makefile CXXFLAGS INCPATH`
     QT_LIBS=`make -s -f $am_have_qt_makefile LIBS`
     rm $am_have_qt_pro $am_have_qt_makefile
 
     # Look for specific tools in $PATH
-    QT_MOC=`which moc`
-    QT_UIC=`which uic`
-    QT_RCC=`which rcc`
-    QT_LRELEASE=`which lrelease`
-    QT_LUPDATE=`which lupdate`
+    QT_MOC="QT_SELECT=qt5 `which moc`"
+    QT_UIC="QT_SELECT=qt5 `which uic`"
+    QT_RCC="QT_SELECT=qt5 `which rcc`"
+    QT_LRELEASE="QT_SELECT=qt5 `which lrelease`"
+    QT_LUPDATE="QT_SELECT=qt5  `which lupdate`"
 
     # Get Qt version from qmake
-    QT_DIR=`qmake --version | grep -o -E /.+`
+    QT_DIR=`QT_SELECT=qt5 qmake --version | grep -o -E /.+`
 
     # All variables are defined, report the result
     AC_MSG_RESULT([$have_qt:

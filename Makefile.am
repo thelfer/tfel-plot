@@ -1,5 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = cmake include src tplot tests
+SUBDIRS = cmake include src tplot tests docs
 
 DISTCHECK_CONFIGURE_FLAGS = --with-tfel=$(TFELHOME)
 if TFEL_QT4

@@ -2,11 +2,14 @@ if(enable-qt4)
   include(${QT_USE_FILE})
   add_definitions(${QT_DEFINITIONS})
 endif(enable-qt4)
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${TFEL_INCLUDE_PATH}")
 
 link_directories("${TFEL_LIBRARY_PATH}")
 link_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
+configure_file(GetInstallPath-Prefix.hxx.in GetInstallPath-Prefix.hxx @ONLY)
 
 qt_add_resources(TFELPlotResources_RCC
   TFELPlotResources.qrc)
@@ -35,6 +38,7 @@ qt_sources(TFELPlot_SOURCES
 
 tfel_plot_library(TFELPlot
   ${TFELPlot_SOURCES}
+  GetInstallPath.cxx
   ArrowStyle.cxx
   GraphCoordinates.cxx
   GraphTheme.cxx

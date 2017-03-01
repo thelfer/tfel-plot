@@ -55,3 +55,5 @@ endif(${ARGC} LESS 1)
 add_executable(${name} ${ARGN})
 install(TARGETS ${name} DESTINATION bin)
 endmacro(tfel_plot_executable)
+
+set(prefix           "${CMAKE_INSTALL_PREFIX}")

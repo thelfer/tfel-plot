@@ -1,13 +1,15 @@
 ## Makefile.am -- Process this file with automake to produce a Makefile.in file.
 
 if TFEL_QT4
-AM_CPPFLAGS = -I$(top_srcdir)/include             \
+AM_CPPFLAGS = -I$(top_builddir)/src/Plot          \
+	      -I$(top_srcdir)/include             \
 	      @QT4_CFLAGS@                        \
 	     `@TFELCONFIG@ --includes --cppflags`
 endif
 
 if TFEL_QT5
-AM_CPPFLAGS = -I$(top_srcdir)/include             \
+AM_CPPFLAGS = -I$(top_builddir)/src/Plot          \
+	      -I$(top_srcdir)/include             \
 	      @QT_CXXFLAGS@                       \
 	     `@TFELCONFIG@ --includes --cppflags`
 endif
@@ -15,7 +17,8 @@ endif
 lib_LTLIBRARIES = libTFELPlot.la               \
 		  libTFELGnuplotInterpreter.la
 
-libTFELPlot_la_SOURCES = ArrowStyle.cxx                   \
+libTFELPlot_la_SOURCES = GetInstallPath.cxx               \
+			 ArrowStyle.cxx                   \
 			 Curve.cxx                        \
 			 CurveBase.cxx                    \
 			 DataCurve.cxx	                  \
