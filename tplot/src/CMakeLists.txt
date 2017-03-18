@@ -12,7 +12,7 @@ link_directories("${TFEL_LIBRARY_PATH}")
 qt_sources(TPlot_SOURCES 
   "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot" TPlot)
 tfel_plot_executable(tplot
-  tplot.cxx
+  tplot-main.cxx
   ${TPlot_SOURCES})
 
 if(enable-qt4)

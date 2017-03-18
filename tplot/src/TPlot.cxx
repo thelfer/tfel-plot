@@ -92,7 +92,7 @@ namespace tfel
     {
       const auto value = qvalue.toStdString();
       for(const auto& c : value){
-	if(!std::isdigit(c)){
+	if(!isdigit(c)){
 	  throw(std::runtime_error("TPlot::convertToUnsignedShort: invalid entry"));
 	}
       }

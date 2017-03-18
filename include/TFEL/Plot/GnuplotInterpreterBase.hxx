@@ -23,7 +23,7 @@ namespace tfel
   {
 
     // forward declaration
-    struct Graph;
+    class Graph;
 
     // forward declaration
     struct TextDataReader;

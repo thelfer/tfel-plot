@@ -32,7 +32,7 @@ namespace tfel{
      * This class provides a simple shell
      * to interpreter gnuplot shell
      */
-    class TFELPLOT_VISIBILITY_EXPORT GraphShell
+    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell
       : public QTextEdit
     {
 

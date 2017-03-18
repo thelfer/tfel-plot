@@ -24,6 +24,7 @@
 #endif /* TFEL_QT5 */
 #include<QtGui/QColor>
 
+#include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/Point.hxx"
 
 namespace tfel{
@@ -35,7 +36,7 @@ namespace tfel{
      * \see the `DataCurve` and the `EvaluatedCurve` classes for
      * details.
      */
-    class Curve
+    class TFELPLOT_VISIBILITY_EXPORT Curve
       : public QObject
     {
 

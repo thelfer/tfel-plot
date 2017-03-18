@@ -24,7 +24,7 @@ namespace tfel
     /*!
      * \brief class in charge of reading data in a text file
      */
-    struct TFELUTILITIES_VISIBILITY_EXPORT TextDataReader
+    struct TFELPLOT_VISIBILITY_EXPORT TextDataReader
     {
       /*!
        * \brief helper class in charge of storing of line of data line
