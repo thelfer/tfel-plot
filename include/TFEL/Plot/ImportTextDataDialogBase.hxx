@@ -33,7 +33,7 @@ namespace tfel
   namespace plot
   {
 
-    struct Graph;
+	  class Graph;
 
     class TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase 
       : public CurveConfigurationDialogBase

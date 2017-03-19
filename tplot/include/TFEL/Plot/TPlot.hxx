@@ -329,7 +329,7 @@ namespace tfel
       void
       treatFunctionInput(const Function&);
 
-      friend class
+      friend struct
       tfel::utilities::ArgumentParserBase<TPlot>;
 
       void createActions();

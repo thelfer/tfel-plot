@@ -14,7 +14,7 @@ namespace tfel{
 
   namespace plot{
 
-    class CurveBase
+    class TFELPLOT_VISIBILITY_EXPORT CurveBase
       : public Curve
     {
 

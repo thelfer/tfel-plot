@@ -18,7 +18,7 @@ qt_sources(TPlot_SOURCES
   CLIHandler)
 endif(TPLOT_ENABLE_CLI)
 tfel_plot_executable(tplot
-  tplot.cxx
+  tplot-main.cxx
   ${TPlot_SOURCES})
 tfel_plot_executable(tplot-gui
   tplot-gui.cxx
