@@ -13,10 +13,10 @@ configure_file(GetInstallPath-Prefix.hxx.in GetInstallPath-Prefix.hxx @ONLY)
 
 qt_add_resources(TFELPlotResources_RCC
   TFELPlotResources.qrc)
-if(MSC)
+if(NOT MSC)
 set_property(SOURCE ${TFELPlotResources_RCC}
   PROPERTY COMPILE_FLAGS "-fvisibility=default")
-endif(MSC)
+endif(NOT MSC)
 
 qt_sources(TFELPlot_SOURCES  
   "${PROJECT_SOURCE_DIR}/include/TFEL/Plot"

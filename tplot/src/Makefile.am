@@ -19,7 +19,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/tplot/include        \
 endif
 
 bin_PROGRAMS  = tplot tplot-gui
-tplot_SOURCES = tplot.cxx
+tplot_SOURCES = tplot-main.cxx
 tplot_gui_SOURCES = tplot-gui.cxx  \
 	      	    TPlot.cxx      \
 		    resources.cxx
