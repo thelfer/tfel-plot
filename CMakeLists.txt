@@ -11,6 +11,14 @@ include(cmake/modules/tfel.cmake)
 # qt support
 include(cmake/modules/qt.cmake)
 
+option(enable-cli "enable the command line interface (requires libreadline)" OFF)
+if(enable-cli)
+  message(STATUS "command line interface support enabled")
+  set(TPLOT_ENABLE_CLI ON)
+  add_definitions("-DTPLOT_ENABLE_CLI")
+  include(cmake/modules/FindReadLine.cmake)
+endif(enable-cli)
+
 # testing
 set(CTEST_CONFIGURATION_TYPE "${JOB_BUILD_CONFIGURATION}")
 # (must be placed *before* any add_subdirectory, cmake bug ?)

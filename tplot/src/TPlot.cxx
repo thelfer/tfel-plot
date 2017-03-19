@@ -1,17 +1,21 @@
 /*! 
- * \file  TPlot.cxx
+ * \file   TPlot.cxx
  * \brief
  * \author Helfer Thomas
- * \brief 30 mai 2013
+ * \brief  30 mai 2013
  */
 
 #include<cassert>
 #include<sstream>
+#include<iostream>
 
+#include<QtCore/QDebug>
 #include<QtCore/QProcess>
 #include<QtCore/QMimeData>
 #include<QtCore/QUrl>
 #include<QtCore/QBuffer>
+#include<QtCore/QTextCodec>
+#include<QtCore/QTextDecoder>
 
 #ifdef TFEL_QT4
 #include<QtGui/QAction>
@@ -116,12 +120,12 @@ namespace tfel
       }
       return true;
     } // end of TPlot::isUnsignedShort
- TPlot::TPlot(const int argc,
+    TPlot::TPlot(const int argc,
 		 const char * const * const argv)
       : tfel::utilities::ArgumentParserBase<TPlot>(argc,argv),
-	g(new Graph(this)),
-	shell(new GraphShell(*g,this)),
-	name(argv[0])
+      g(new Graph(this)),
+      shell(new GraphShell(*g,this)),
+      name(argv[0])
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::TPlot: "+std::string(m))));
@@ -149,10 +153,10 @@ namespace tfel
       } else {
 	throw_if(this->goutput,"an input (for example a gnuplot script, a licos curve) "
 		 "is not compatible with the definition of an output file");
-	const auto& out = this->output.toStdString();
-	auto spos = out.find_last_of('.');
-	throw_if(spos==std::string::npos,"invalid output name '" + out+"'");
-	const auto extension = out.substr(spos+1);
+	const auto o = this->output.toStdString();
+	auto spos = o.find_last_of('.');
+	throw_if(spos==std::string::npos,"invalid output name '"+o+"'");
+	const auto extension = o.substr(spos+1);
 	if(extension=="pdf"){
 	  this->g->exportToPDF(this->output);
 #ifdef TFEL_QT4
@@ -164,7 +168,7 @@ namespace tfel
 	} else if(extension=="png"){
 	  this->g->exportToPNG(this->output);
 	} else {
-	  throw_if(true,"invalid output name '"+out+" "
+	  throw_if(true,"invalid output name '"+o+" "
 		   "(unsupported extension "+extension+")");
 	}
 	this->goutput = false;
@@ -240,7 +244,7 @@ namespace tfel
       }
     }
 
-    void TPlot::createActions(void)
+    void TPlot::createActions()
     {
       this->epdfa = new QAction(tr("Export to pdf"), this);
       this->epdfa->setIcon(QIcon::fromTheme("document-save-as"));
@@ -399,7 +403,7 @@ namespace tfel
 
       this->aa = new QAction(tr("&About"), this);
 
-       this->aa->setStatusTip(tr("Show the application's About box"));
+      this->aa->setStatusTip(tr("Show the application's About box"));
       connect(this->aa, SIGNAL(triggered()), this, SLOT(about()));
       this->aa2 = new QAction(tr("About &Qt"), this);
       this->aa2->setStatusTip(tr("Show the Qt library's About box"));
@@ -424,7 +428,7 @@ namespace tfel
       }
     } // end of TPlot::createCurvesMenu
 
-    void TPlot::createThemesMenu(void)
+    void TPlot::createThemesMenu()
     {
       const auto& thm = ThemeManager::getThemeManager();
       const auto themes = thm.getAvailableThemesNames();
@@ -436,7 +440,7 @@ namespace tfel
       }
     } // end of TPlot::createThemesMenu
    
-    void TPlot::createMainMenu(void)
+    void TPlot::createMainMenu()
     {
       this->fm = this->menuBar()->addMenu(tr("&File"));
       this->fm->addAction(this->na);
@@ -578,7 +582,7 @@ namespace tfel
     }
 
     const std::vector<std::string> TPlot::tokenize(const std::string& s,
-		    const char c)
+						   const char c)
     {
       std::vector<std::string> res;
       std::string::size_type b = 0u;
@@ -591,13 +595,23 @@ namespace tfel
       }
       return res;
     } // end of TPlot::tokenize
- TPlot::~TPlot()
+    TPlot::~TPlot()
     {} // end of TPlot::TPlot
 
-    void TPlot::registerArgumentCallBacks(void)
+    void TPlot::registerArgumentCallBacks()
     {
       this->registerNewCallBack("--noborder",&TPlot::treatNoBorder,
 				"don't show the graph border");
+#ifdef TPLOT_ENABLE_CLI
+      this->registerNewCallBack("--cli",&TPlot::treatCLI,
+				"read gnuplot commands from the command line");
+      this->registerNewCallBack("--input-socket",&TPlot::treatInputSocket,
+				"give the name of the input socket for "
+				"receiving commands from the command line",true);
+      this->registerNewCallBack("--output-socket",&TPlot::treatOutputSocket,
+				"give the name of the output socket for "
+				"sending message to the command line",true);
+#endif /* TPLOT_ENABLE_CLI */      
       this->registerNewCallBack("--xy","-xy",&TPlot::treatXY,
 				"specify axis used for drawing");
       this->registerNewCallBack("--x2y","-x2y",&TPlot::treatX2Y,
@@ -707,14 +721,14 @@ namespace tfel
 				"add a gnuplot instruction",true);
     } // end of TPlot::registerArgumentCallBacks
 
-    bool TPlot::graphicalOutput(void) const
+    bool TPlot::graphicalOutput() const
     {
       return this->goutput;
     }
 
     void TPlot::getStringFromArgs(QString& w,
-			     const std::string& method,
-			     const std::string& key)
+				  const std::string& method,
+				  const std::string& key)
     {
       const auto& o =this->currentArgument->getOption();
       if(!w.isEmpty()){
@@ -755,12 +769,57 @@ namespace tfel
       return r;
     }
 
-    void TPlot::treatOutput(void)
+#ifdef TPLOT_ENABLE_CLI
+    void TPlot::treatCLI()
+    {} // end of TPlot::treatCLI()
+    
+    void TPlot::treatInputSocket()
+    {
+      auto throw_if = [](const bool b, const std::string& m){
+	if(b)(throw(std::runtime_error("TPlot::treatInputSocket: "+std::string(m))));
+      };
+      const auto o =this->currentArgument->getOption();
+      throw_if(o.empty(),"no argument given to the '"+
+	       std::string{*(this->currentArgument)}+"' option");
+      throw_if(this->in!=nullptr,"input socket already defined");
+      this->in = new QLocalSocket(this);
+      this->in->connectToServer(QString::fromStdString(o),QIODevice::ReadOnly);
+      throw_if(this->in->state()!=QLocalSocket::ConnectedState,
+	       "can't connect to socket '"+o+"'");
+      QObject::connect(this->in,&QLocalSocket::readyRead,
+		       this,&TPlot::readCLIInput);
+    }
+    
+    void TPlot::treatOutputSocket()
+    {
+      // const auto o =this->currentArgument->getOption();
+      // throw_if(o.empty(),"no argument given to the '"+
+      // 	       std::string{*(this->currentArgument)}+"' option");
+      // this->s = new QLocalServer(this);
+      // this->s->listen(o);
+      // this->s.waitForNewConnection(-1);
+      // this->out = this->s.nextPendingConnection();
+    }
+    
+    void TPlot::readCLIInput()
+    {
+      QObject::disconnect(this->in, SIGNAL(readyRead()),
+			  this, SLOT(readCLIInput()));
+      const auto l = QString::fromLatin1(this->in->readLine());
+      this->shell->treatNewCommand(l);
+      // this->out->write();
+      QObject::connect(this->in, SIGNAL(readyRead()),
+		       this, SLOT(readCLIInput()));
+    } // end of TPlot::readCLIInput
+
+#endif /* TPLOT_ENABLE_CLI */
+    
+    void TPlot::treatOutput()
     {
       this->getStringFromArgs(this->output,"treatOutput","output");
     } // end of TPlot::treatOutput
 
-    void TPlot::treatNoBorder(void)
+    void TPlot::treatNoBorder()
     {
       this->g->hideBorder(false);
     } // end of TPlot::treatNoBorder
@@ -771,22 +830,22 @@ namespace tfel
 	if(b)(throw(std::runtime_error("TPlot::treatLineStyle: "+std::string(m))));
       };
       throw_if(this->inputs.empty(),"no curve specified");
-      QString s;
-      this->getStringFromArgs(s,"treatLineStyle",
+      QString ls;
+      this->getStringFromArgs(ls,"treatLineStyle",
 			      "gnuplot instruction");
-      if(TPlot::isUnsignedShort(s)){
-	const auto ls = TPlot::convertToUnsignedShort(s);
+      if(TPlot::isUnsignedShort(ls)){
+	const auto lsn = TPlot::convertToUnsignedShort(ls);
 	auto& o = this->inputs.back().getCurveOptions();
 	throw_if(o.hasThemeLineStyle,"theme line style already specified");
 	o.hasThemeLineStyle = true;
-	o.themestyle = ls;
+	o.themestyle = lsn;
       } else {
 	throw_if(true,"can't convert argument given to the '"+
 		 std::string{*(this->currentArgument)}+"' option to unsigned short");
       }
     }
 
-    void TPlot::treatGnuplotInstruction(void)
+    void TPlot::treatGnuplotInstruction()
     {
       QString i;
       this->getStringFromArgs(i,"treatGnuplotInstruction",
@@ -794,13 +853,13 @@ namespace tfel
       this->shell->treatNewCommand(i);
     } // end of TPlot::treatGnuplotInstruction
 
-    void TPlot::treatTheme(void)
+    void TPlot::treatTheme()
     {
       auto& thm = ThemeManager::getThemeManager();
       this->g->setTheme(thm.getTheme(this->getStringOption()),false);
     } // end of TPlot::treatTheme
 
-    void TPlot::treatTitle(void)
+    void TPlot::treatTitle()
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatTitle: "+std::string(m))));
@@ -812,7 +871,7 @@ namespace tfel
       o.title = this->getStringOption(true);
     } // end of TPlot::treatTitle
 
-    void TPlot::treatCurveStyle(const Curve::Style s)
+    void TPlot::treatCurveStyle(const Curve::Style cs)
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatCurveStyle: "+std::string(m))));
@@ -820,66 +879,66 @@ namespace tfel
       throw_if(this->inputs.empty(),"no curve declared");
       auto& o = this->inputs.back().getCurveOptions();
       throw_if(o.hasStyle,"curve style already declared");
-      o.style    = s;
+      o.style    = cs;
       o.hasStyle = true;
     } // end of TPlot::treatCurveStyle
     
-    void TPlot::treatWithSolidLine(void)
+    void TPlot::treatWithSolidLine()
     {
       this->treatCurveStyle(Curve::SOLIDLINE);
     } // end of TPlot::treatWithSolidLine
 
-    void TPlot::treatWithDotLine(void)
+    void TPlot::treatWithDotLine()
     {
       this->treatCurveStyle(Curve::DOTLINE);
     } // end of TPlot::treatWithDotLine
 
-    void TPlot::treatWithDashLine(void)
+    void TPlot::treatWithDashLine()
     {
       this->treatCurveStyle(Curve::DASHLINE);
     } // end of TPlot::treatWithDashLine
 
-    void TPlot::treatWithDashDotLine(void)
+    void TPlot::treatWithDashDotLine()
     {
       this->treatCurveStyle(Curve::DASHDOTLINE);
     } // end of TPlot::treatWithDashDotLine
 
-    void TPlot::treatWithDashDotDotLine(void)
+    void TPlot::treatWithDashDotDotLine()
     {
       this->treatCurveStyle(Curve::DASHDOTDOTLINE);
     } // end of TPlot::treatWithDashDotDotLine
 
-    void TPlot::treatWithLinePlus(void)
+    void TPlot::treatWithLinePlus()
     {
       this->treatCurveStyle(Curve::LINEPLUS);
     } // end of TPlot::treatWithLinePlusLine
 
-    void TPlot::treatWithCrosses(void)
+    void TPlot::treatWithCrosses()
     {
       this->treatCurveStyle(Curve::CROSS);
     } // end of TPlot::treatWithCrosses
 
-    void TPlot::treatWithDiamonds(void)
+    void TPlot::treatWithDiamonds()
     {
       this->treatCurveStyle(Curve::DIAMOND);
     } // end of TPlot::treatWithDiamonds
 
-    void TPlot::treatWithSquares(void)
+    void TPlot::treatWithSquares()
     {
       this->treatCurveStyle(Curve::SQUARE);
     } // end of TPlot::treatWithSquares
 
-    void TPlot::treatWithTriangles(void)
+    void TPlot::treatWithTriangles()
     {
       this->treatCurveStyle(Curve::TRIANGLE);
     } // end of TPlot::treatWithTriangles
 
-    void TPlot::treatWithDots(void)
+    void TPlot::treatWithDots()
     {
       this->treatCurveStyle(Curve::DOT);
     } // end of TPlot::treatWithDots
 
-    void TPlot::treatXY(void)
+    void TPlot::treatXY()
     {
       if(this->inputs.empty()){
 	throw(std::runtime_error("TPlot::treatXY: "
@@ -889,7 +948,7 @@ namespace tfel
       o.axis = Graph::XY;
     } // end of TPlot::treatXY
     
-    void TPlot::treatX2Y(void)
+    void TPlot::treatX2Y()
     {
       if(this->inputs.empty()){
 	throw(std::runtime_error("TPlot::treatX2Y: "
@@ -899,7 +958,7 @@ namespace tfel
       o.axis = Graph::X2Y;
     } // end of TPlot::treatX2Y
     
-    void TPlot::treatXY2(void)
+    void TPlot::treatXY2()
     {
       if(this->inputs.empty()){
 	throw(std::runtime_error("TPlot::treatXY2: "
@@ -909,7 +968,7 @@ namespace tfel
       o.axis = Graph::XY2;
     } // end of TPlot::treatX2Y
     
-    void TPlot::treatX2Y2(void)
+    void TPlot::treatX2Y2()
     {
       if(this->inputs.empty()){
 	throw(std::runtime_error("TPlot::treatX2Y2: "
@@ -919,65 +978,65 @@ namespace tfel
       o.axis = Graph::X2Y2;
     } // end of TPlot::treatX2Y
     
-    void TPlot::treatUpperTitle(void)
+    void TPlot::treatUpperTitle()
     {
       this->getStringFromArgs(this->upperTitle,"treatUpperTitle","upperTitle");
     } // end of TPlot::treatUpperTitle
 
-    void TPlot::treatDownTitle(void)
+    void TPlot::treatDownTitle()
     {
       this->getStringFromArgs(this->downTitle,"treatDownTitle","downTitle");
     } // end of TPlot::treatDownTitle
 
-    void TPlot::treatLeftTitle(void)
+    void TPlot::treatLeftTitle()
     {
       this->getStringFromArgs(this->leftTitle,"treatLeftTitle","leftTitle");
     } // end of TPlot::treatLeftTitle
 
-    void TPlot::treatRightTitle(void)
+    void TPlot::treatRightTitle()
     {
       this->getStringFromArgs(this->rightTitle,"treatRightTitle","rightTitle");
     } // end of TPlot::treatRightTitle
 
-    void TPlot::treatUpperLabel(void)
+    void TPlot::treatUpperLabel()
     {
       this->getStringFromArgs(this->upperLabel,"treatUpperLabel","upperLabel");
     } // end of TPlot::treatUpperLabel
 
-    void TPlot::treatDownLabel(void)
+    void TPlot::treatDownLabel()
     {
       this->getStringFromArgs(this->downLabel,"treatDownLabel","downLabel");
     } // end of TPlot::treatDownLabel
 
-    void TPlot::treatLeftLabel(void)
+    void TPlot::treatLeftLabel()
     {
       this->getStringFromArgs(this->leftLabel,"treatLeftLabel","leftLabel");
     } // end of TPlot::treatLeftLabel
 
-    void TPlot::treatRightLabel(void)
+    void TPlot::treatRightLabel()
     {
       this->getStringFromArgs(this->rightLabel,"treatRightLabel","rightLabel");
     } // end of TPlot::treatRightLabel
 
-    void TPlot::treatWithGrid(void)
+    void TPlot::treatWithGrid()
     {
       this->hasGrid = true;
     } // end of TPlot::treatWithGrid
 
-    void TPlot::treatKeyHorizontalPosition(void)
+    void TPlot::treatKeyHorizontalPosition()
     {
       this->getStringFromArgs(this->keyHorizontalPosition,"treatKeyHorizontalPosition",
 			      "keyHorizontalPosition");
     } // end of TPlot::treatKeyHorizontalPosition
 
-    void TPlot::treatKeyVerticalPosition(void)
+    void TPlot::treatKeyVerticalPosition()
     {
       this->getStringFromArgs(this->keyVerticalPosition,
 			      "treatKeyVerticalPosition",
 			      "keyVerticalPosition");
     } // end of TPlot::treatKeyVerticalPosition
 
-    void TPlot::treatColor(void)
+    void TPlot::treatColor()
     {
       if(this->inputs.empty()){
 	throw(std::runtime_error("TPlot::treatColor: "
@@ -1018,55 +1077,55 @@ namespace tfel
       }
     } // end of TPlot::treatColor
 
-    void TPlot::treatXMin(void)
+    void TPlot::treatXMin()
     {
       this->xmin = this->getDoubleOption();
       this->hasXMinValue = true;
     } // end of TPlot::treatXMin
 
-    void TPlot::treatYMin(void)
+    void TPlot::treatYMin()
     {
       this->ymin = this->getDoubleOption();
       this->hasYMinValue = true;
     } // end of TPlot::treatYMin
 
-    void TPlot::treatXMax(void)
+    void TPlot::treatXMax()
     {
       this->xmax = this->getDoubleOption();
       this->hasXMaxValue = true;
     } // end of TPlot::treatXMax
 
-    void TPlot::treatYMax(void)
+    void TPlot::treatYMax()
     {
       this->ymax = this->getDoubleOption();
       this->hasYMaxValue = true;
     } // end of TPlot::treatYMax
 
-    void TPlot::treatX2Min(void)
+    void TPlot::treatX2Min()
     {
       this->x2min = this->getDoubleOption();
       this->hasX2MinValue = true;
     } // end of TPlot::treatX2Min
 
-    void TPlot::treatY2Min(void)
+    void TPlot::treatY2Min()
     {
       this->y2min = this->getDoubleOption();
       this->hasY2MinValue = true;
     } // end of TPlot::treatY2Min
 
-    void TPlot::treatX2Max(void)
+    void TPlot::treatX2Max()
     {
       this->x2max = this->getDoubleOption();
       this->hasX2MaxValue = true;
     } // end of TPlot::treatX2Max
 
-    void TPlot::treatY2Max(void)
+    void TPlot::treatY2Max()
     {
       this->y2max = this->getDoubleOption();
       this->hasY2MaxValue = true;
     } // end of TPlot::treatY2Max
 
-    void TPlot::treatUsing(void)
+    void TPlot::treatUsing()
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatUsing: "+std::string(m))));
@@ -1088,7 +1147,7 @@ namespace tfel
       }
     } // end of TPlot::treatUsing
 
-    void TPlot::treatUnknownArgument(void)
+    void TPlot::treatUnknownArgument()
     {
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatUnknownArgument: "+std::string(m))));
@@ -1098,11 +1157,11 @@ namespace tfel
       const auto a = QString::fromStdString(arg);
       if(a.startsWith("gp:")){
 	this->goutput = true;
-	GnuplotScript s;
-	s.fileName = a.mid(3);
-	throw_if(s.fileName.isEmpty(),"empty gnuplot script name");
+	GnuplotScript gs;
+	gs.fileName = a.mid(3);
+	throw_if(gs.fileName.isEmpty(),"empty gnuplot script name");
 	Input i;
-	i.set(s);
+	i.set(gs);
 	this->inputs.push_back(i);
       } else if(a.startsWith("f:")){
 	Function f;
@@ -1165,19 +1224,19 @@ namespace tfel
 	i.set(d);
 	this->inputs.push_back(i);
       }
-    } // end of TPlot::treatUnknownArgument(void)
+    } // end of TPlot::treatUnknownArgument()
 
-    std::string TPlot::getVersionDescription(void) const
+    std::string TPlot::getVersionDescription() const
     {
       return "1.0";
     }
 
-    std::string TPlot::getUsageDescription(void) const
+    std::string TPlot::getUsageDescription() const
     {
       return "Usage: "+this->programName+" [options] [files]";
     }
 
-    void TPlot::initialize(void)
+    void TPlot::initialize()
     {
       std::string extension;
       if(this->inputs.empty()){
@@ -1312,8 +1371,8 @@ namespace tfel
 				     "gnuplot script is not compatible with "
 				     "the definition of an output file"));	  
 	  }
-	  const auto& s = i.get<GnuplotScript>();
-	  this->shell->importGnuplotFile(s.fileName);
+	  const auto& gs = i.get<GnuplotScript>();
+	  this->shell->importGnuplotFile(gs.fileName);
 	}
       }
       this->setRanges();
@@ -1457,11 +1516,11 @@ namespace tfel
       this->g->addCurve(curve,f.axis);
     } // end of TPlot::treatFunctionInput
 
-    void TPlot::treatFontSize(void){
+    void TPlot::treatFontSize(){
       this->g->setGraphFontSize(this->getDoubleOption());
     }
 
-    void TPlot::treatFontFamily(void){
+    void TPlot::treatFontFamily(){
       this->g->setGraphFontFamily(this->getStringOption());
     }
 
@@ -1472,12 +1531,12 @@ namespace tfel
 	TextDataReader dr;
 	try{
 #ifdef TFEL_QT4
-	  QTextStream s(m->text().toAscii());
+	  QTextStream qs(m->text().toAscii());
 #endif /* TFEL_QT4 */
 #ifdef TFEL_QT5
-	  QTextStream s(m->text().toLatin1());
+	  QTextStream qs(m->text().toLatin1());
 #endif /* TFEL_QT5 */
-	  dr.extractData(s);
+	  dr.extractData(qs);
 	} catch(...){
 	  return;
 	}
@@ -1521,7 +1580,7 @@ namespace tfel
       QApplication::clipboard()->setMimeData(d,QClipboard::Clipboard);
     } // end of TPlot::copyToClipboardAsTable
 
-    void TPlot::insertImageFromFile(void)
+    void TPlot::insertImageFromFile()
     {
       QList<QByteArray> exts = QImageReader::supportedImageFormats();
       QList<QByteArray>::const_iterator p;
@@ -1533,7 +1592,7 @@ namespace tfel
 	}
       }
       const auto f = QFileDialog::getOpenFileName(this,tr("Open Image"),"",
-					       tr("Image Files (%1)").arg(e));
+						  tr("Image Files (%1)").arg(e));
       if(!f.isEmpty()){
 	this->g->insertImage(QPixmap(f));
       }
@@ -1666,12 +1725,12 @@ namespace tfel
       }
     } // end of TPlot::selectFontDialog
   
-    void TPlot::showShell(void)
+    void TPlot::showShell()
     {
       this->shell->setHidden(!this->shell->isHidden());
     }
 
-    void TPlot::newWindow(void)
+    void TPlot::newWindow()
     {
       QProcess::startDetached(this->name);
     } // end of TPlot::newWindow
@@ -1679,5 +1738,3 @@ namespace tfel
   } // end of namespace plot
 
 } // end of namespace tfel
-
-

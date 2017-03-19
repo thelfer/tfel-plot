@@ -192,6 +192,25 @@ then
     AM_CONDITIONAL([TFEL_QT5],[true])
 fi
 
+AC_ARG_ENABLE([cli],
+	       AC_HELP_STRING([--enable-cli],
+		              [enable the command line interface (requires libreadline)]))
+if test "x$enable_cli" == "xyes";
+then
+    # looking for libreadline
+    AX_LIB_READLINE
+    echo "readline $HAVE_LIBREADLINE"
+    if test "x$HAVE_LIBREADLINE" == "x";
+    then
+	AC_MSG_ERROR("libreadline not found")
+    fi
+    if test "x$HAVE_LIBREADLINE_HISTORY" == "x";
+    then
+	AC_MSG_ERROR("the libreadline does not support add_history function")
+    fi
+fi
+AM_CONDITIONAL(TPLOT_CLI,test x"$enable_cli" != xno)
+
 AC_CONFIG_FILES([Makefile
 		 cmake/Makefile
 		 cmake/modules/Makefile

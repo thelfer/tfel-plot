@@ -18,52 +18,72 @@ AM_CPPFLAGS = -I$(top_srcdir)/tplot/include        \
 	      -DLOCALEDIR=\"$(localedir)\"
 endif
 
-bin_PROGRAMS  = tplot
-tplot_SOURCES = tplot.cxx     \
-		TPlot.cxx     \
-		resources.cxx
-nodist_tplot_SOURCES = moc_tplot.cxx 
+bin_PROGRAMS  = tplot tplot-gui
+tplot_SOURCES = tplot.cxx
+tplot_gui_SOURCES = tplot-gui.cxx  \
+	      	    TPlot.cxx      \
+		    resources.cxx
+if TPLOT_CLI
+tplot_SOURCES += CLIHandler.cxx
+endif
+
+nodist_tplot_gui_SOURCES  = moc_tplot-gui.cxx
+if TPLOT_CLI
+nodist_tplot_SOURCES = moc_CLIHandler.cxx 
+endif
 
 if TFEL_QT4
-moc_tplot.cxx : @top_srcdir@/tplot/include/TFEL/Plot/TPlot.hxx
+moc_tplot-gui.cxx : @top_srcdir@/tplot/include/TFEL/Plot/TPlot.hxx
 	@MOC@ $< -o $@
+moc_%.cxx : @top_srcdir@/tplot/include/TFEL/Plot/%.hxx
+	@MOC@ $< -o $@	
 endif
 
 if TFEL_QT5
-moc_tplot.cxx : @top_srcdir@/tplot/include/TFEL/Plot/TPlot.hxx
+moc_tplot-gui.cxx : @top_srcdir@/tplot/include/TFEL/Plot/TPlot.hxx
 	@QT_MOC@ $< -o $@
-endif
+moc_%.cxx : @top_srcdir@/tplot/include/TFEL/Plot/%.hxx
+	@QT_MOC@ $< -o $@	
+endif TFEL_QT5
 
-tplot_LDFLAGS = -export-dynamic
+tplot_gui_LDFLAGS = -export-dynamic
 
 if TFEL_QT4
-tplot_LDADD   = -L$(top_builddir)/src/Plot           \
-		-lTFELGnuplotInterpreter -lTFELPlot  \
-		@QT4_LIBS@                           \
-		-L@TFELHOME@/lib                     \
-		-lTFELMathKriging                    \
-		-lTFELMathParser                     \
-		-lTFELMath                           \
-		-lTFELUtilities                      \
-		-lTFELSystem                         \
-		-lTFELException
+tplot_LDADD     = @QT4_LIBS@ 
+if TPLOT_CLI
+tplot_LDADD += -lreadline
+endif
+tplot_gui_LDADD = -L$(top_builddir)/src/Plot           \
+		  -lTFELGnuplotInterpreter -lTFELPlot  \
+		  @QT4_LIBS@                           \
+		  -L@TFELHOME@/lib                     \
+		  -lTFELMathKriging                    \
+		  -lTFELMathParser                     \
+		  -lTFELMath                           \
+		  -lTFELUtilities                      \
+		  -lTFELSystem                         \
+		  -lTFELException
 endif
 
 if TFEL_QT5
-tplot_LDADD   = -L$(top_builddir)/src/Plot           \
-		-lTFELGnuplotInterpreter -lTFELPlot  \
-		@QT_LIBS@                            \
-		-L@TFELHOME@/lib                     \
-		-lTFELMathKriging                    \
-		-lTFELMathParser                     \
-		-lTFELMath                           \
-		-lTFELUtilities                      \
-		-lTFELSystem                         \
-		-lTFELException
+tplot_LDADD     = @QT_LIBS@ 
+if TPLOT_CLI
+tplot_LDADD += -lreadline
+endif
+tplot_gui_LDADD = -L$(top_builddir)/src/Plot           \
+		  -lTFELGnuplotInterpreter -lTFELPlot  \
+		  @QT_LIBS@                            \
+		  -L@TFELHOME@/lib                     \
+		  -lTFELMathKriging                    \
+		  -lTFELMathParser                     \
+		  -lTFELMath                           \
+		  -lTFELUtilities                      \
+		  -lTFELSystem                         \
+		  -lTFELException
 endif
 
 clean-local:
-	$(RM) $(nodist_tplot_SOURCES)
+	$(RM) $(nodist_tplot_gui_SOURCES) $(nodist_tplot_SOURCES)
 
 EXTERNAL_RESOURCES=
 

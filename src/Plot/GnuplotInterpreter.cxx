@@ -218,7 +218,7 @@ namespace tfel
 	      (this->*(pf->second))(p,pe);
 	    }
 	    if(p!=pe){
-	      string msg("GnuplotInterpreter::eval : ");
+	      string msg("GnuplotInterpreter::eval: ");
 	      msg += "unexpected token '"+p->value+"'";
 	      throw(runtime_error(msg));
 	    }
@@ -297,7 +297,7 @@ namespace tfel
       }
       QString e;
       this->parseString(e,this->previousPlot);
-    } // end of 
+    } // end of GnuplotInterpreter::treatRePlot
 
     void GnuplotInterpreter::treatPlot(const_iterator& p,
 				       const const_iterator pe)

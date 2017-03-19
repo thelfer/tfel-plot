@@ -9,14 +9,31 @@ include_directories("${TFEL_INCLUDE_PATH}")
 link_directories("${PROJECT_BINARY_DIR}/src/Plot")
 link_directories("${TFEL_LIBRARY_PATH}")
 
+qt_sources(TPlot_GUI_SOURCES 
+  "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot"
+  TPlot)
+if(TPLOT_ENABLE_CLI)
 qt_sources(TPlot_SOURCES 
-  "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot" TPlot)
+  "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot"
+  CLIHandler)
+endif(TPLOT_ENABLE_CLI)
 tfel_plot_executable(tplot
   tplot.cxx
   ${TPlot_SOURCES})
+tfel_plot_executable(tplot-gui
+  tplot-gui.cxx
+  ${TPlot_GUI_SOURCES})
 
 if(enable-qt4)
-  target_link_libraries(tplot 
+  if(TPLOT_ENABLE_CLI)
+    target_link_libraries(tplot 
+      ${READLINE_LIBRARY}
+      ${QT_LIBRARIES})
+  else(TPLOT_ENABLE_CLI)
+    target_link_libraries(tplot 
+      ${QT_LIBRARIES})
+  endif(TPLOT_ENABLE_CLI)
+  target_link_libraries(tplot-gui 
     TFELGnuplotInterpreter
     TFELPlot
     TFELMathParser
@@ -27,14 +44,36 @@ if(enable-qt4)
     ${QT_LIBRARIES})
 endif(enable-qt4)
 if(enable-qt5)
-  target_link_libraries(tplot 
-    TFELGnuplotInterpreter
-    TFELPlot
-    TFELMathParser
-    TFELMath
-    TFELUtilities
-    TFELSystem
-    TFELException
-    Qt5::Widgets
-    Qt5::PrintSupport)
+  if(TPLOT_ENABLE_CLI)
+    target_link_libraries(tplot 
+      ${READLINE_LIBRARY}
+      Qt5::Core
+      Qt5::Network)
+    target_link_libraries(tplot-gui
+      TFELGnuplotInterpreter
+      TFELPlot
+      TFELMathParser
+      TFELMath
+      TFELUtilities
+      TFELSystem
+      TFELException
+      Qt5::Core
+      Qt5::Widgets
+      Qt5::Network
+      Qt5::PrintSupport)
+  else(TPLOT_ENABLE_CLI)
+    target_link_libraries(tplot 
+      Qt5::Core)
+    target_link_libraries(tplot-gui
+      TFELGnuplotInterpreter
+      TFELPlot
+      TFELMathParser
+      TFELMath
+      TFELUtilities
+      TFELSystem
+      TFELException
+      Qt5::Core
+      Qt5::Widgets
+      Qt5::PrintSupport)
+  endif(TPLOT_ENABLE_CLI)
 endif(enable-qt5)

@@ -8,6 +8,8 @@
 #ifndef _LIB_TFEL_PLOT_TPLOT_H_
 #define _LIB_TFEL_PLOT_TPLOT_H_ 
 
+#include<QtNetwork/QLocalServer>
+#include<QtNetwork/QLocalSocket>
 #ifdef TFEL_QT4
 #include<QtGui/QMainWindow>
 #endif /* TFEL_QT4 */
@@ -39,18 +41,22 @@ namespace tfel
 
     public slots:
 
-      void about(void);
+      virtual void about();
 
-      void print(void);
+      virtual void print();
 
-      void importGnuplotScript(void);
+      virtual void importGnuplotScript();
 
-      void importTextData(void);
+      virtual void importTextData();
 
-      void importLicosCurve(void);
+      virtual void importLicosCurve();
 
-      void importLicosResults(void);
+      virtual void importLicosResults();
 
+#ifdef TPLOT_ENABLE_CLI
+      virtual void readCLIInput();
+#endif /* TPLOT_ENABLE_CLI */
+      
     public:
 
       /*!
@@ -59,9 +65,9 @@ namespace tfel
       TPlot(const int,
 	    const char * const * const);
 
-      bool graphicalOutput(void) const;
+      bool graphicalOutput() const;
 
-      void treatPendingInputs(void);
+      void treatPendingInputs();
 
       ~TPlot();
 
@@ -119,7 +125,7 @@ namespace tfel
       dropEvent(QDropEvent *) override;
 
       void
-      initialize(void);
+      initialize();
 
       struct TFEL_VISIBILITY_LOCAL CurveOptions
       {
@@ -199,100 +205,107 @@ namespace tfel
       static const std::vector<std::string>
       tokenize(const std::string&,const char);
 	
-      void registerArgumentCallBacks(void);
+      void registerArgumentCallBacks();
 
-      void
-      treatUnknownArgument(void);
+      void treatUnknownArgument();
+#ifdef TPLOT_ENABLE_CLI
+      //! treat the `--cli` option
+      void treatCLI();
+      //! treat the `--input-socket` option
+      void treatInputSocket();
+      //! treat the `--output-socket` option
+      void treatOutputSocket();
+#endif /* TPLOT_ENABLE_CLI */
 
-      void treatGnuplotInstruction(void);
+      void treatGnuplotInstruction();
 
-      void treatTheme(void);
+      void treatTheme();
 
-      void treatNoBorder(void);
+      void treatNoBorder();
 
-      void treatXY(void);
+      void treatXY();
 
-      void treatX2Y(void);
+      void treatX2Y();
 
-      void treatXY2(void);
+      void treatXY2();
 
-      void treatX2Y2(void);
+      void treatX2Y2();
 
-      void treatOutput(void);
+      void treatOutput();
 
-      void treatColor(void);
+      void treatColor();
 
-      void treatUsing(void);
+      void treatUsing();
 
-      void treatWithGrid(void);
+      void treatWithGrid();
 
-      void treatXMin(void);
+      void treatXMin();
 
-      void treatXMax(void);
+      void treatXMax();
 
-      void treatYMin(void);
+      void treatYMin();
 
-      void treatYMax(void);
+      void treatYMax();
 
-      void treatX2Min(void);
+      void treatX2Min();
 
-      void treatX2Max(void);
+      void treatX2Max();
 
-      void treatY2Min(void);
+      void treatY2Min();
 
-      void treatY2Max(void);
+      void treatY2Max();
 
-      void treatLineStyle(void);
+      void treatLineStyle();
 
-      void treatKeyHorizontalPosition(void);
+      void treatKeyHorizontalPosition();
 
-      void treatKeyVerticalPosition(void);
+      void treatKeyVerticalPosition();
 
-      void treatTitle(void);
+      void treatTitle();
 
-      void treatUpperTitle(void);
+      void treatUpperTitle();
 
-      void treatDownTitle(void);
+      void treatDownTitle();
 
-      void treatLeftTitle(void);
+      void treatLeftTitle();
 
-      void treatRightTitle(void);
+      void treatRightTitle();
 
-      void treatUpperLabel(void);
+      void treatUpperLabel();
 
-      void treatDownLabel(void);
+      void treatDownLabel();
 
-      void treatLeftLabel(void);
+      void treatLeftLabel();
 
-      void treatRightLabel(void);
+      void treatRightLabel();
 
       void treatCurveStyle(const Curve::Style);
 
-      void treatWithSolidLine(void);
+      void treatWithSolidLine();
 
-      void treatWithDotLine(void);
+      void treatWithDotLine();
 
-      void treatWithDashLine(void);
+      void treatWithDashLine();
 
-      void treatWithDashDotLine(void);
+      void treatWithDashDotLine();
 
-      void treatWithDashDotDotLine(void);
+      void treatWithDashDotDotLine();
 
-      void treatWithLinePlus(void);
+      void treatWithLinePlus();
 
-      void treatWithDiamonds(void);
+      void treatWithDiamonds();
 
-      void treatWithCrosses(void);
+      void treatWithCrosses();
 
-      void treatWithSquares(void);
+      void treatWithSquares();
 
-      void treatWithTriangles(void);
+      void treatWithTriangles();
 
-      void treatWithDots(void);
+      void treatWithDots();
 
-      void treatFontSize(void);
+      void treatFontSize();
 
-      void treatFontFamily(void);
+      void treatFontFamily();
 
       void setRanges();
 
@@ -305,10 +318,10 @@ namespace tfel
       double getDoubleOption();
 
       virtual std::string
-      getVersionDescription(void) const override;
+      getVersionDescription() const override;
   
       virtual std::string
-      getUsageDescription(void) const override;
+      getUsageDescription() const override;
 
       void
       treatDataInput(const Data&);
@@ -319,9 +332,9 @@ namespace tfel
       friend class
       tfel::utilities::ArgumentParserBase<TPlot>;
 
-      void createActions(void);
+      void createActions();
 
-      void createMainMenu(void);
+      void createMainMenu();
 
       Graph      *g;
       GraphShell *shell;
@@ -375,6 +388,16 @@ namespace tfel
       QMenu *hm;
       QMenu *sm;
 
+#ifdef TPLOT_ENABLE_CLI
+      /* data members related to the command-line mode */
+      //! the server, used to read data from the command line
+      QLocalServer *s   = nullptr;
+      //! the input socket
+      QLocalSocket *in  = nullptr;
+      //! the output socket
+      QLocalSocket *out = nullptr;
+#endif /* TPLOT_ENABLE_CLI */
+      //! list of text data
       std::map<QString,std::shared_ptr<TextDataReader> > dataSources;
       std::vector<Input> inputs;
       QString output;
