@@ -164,12 +164,22 @@ then
     AM_CONDITIONAL([TFEL_QT4],[true])
     AM_CONDITIONAL([TFEL_QT5],[false])
     PKG_CHECK_MODULES(QT4, [QtCore QtGui QtSvg QtXml QtNetwork >= 4.4.0], [
-			     AC_PATH_PROGS(MOC, [moc-qt4 moc], moc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-			     AC_PATH_PROG(RCC, rcc, rcc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-			     AC_PATH_PROGS(UIC, [uic-qt4 uic], uic,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+			     AC_PATH_PROGS(QT_MOC, [moc-qt4 moc], moc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+			     AC_PATH_PROG(QT_RCC, rcc, rcc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
+			     AC_PATH_PROGS(QT_UIC, [uic-qt4 uic], uic,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
 			 ], [
 			     AC_MSG_ERROR([Qt4 library not found])
 			 ])
+    QT_CXXFLAGS=$QT4_CFLAGS
+    QT_LIBS=$QT4_LIBS
+    QT_CXXFLAGS=$QT_CXXFLAGS
+    AC_SUBST(QT_CXXFLAGS)
+    AC_SUBST(QT_LIBS)
+    echo "qt4 C++ flags: $QT_CXXFLAGS"
+    echo "qt4 libraries: $QT_LIBS"
+    echo "qt4 moc      : $QT_MOC"
+    echo "qt4 rcc      : $QT_RCC"
+    echo "qt4 uic      : $QT_UIC"
 fi
 
 if test "x$enable_qt5" == "xyes";
@@ -218,6 +228,8 @@ AC_CONFIG_FILES([Makefile
 		 src/Makefile
 		 src/Plot/Makefile
  		 src/Plot/GetInstallPath-Prefix.hxx
+		 tfel-plot-config/Makefile
+		 tfel-plot-config/tfel-plot-config.hxx
 		 tplot/Makefile
 		 tplot/src/Makefile
 		 tplot/include/Makefile

@@ -33,6 +33,7 @@ endif(CMAKE_CONFIGURATION_TYPES)
 
 add_subdirectory(include)
 add_subdirectory(src)
+add_subdirectory(tfel-plot-config)
 add_subdirectory(tplot)
 add_subdirectory(tests)
 add_subdirectory(docs)

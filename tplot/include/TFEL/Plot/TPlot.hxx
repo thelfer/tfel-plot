@@ -41,6 +41,8 @@ namespace tfel
 
     public slots:
 
+      virtual void close();
+
       virtual void about();
 
       virtual void print();
@@ -69,7 +71,12 @@ namespace tfel
 
       void treatPendingInputs();
 
-      ~TPlot();
+#ifdef TPLOT_ENABLE_CLI      
+      //! treat the `--cli` option
+      bool isCLIModeEnabled() const;
+#endif /* TPLOT_ENABLE_CLI */
+
+      virtual ~TPlot();
 
     protected slots:
 
@@ -115,6 +122,9 @@ namespace tfel
       static unsigned short
       convertToUnsignedShort(const QString&);
 
+      
+      virtual void closeEvent(QCloseEvent *) override;
+      
       virtual void
       keyPressEvent(QKeyEvent *) override;
 
@@ -124,8 +134,7 @@ namespace tfel
       virtual void
       dropEvent(QDropEvent *) override;
 
-      void
-      initialize();
+      virtual void initialize();
 
       struct TFEL_VISIBILITY_LOCAL CurveOptions
       {
@@ -209,8 +218,6 @@ namespace tfel
 
       void treatUnknownArgument();
 #ifdef TPLOT_ENABLE_CLI
-      //! treat the `--cli` option
-      void treatCLI();
       //! treat the `--input-socket` option
       void treatInputSocket();
       //! treat the `--output-socket` option

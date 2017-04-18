@@ -15,6 +15,7 @@ qt_sources(TPlot_GUI_SOURCES
 if(TPLOT_ENABLE_CLI)
 qt_sources(TPlot_SOURCES 
   "${PROJECT_SOURCE_DIR}/tplot/include/TFEL/Plot"
+  TPlotCLIApplication
   CLIHandler)
 endif(TPLOT_ENABLE_CLI)
 tfel_plot_executable(tplot

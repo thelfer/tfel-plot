@@ -7,7 +7,6 @@
 
 #include<cassert>
 #include<sstream>
-#include<iostream>
 
 #include<QtCore/QDebug>
 #include<QtCore/QProcess>
@@ -120,6 +119,7 @@ namespace tfel
       }
       return true;
     } // end of TPlot::isUnsignedShort
+
     TPlot::TPlot(const int argc,
 		 const char * const * const argv)
       : tfel::utilities::ArgumentParserBase<TPlot>(argc,argv),
@@ -135,13 +135,15 @@ namespace tfel
       this->initialize();
       this->createActions();
       this->createMainMenu();
-      this->shell->setPrompt("tplot>");
-      auto *dock = new QDockWidget(tr("TPlot Shell"), this);
-      dock->setFeatures(dock->features()^QDockWidget::DockWidgetClosable);
-      dock->setAllowedAreas(Qt::BottomDockWidgetArea);
-      dock->setWidget(shell);
-      this->shell->setVisible(false);
-      this->addDockWidget(Qt::BottomDockWidgetArea,dock);
+      if(!this->isCLIModeEnabled()){
+	this->shell->setPrompt("tplot>");
+	auto *dock = new QDockWidget(tr("TPlot Shell"), this);
+	dock->setFeatures(dock->features()^QDockWidget::DockWidgetClosable);
+	dock->setAllowedAreas(Qt::BottomDockWidgetArea);
+	dock->setWidget(shell);
+	this->shell->setVisible(false);
+	this->addDockWidget(Qt::BottomDockWidgetArea,dock);
+      }
       this->setCentralWidget(this->g);
       // drag an drop
       this->g->setAcceptDrops(false);
@@ -173,10 +175,23 @@ namespace tfel
 	}
 	this->goutput = false;
       }
-      QObject::connect(g,SIGNAL(updated()),
+      QObject::connect(this->shell,SIGNAL(quitCommandTreated()),
+		       this,SLOT(close()));
+      QObject::connect(this->shell,SIGNAL(graphicalPlot()),
+		       this,SLOT(show()));
+      QObject::connect(this->g,SIGNAL(updated()),
 		       this,SLOT(createCurvesMenu()));
     }
 
+    void TPlot::close()
+    {
+      if(this->isCLIModeEnabled()){
+	this->hide();
+      } else {
+	QMainWindow::close();
+      }
+    }
+    
     void TPlot::dragEnterEvent(QDragEnterEvent *e)
     {
       if (e->mimeData()->hasUrls()){
@@ -190,20 +205,20 @@ namespace tfel
       ChooseImportFilter(QWidget *p)
 	: QDialog(p)
       {
-	QRadioButton* b1 = new QRadioButton(QObject::tr("Import as txt file"), this);
-	QRadioButton* b2 = new QRadioButton(QObject::tr("Import as licos result file"), this);
+	auto* b1 = new QRadioButton(QObject::tr("Import as txt file"), this);
+	auto* b2 = new QRadioButton(QObject::tr("Import as licos result file"), this);
 	b1->setChecked(true);
 	this->bgrp =  new QButtonGroup(this);
 	this->bgrp->addButton(b1,0);
 	this->bgrp->addButton(b2,1);
-	QVBoxLayout *vl = new QVBoxLayout;
+	auto *vl = new QVBoxLayout;
 	vl->addWidget(b1);
 	vl->addWidget(b2);
 	bbox = new QDialogButtonBox(QDialogButtonBox::Ok,Qt::Horizontal,this);
 	vl->addWidget(bbox);
 	this->setLayout(vl);
 	// signals
-	connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
+	QObject::connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
       }
       int getFilterId(){
 	return this->bgrp->checkedId();
@@ -225,14 +240,14 @@ namespace tfel
 	    ChooseImportFilter cif(this);
 	    cif.exec();
 	    if(cif.getFilterId()==1){
-	      ImportLicosCurveDialog *d = new ImportLicosCurveDialog(*(this->g),this);
+	      auto *d = new ImportLicosCurveDialog(*(this->g),this);
 	      d->exec(f);
 	      if(*d){
 		d->setWindowModality(Qt::NonModal);
 		d->show();
 	      }
 	    } else {
-	      ImportTextDataDialog *d = new ImportTextDataDialog(*(this->g),this);
+	      auto *d = new ImportTextDataDialog(*(this->g),this);
 	      d->exec(f);
 	      if(*d){
 		d->setWindowModality(Qt::NonModal);
@@ -298,9 +313,9 @@ namespace tfel
       this->ea->setStatusTip(tr("Exit the application"));
       this->ea->setIcon(QIcon::fromTheme("window-close"));
       this->ea->setIconVisibleInMenu(true);
-
       QObject::connect(this->ea, SIGNAL(triggered()), this,
 		       SLOT(close()));
+
       this->gca = new QAction(tr("&Configuration"), this);
       this->gca->setStatusTip(tr("Open the graph configuration dialog"));
       QObject::connect(this->gca, SIGNAL(triggered()),
@@ -391,10 +406,12 @@ namespace tfel
       connect(this->iia, SIGNAL(triggered()),
 	      this,SLOT(insertImageFromFile()));
 
-      this->showShellAction = new QAction(tr("Show shell"),this);
-      this->showShellAction->setStatusTip(tr("Show the tplot shell"));
-      connect(this->showShellAction, SIGNAL(triggered()),
-	      this,SLOT(showShell()));
+      if(!this->isCLIModeEnabled()){
+	this->showShellAction = new QAction(tr("Show shell"),this);
+	this->showShellAction->setStatusTip(tr("Show the tplot shell"));
+	connect(this->showShellAction, SIGNAL(triggered()),
+		this,SLOT(showShell()));
+      }
       
       this->showGridAction = new QAction(tr("Show grid"),this);
       this->showGridAction->setStatusTip(tr("Show the graph grid"));
@@ -497,7 +514,9 @@ namespace tfel
 		       this,SLOT(createCurvesMenu()));
       this->sm = this->menuBar()->addMenu(tr("&Show"));
       this->sm->addAction(this->showGridAction);
-      this->sm->addAction(this->showShellAction);
+      if(!this->isCLIModeEnabled()){
+	this->sm->addAction(this->showShellAction);
+      }
       this->hm = this->menuBar()->addMenu(tr("&Help"));
       this->hm->addAction(this->aa);
       this->hm->addAction(this->aa2);
@@ -550,6 +569,16 @@ namespace tfel
 			    "widget."));
     }
 
+    void TPlot::closeEvent(QCloseEvent *ev)
+    {
+      if(this->isCLIModeEnabled()){
+	this->hide();
+	ev->ignore();
+      } else {
+	QMainWindow::closeEvent(ev);
+      }
+    }
+    
     void TPlot::keyPressEvent(QKeyEvent *ev)
     {
       QString k = ev->text();
@@ -595,16 +624,12 @@ namespace tfel
       }
       return res;
     } // end of TPlot::tokenize
-    TPlot::~TPlot()
-    {} // end of TPlot::TPlot
 
     void TPlot::registerArgumentCallBacks()
     {
       this->registerNewCallBack("--noborder",&TPlot::treatNoBorder,
 				"don't show the graph border");
 #ifdef TPLOT_ENABLE_CLI
-      this->registerNewCallBack("--cli",&TPlot::treatCLI,
-				"read gnuplot commands from the command line");
       this->registerNewCallBack("--input-socket",&TPlot::treatInputSocket,
 				"give the name of the input socket for "
 				"receiving commands from the command line",true);
@@ -770,13 +795,15 @@ namespace tfel
     }
 
 #ifdef TPLOT_ENABLE_CLI
-    void TPlot::treatCLI()
-    {} // end of TPlot::treatCLI()
+    bool TPlot::isCLIModeEnabled() const
+    {
+      return this->in!=nullptr;
+    } // end of TPlot::treatCLI()
     
     void TPlot::treatInputSocket()
     {
       auto throw_if = [](const bool b, const std::string& m){
-	if(b)(throw(std::runtime_error("TPlot::treatInputSocket: "+std::string(m))));
+	if(b){throw(std::runtime_error("TPlot::treatInputSocket: "+m));}
       };
       const auto o =this->currentArgument->getOption();
       throw_if(o.empty(),"no argument given to the '"+
@@ -792,22 +819,45 @@ namespace tfel
     
     void TPlot::treatOutputSocket()
     {
-      // const auto o =this->currentArgument->getOption();
-      // throw_if(o.empty(),"no argument given to the '"+
-      // 	       std::string{*(this->currentArgument)}+"' option");
-      // this->s = new QLocalServer(this);
-      // this->s->listen(o);
-      // this->s.waitForNewConnection(-1);
-      // this->out = this->s.nextPendingConnection();
+      auto throw_if = [](const bool b, const std::string& m){
+	if(b){throw(std::runtime_error("TPlot::treatOutputSocket: "+m));}
+      };
+      const auto o =this->currentArgument->getOption();
+      throw_if(o.empty(),"no argument given to the '"+
+      	       std::string{*(this->currentArgument)}+"' option");
+      this->s = new QLocalServer(this);
+      this->s->listen(QString::fromStdString(o));
+      this->s->waitForNewConnection(-1);
+      this->out = this->s->nextPendingConnection();
     }
     
     void TPlot::readCLIInput()
     {
+      auto write = [this](const QString& m){
+	if(m.isEmpty()){
+	  this->out->write("\0",1u);
+	} else {
+	  this->out->write(m.toLatin1());
+	}
+      };
       QObject::disconnect(this->in, SIGNAL(readyRead()),
 			  this, SLOT(readCLIInput()));
       const auto l = QString::fromLatin1(this->in->readLine());
-      this->shell->treatNewCommand(l);
-      // this->out->write();
+      const auto r = this->shell->treatNewCommand(l);
+      if(r.status==GnuplotInterpreter::ParsingResult::QUIT){
+	write("2");
+      } else if(r.status==GnuplotInterpreter::ParsingResult::FAILURE){
+	write("1");
+      } else {
+	write("0");
+      }
+      write(r.output);
+      write(r.error);
+      if(r.status==GnuplotInterpreter::ParsingResult::QUIT){
+	this->in->readLine();
+	this->in=nullptr;
+	this->close();
+      }
       QObject::connect(this->in, SIGNAL(readyRead()),
 		       this, SLOT(readCLIInput()));
     } // end of TPlot::readCLIInput
@@ -1719,7 +1769,8 @@ namespace tfel
     void TPlot::selectFontDialog()
     {
       bool ok;
-      auto f  = QFontDialog::getFont(&ok,this->g->getGraphFont(),this,"Select graph font");
+      auto f  = QFontDialog::getFont(&ok,this->g->getGraphFont(),
+				     this,"Select graph font");
       if(ok){
 	this->g->setGraphFont(f);
       }
@@ -1727,7 +1778,9 @@ namespace tfel
   
     void TPlot::showShell()
     {
-      this->shell->setHidden(!this->shell->isHidden());
+      if(!this->isCLIModeEnabled()){
+	this->shell->setHidden(!this->shell->isHidden());
+      }
     }
 
     void TPlot::newWindow()
@@ -1735,6 +1788,8 @@ namespace tfel
       QProcess::startDetached(this->name);
     } // end of TPlot::newWindow
 
+    TPlot::~TPlot() = default;
+    
   } // end of namespace plot
 
 } // end of namespace tfel

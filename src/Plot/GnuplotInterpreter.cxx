@@ -57,6 +57,15 @@ namespace tfel
       }
       return "";
     }
+
+    GnuplotInterpreter::ParsingResult::ParsingResult() = default;
+    GnuplotInterpreter::ParsingResult::ParsingResult(ParsingResult&&) = default;
+    GnuplotInterpreter::ParsingResult::ParsingResult(const ParsingResult&) = default;
+    GnuplotInterpreter::ParsingResult&
+    GnuplotInterpreter::ParsingResult::operator=(ParsingResult&&) = default;
+    GnuplotInterpreter::ParsingResult&
+    GnuplotInterpreter::ParsingResult::operator=(const ParsingResult&) = default;
+
     
     GnuplotInterpreter::GnuplotInterpreter(Graph& graph,
 					   QObject *const p)
@@ -70,11 +79,9 @@ namespace tfel
 
     void GnuplotInterpreter::setDummyVariable(const std::string& n)
     {
-      using namespace std;
       if(!GnuplotInterpreterBase::isValidIdentifier(n)){
-	string msg("GnuplotInterpreter::setDummyVariable : '");
-	msg += n+"' is not a valid identifer.";
-	throw(runtime_error(msg));
+	throw(std::runtime_error("GnuplotInterpreter::setDummyVariable: "
+				 "'"+n+"' is not a valid identifer."));
       }
       this->dummyVariable = n;
     }// end of GnuplotInterpreter::setDummyVariable
@@ -118,12 +125,23 @@ namespace tfel
 			     &GnuplotInterpreter::treatFit);
     } // end of GnuplotInterpreter::registerCallBacks()
 
-    bool GnuplotInterpreter::parseFile(QString& e,
-				       const QString& f)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::parseFile(const QString& f)
     {
+      auto append = [](QString& s, const QString& s2){
+	if(s2.isEmpty()){
+	  return;
+	}
+	if(!s.isEmpty()){
+	  s+='\n';
+	}
+	s+=s2;
+      };
+      ParsingResult r;
       QFile file(f);
       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-	return false;
+	r.error="can't open file '"+f+"'";
+	return r;
       }
       QTextStream in(&file);
       QString line;
@@ -141,15 +159,20 @@ namespace tfel
 	  continue;
 	}
 	if(!line.endsWith('\\')){
-	  QString le;
-	  if(!this->parseString(le,line,false)){
-	    QString msg("GnuplotInterpreter::parseFile : ");
-	    msg += QObject::tr("error at line '%1' while parsing file '%2'\n").arg(pos).arg(f);
-	    msg += le;
-	    if(!e.isEmpty()){
-	      e += "\n";
+	  const auto r2 = this->parseString(line,false);
+	  if(r2.status==ParsingResult::QUIT){
+	    r.status=ParsingResult::QUIT;
+	  } else if(r2.status==ParsingResult::FAILURE){
+	    if(r.status!=ParsingResult::QUIT){
+	      r.status=ParsingResult::FAILURE;
 	    }
-	    e += msg;
+	  }
+	  append(r.output,r2.output);
+	  if(!r2.error.isEmpty()){
+	    QString msg("GnuplotInterpreter::parseFile: ");
+	    msg += QObject::tr("error at line '%1' while parsing file '%2'\n").arg(pos).arg(f);
+	    msg += r2.error;
+	    append(r.error,msg);
 	  }
 	  line.clear();
 	} else {
@@ -161,31 +184,35 @@ namespace tfel
 	QString msg("GnuplotInterpreter::parseFile : ");
 	msg += QObject::tr("error at line '%1' while parsing file '%2'\n").arg(pos).arg(f);
 	msg += QObject::tr("last line ended with a continuation mark");
-	if(!e.isEmpty()){
-	  e += "\n";
-	}
-	e += msg;
+	append(r.error,msg);
       }
-      if(!e.isEmpty()){
-	emit errorMsg(e);
-	return false;
+      if(!r.output.isEmpty()){
+	emit outputMsg(r.output);
       }
-      return true;
+      if(!r.error.isEmpty()){
+	emit errorMsg(r.error);
+      }
+      return r;
     } // end of GnuplotInterpreter::parseFile
     
-    bool GnuplotInterpreter::parseString(QString& emsg,
-					 const QString& l,
-					 const bool b)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::parseString(const QString& l,
+				    const bool b)
     {
-      using namespace std;
       using namespace tfel::utilities;
+      auto append = [](QString& s, const QString& s2){
+	if(s2.isEmpty()){
+	  return;
+	}
+	if(!s.isEmpty()){
+	  s+='\n';
+	}
+	s+=s2;
+      };
       const auto s = l.trimmed();
-      emsg.clear();
-      if(s.isEmpty()){
-	return true;
-      }
-      if(s.startsWith('#')){
-	return true;
+      ParsingResult r;
+      if((s.isEmpty())||(s.startsWith('#'))){
+	return r;
       }
       this->currentLine = s;
       try{
@@ -194,7 +221,7 @@ namespace tfel
 	tokenizer.parseString(s.toStdString());
 	auto p  = tokenizer.begin();
 	auto pe = tokenizer.end();
-	vector<TokensContainer> i(1u);
+	std::vector<TokensContainer> i(1u);
 	while(p!=pe){
 	  if(p->value!=";"){
 	    i.back().push_back(*p);
@@ -215,29 +242,43 @@ namespace tfel
 	      this->analyseFunctionDefinition(p,pe,false,false);
 	    } else {
 	      ++p;
-	      (this->*(pf->second))(p,pe);
+	      const auto r2 = (this->*(pf->second))(p,pe);
+	      if(r2.status==ParsingResult::QUIT){
+		r.status=ParsingResult::QUIT;
+	      } else if(r2.status==ParsingResult::FAILURE){
+		if(r.status!=ParsingResult::QUIT){
+		  r.status=ParsingResult::FAILURE;
+		}
+	      }
+	      append(r.output,r2.output);
+	      append(r.error,r2.error);
 	    }
 	    if(p!=pe){
-	      string msg("GnuplotInterpreter::eval: ");
-	      msg += "unexpected token '"+p->value+"'";
-	      throw(runtime_error(msg));
+	      throw(std::runtime_error("GnuplotInterpreter::eval: "
+				       "unexpected token '"+p->value+"'"));
 	    }
 	  }
 	}
       } catch(std::exception& e){
-	emsg = e.what();
-	if(b){
-	  emit errorMsg(e.what());
+	if(!r.status==ParsingResult::QUIT){
+	  r.status=ParsingResult::FAILURE;
 	}
-	return false;
+	append(r.error,QString::fromStdString(e.what()));
       } catch(...){
-	emsg = QObject::tr("unknown exception"); 
-	if(b){
-	  emit errorMsg(emsg);
+	if(!r.status==ParsingResult::QUIT){
+	  r.status=ParsingResult::FAILURE;
 	}
-	return false;
+	append(r.error,"unknown exception");
       }
-      return true;
+      if(b){
+	if(!r.output.isEmpty()){
+	  emit outputMsg(r.output);
+	}
+	if(!r.error.isEmpty()){
+	  emit errorMsg(r.error);
+	}
+      }
+      return r;
     }
 
     void GnuplotInterpreter::setTerminal(const std::string& t,
@@ -253,16 +294,17 @@ namespace tfel
       }
     } // end of GnuplotInterpreter::setTerminal
 
-    void GnuplotInterpreter::treatHelp(const_iterator& p,
-				       const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatHelp(const_iterator& p,
+				  const const_iterator pe)
     {
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatHelp","",p,pe);
+      ParsingResult r;
       const auto k = p->value;
       const auto f = getDocumentationFilePath(k);      
       ++p;
       if(f.empty()){
-	emit outputMsg(QString::fromStdString("no help available for "
-					      "'"+k+"'"));
+	r.output += QString::fromStdString("no help available for '"+k+"'");
       } else {
 	std::ifstream desc(f);
 	std::ostringstream o;
@@ -272,8 +314,9 @@ namespace tfel
 	} else {
 	  o << desc.rdbuf();
 	}
-	emit outputMsg(QString::fromStdString(o.str()));
+	r.output += QString::fromStdString(o.str());
       }
+      return r;
     } // end of GnuplotInterpreter::treatHelp
     
     void GnuplotInterpreter::setOutput(const std::string& o)
@@ -281,45 +324,35 @@ namespace tfel
       this->output = o;
     }
 
-    void GnuplotInterpreter::treatRePlot(const_iterator& p,
-					 const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatRePlot(const_iterator& p,
+				    const const_iterator pe)
     {
-      using namespace std;
-      if(this->previousPlot.isEmpty()){
-	string msg("GnuplotInterpreter::treatPlot : ");
-	msg += "no previous plot";
-	throw(runtime_error(msg));
-      }
-      if(p!=pe){
-	string msg("GnuplotInterpreter::treatRePlot : ");
-	msg += "unexpected token '"+p->value+"'";
-	throw(runtime_error(msg));
-      }
-      QString e;
-      this->parseString(e,this->previousPlot);
+      auto throw_if = [](const bool c,const std::string& m){
+	if(c){throw(std::runtime_error("GnuplotInterpreter::treatRePlot: "+m));}
+      };
+      throw_if(this->previousPlot.isEmpty(),"no previous plot");
+      throw_if(p!=pe,"unexpected token '"+p->value+"'");
+      return this->parseString(this->previousPlot);
     } // end of GnuplotInterpreter::treatRePlot
 
-    void GnuplotInterpreter::treatPlot(const_iterator& p,
-				       const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatPlot(const_iterator& p,
+				  const const_iterator pe)
     {
-      using namespace std;
+      auto throw_if = [](const bool c,const std::string& m){
+	if(c){throw(std::runtime_error("GnuplotInterpreter::treatPlot: "+m));}
+      };
       PlotInterpreter i(*this,this->g);
       this->g.removeCurves();
       i.eval(p,pe);
       if(this->terminal=="x11"){
 	this->g.replot();
       	this->g.show();
+	emit graphicalPlot();
       } else {
-      	if(this->output.empty()){
-      	  string msg("GnuplotInterpreter::treatPlot : ");
-      	  msg += "no output file specified";
-      	  throw(runtime_error(msg));
-      	}
-      	if(this->terminal.empty()){
-      	  string msg("GnuplotInterpreter::treatPlot : ");
-      	  msg += "no terminal file specified";
-      	  throw(runtime_error(msg));
-      	}
+      	throw_if(this->output.empty(),"no output file specified");
+      	throw_if(this->terminal.empty(),"no terminal file specified");
 	if(this->terminal=="pdf"){
 	  this->g.replot();
       	  this->g.exportToPDF(QString::fromStdString(this->output));
@@ -354,40 +387,46 @@ namespace tfel
 	  this->g.replot();
       	  this->g.exportToTable(QString::fromStdString(this->output));
       	} else {
-      	  string msg("GnuplotInterpreter::treatPlot : ");
-      	  msg += "internal error, unsupported terminal '"+this->terminal+"'";
-      	  throw(runtime_error(msg));
+	  throw_if(true,"internal error, unsupported "
+		   "terminal '"+this->terminal+"'");
       	}
       }
       this->previousPlot = this->currentLine;
+      return {};
     }
 
-    void GnuplotInterpreter::treatSet(const_iterator& p,
-				      const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatSet(const_iterator& p,
+				 const const_iterator pe)
     {
       SetInterpreter i(*this,this->g);
       i.eval(p,pe);
+      return {};
     }
 
-    void GnuplotInterpreter::treatUnSet(const_iterator& p,
-					const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatUnSet(const_iterator& p,
+				   const const_iterator pe)
     {
       UnSetInterpreter i(this->g);
       i.eval(p,pe);
+      return {};
     }
 
-    void GnuplotInterpreter::treatReset(const_iterator&, 
-					const const_iterator)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatReset(const_iterator&, 
+				   const const_iterator)
     {
       this->g.reset();
+      return {};
     } // end of GnuplotInterpreter::treatReset
 
-    void GnuplotInterpreter::treatInclude(const_iterator& p, 
-					  const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatInclude(const_iterator& p, 
+				     const const_iterator pe)
     {
       const auto f = this->readQString(p,pe);
-      QString e;
-      this->parseFile(e,f);
+      return this->parseFile(f);
     } // end of GnuplotInterpreter::treatInclude
 
     std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(const_iterator& p, 
@@ -487,31 +526,41 @@ namespace tfel
     } // end of GnuplotInterpreter::readCoordinates
 
 
-    void GnuplotInterpreter::treatQuit(const_iterator&, 
-				       const const_iterator)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatQuit(const_iterator&, 
+				  const const_iterator)
     {
-      QApplication::exit(EXIT_SUCCESS);
+      emit quitCommandTreated();
+      ParsingResult r;
+      r.status = ParsingResult::QUIT;
+      return r;
     } // end of GnuplotInterpreter::treatQuit
     
-    void GnuplotInterpreter::treatImport(const_iterator& p,
-					 const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatImport(const_iterator& p,
+				    const const_iterator pe)
     {
       ImportInterpreter i(*this,this->g);
       i.treatImport(p,pe,false);
+      return {};
     } // end of GnuplotInterpreter::treatImport
 
-    void GnuplotInterpreter::treatKriging(const_iterator& p,
-					  const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatKriging(const_iterator& p,
+				     const const_iterator pe)
     {
       KrigingInterpreter i(*this,this->g);
       i.eval(p,pe);
+      return {};
     } // end of GnuplotInterpreter::treatKriging
 
-    void GnuplotInterpreter::treatFit(const_iterator& p,
-				      const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatFit(const_iterator& p,
+				 const const_iterator pe)
     {
       FitInterpreter i(*this,this->g);
       i.eval(p,pe);
+      return {};
     } // end of GnuplotInterpreter::treatFit
 
     std::string GnuplotInterpreter::gatherTokenGroup(const_iterator& p,
@@ -558,39 +607,26 @@ namespace tfel
     {
       using namespace std;
       using namespace tfel::utilities;
-      using namespace tfel::math;
+      using tfel::math::Evaluator;
+      using tfel::math::parser::ExternalFunction;
       using std::vector;
-      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::analyseFunctionDefinition","",p,pe);
+      auto throw_if = [](const bool c,const std::string& m){
+	if(c){throw(std::runtime_error("GnuplotInterpreter::analyseFunctionDefinition(: "+m));}
+      };
+      throw_if(p==pe,"unexpected end of line");
       string var = p->value;
       // variable or function definition
-      if(!this->isValidIdentifier(var)){
-	string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	msg += p->value+" is not a valid identifer.";
-	throw(runtime_error(msg));
-      }
+      throw_if(!this->isValidIdentifier(var),p->value+" is not a valid identifer");
       ++p;
-      if(p==pe){
-	string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	msg += "unexpected end of line";
-	throw(runtime_error(msg));
-      }
+      throw_if(p==pe,"unexpected end of line");
       if(p->value=="="){
 	vector<string> vars;
 	// adding a variable
 	++p;
-	if(p==pe){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "unexpected end of line";
-	  throw(runtime_error(msg));
-	}
+	throw_if(p==pe,"unexpected end of line");
 	const auto group = this->gatherTokenGroup(p,pe);
-	if(group.empty()){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "invalid declaraction of variable "+var;
-	  throw(runtime_error(msg));
-	}
-	shared_ptr<tfel::math::parser::ExternalFunction> pev = std::make_shared<Evaluator>(vars,group,functions);
-	auto* ev = static_cast<Evaluator *>(pev.get());
+	throw_if(group.empty(),"invalid declaraction of variable '"+var+"'");
+	auto ev = std::make_shared<Evaluator>(vars,group,functions);
 	if(ev->getNumberOfVariables()!=0u){
 	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
 	  msg += "error while declaring variable "+var;
@@ -610,65 +646,47 @@ namespace tfel
 	  }
 	  throw(runtime_error(msg));
 	}
-	this->addFunction(var,pev,b1,b2);
+	this->addFunction(var,ev,b1,b2);
       } else if (p->value=="("){
-	shared_ptr<tfel::math::parser::ExternalFunction> ev;
-	vector<string>::const_iterator p2;
 	// adding a new function
-	QVector<string> vars = this->readVariableList(p,pe);
-	if(vars.isEmpty()){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "no variable defined";
-	  throw(runtime_error(msg));
-	}
-	if(p==pe){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "unexpected end of line";
-	  throw(runtime_error(msg));
-	}
-	if(p->value!="="){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "unexpected token '"+p->value+"' (expected '=')";
-	  throw(runtime_error(msg));
-	}
+	const auto vars = this->readVariableList(p,pe);
+	throw_if(vars.isEmpty(),"no variable defined");
+	throw_if(p==pe,"unexpected end of line");
+	throw_if(p->value!="=","unexpected token '"+p->value+"' (expected '=')");
 	++p;
-	if(p==pe){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "unexpected end of line";
-	  throw(runtime_error(msg));
-	}
+	throw_if(p==pe,"unexpected end of line");
 	string group = this->gatherTokenGroup(p,pe);
-	if(group.empty()){
-	  string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	  msg += "invalid declaraction of function "+var;
-	  throw(runtime_error(msg));
-	}
-	ev = shared_ptr<tfel::math::parser::ExternalFunction> (new Evaluator(vars.toStdVector(),
-									     group,functions));
+	throw_if(group.empty(),"invalid declaraction of function '"+var+"'");
+	auto ev = shared_ptr<ExternalFunction> (new Evaluator(vars.toStdVector(),
+							      group,functions));
 	this->addFunction(var,ev,b1,b2);
       } else {
-	string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
-	msg += "unexpected token ('"+p->value+"')";
-	throw(runtime_error(msg));
+	throw_if(true,"unexpected token ('"+p->value+"')");
       }
     } // end of GnuplotInterpreter::analyseFunctionDefinition
 
-    void GnuplotInterpreter::treatConst(const_iterator& p,
-					const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatConst(const_iterator& p,
+				   const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,true,true);
+      return {};
     } // end of GnuplotInterpreter::treatConst
 
-    void GnuplotInterpreter::treatLock(const_iterator& p,
-				       const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatLock(const_iterator& p,
+				  const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,true,false);
+      return {};
     } // end of GnuplotInterpreter::treatLock
 
-    void GnuplotInterpreter::treatNoDeps(const_iterator& p,
-					 const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatNoDeps(const_iterator& p,
+				    const const_iterator pe)
     {
       this->analyseFunctionDefinition(p,pe,false,true);
+      return {};
     } // end of GnuplotInterpreter::treatNoDeps
 
     double GnuplotInterpreter::eval(const QString& l)
@@ -716,8 +734,9 @@ namespace tfel
       return ev->getValue();
     } // end of GnuplotInterpreter::eval
     
-    void GnuplotInterpreter::treatPrint(const_iterator& p,
-					const const_iterator pe)
+    GnuplotInterpreter::ParsingResult
+    GnuplotInterpreter::treatPrint(const_iterator& p,
+				   const const_iterator pe)
     {
       using namespace tfel::utilities;
       bool cont = true;
@@ -737,7 +756,9 @@ namespace tfel
 	  CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint : ","",p,pe);
 	}
       }
-      emit outputMsg(QString::fromStdString(res.str()));
+      ParsingResult r;
+      r.output = QString::fromStdString(res.str());
+      return r;
     } // end of GnuplotInterpreter::treatPrint
 
     tfel::math::parser::ExternalFunctionManagerPtr GnuplotInterpreter::getExternalFunctionManager()

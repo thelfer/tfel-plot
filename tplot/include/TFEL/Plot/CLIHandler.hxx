@@ -32,13 +32,18 @@ namespace tfel
        * \param[in] fout: output socket name
        * \param[in] p:    parent object
        */
-      CLIHandler(const QString&,QObject* = nullptr);
+      CLIHandler(const QString&,
+		 QObject* = nullptr);
+      /*!
+       * \param[in] fout: input socket name
+       */
+      virtual void connect(const QString&);
       //! destructor
       virtual ~CLIHandler();
     public slots:
       //! \brief execute an infinite loop.
       virtual void process();
-      //! \brief execute an infinite loop.
+      //! \brief slot called whan a the server is disconnected.
       virtual void socketDisconnected();
     signals:
       //! signal called when reading from the command line is finished
@@ -49,6 +54,7 @@ namespace tfel
       void error(QString);
     private:
       QLocalServer *sout;
+      QLocalSocket *in;
       QLocalSocket *out;
     }; // end of class CLIHandler
     

@@ -59,7 +59,9 @@ int main(int argc,char** argv)
   try{
     TPlot tplot(argc,argv);
     if(tplot.graphicalOutput()){
-      tplot.show();
+      if(!tplot.isCLIModeEnabled()){
+	tplot.show();
+      }
       tplot.treatPendingInputs();
       return TPlotApplication::exec();
     }

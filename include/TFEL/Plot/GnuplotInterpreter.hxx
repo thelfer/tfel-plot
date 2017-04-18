@@ -49,35 +49,64 @@ namespace tfel
       Q_OBJECT
 
     public:
+
+      /*!
+       * \brief A structure describing the result of the parsing of a
+       * file or a string.
+       */
+      struct ParsingResult{
+	//! default constructor
+	ParsingResult();
+	//! move constructor
+	ParsingResult(ParsingResult&&);
+	//! copy constructor
+	ParsingResult(const ParsingResult&);
+	//! move assignement
+	ParsingResult& operator=(ParsingResult&&);
+	//! standard assignement
+	ParsingResult& operator=(const ParsingResult&);
+	enum {
+	  SUCCESS,
+	  FAILURE,
+	  QUIT
+	} status = SUCCESS;
+	//! output message
+	QString output;
+	//! error message
+	QString error;
+      }; // end of struct ParsingResult
       
       GnuplotInterpreter(Graph&,
 			 QObject * const = nullptr);
 
-      bool parseFile(QString&,
-		     const QString&);
+      ParsingResult parseFile(const QString&);
       /*!
        * \brief evaluate a string
        * \return true if the string has been evaluated correctly
+       * \param[out] r:    result
        * \param[out] emsg: error message in case of failure
        * \param[in]  l:    string to be evaluated
        * \param[in]  b:    if true, emit the errorMsg signal
        */
-      bool parseString(QString&,
-		       const QString&,
-		       const bool = true);
+      ParsingResult parseString(const QString&,
+				const bool = true);
       /*!
        * \brief evaluate a string
        * \return the result of the evaluation.
        * \param[in] l: string to be evaluated
        */
       double eval(const QString&);
-
+      
     signals:
 
       void outputMsg(const QString&);
 
       void errorMsg(const QString&);
 
+      void quitCommandTreated();
+
+      void graphicalPlot();
+      
     protected:
 
       struct PlotInterpreter;
@@ -87,8 +116,8 @@ namespace tfel
       struct KrigingInterpreter;
       struct FitInterpreter;
 
-      typedef void (GnuplotInterpreter::* MemFuncPtr)(const_iterator&,
-						      const const_iterator);
+      typedef ParsingResult (GnuplotInterpreter::* MemFuncPtr)(const_iterator&,
+							       const const_iterator);
       /*!
        * \brief evaluate the next group 
        * \param[in,out] p:  iterator to the current position
@@ -167,112 +196,112 @@ namespace tfel
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatHelp(const_iterator&, 
-		     const const_iterator);
+      ParsingResult treatHelp(const_iterator&, 
+			      const const_iterator);
       /*!
        * \brief treat the `include` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatInclude(const_iterator&, 
-			const const_iterator);
+      ParsingResult treatInclude(const_iterator&, 
+				 const const_iterator);
       /*!
        * \brief treat the `import` keyword. The treatment of this
        * keyword is in fact handled by the `ImportInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatImport(const_iterator&, 
-		       const const_iterator);
+      ParsingResult treatImport(const_iterator&, 
+				const const_iterator);
       /*!
        * \brief treat the `replot` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatRePlot(const_iterator&, 
-		       const const_iterator);
+      ParsingResult treatRePlot(const_iterator&, 
+				const const_iterator);
       /*!
        * \brief treat the `plot` keyword. The treatment of this
        * keyword is in fact handled by the `PlotInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatPlot(const_iterator&, 
-		     const const_iterator);
+      ParsingResult treatPlot(const_iterator&, 
+			      const const_iterator);
       /*!
        * \brief treat the `set` keyword. The treatment of this
        * keyword is in fact handled by the `SetInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatSet(const_iterator&, 
-		    const const_iterator);
+      ParsingResult treatSet(const_iterator&, 
+			     const const_iterator);
       /*!
        * \brief treat the `unset` keyword. The treatment of this
        * keyword is in fact handled by the `UnSetInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatUnSet(const_iterator&, 
-		      const const_iterator);
+      ParsingResult treatUnSet(const_iterator&, 
+			       const const_iterator);
       /*!
        * \brief treat the `print` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatPrint(const_iterator&, 
-		      const const_iterator);
+      ParsingResult treatPrint(const_iterator&, 
+			       const const_iterator);
       /*!
        * \brief treat the `quit` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatQuit(const_iterator&, 
-		     const const_iterator);
+      ParsingResult treatQuit(const_iterator&, 
+			      const const_iterator);
       /*!
        * \brief treat the `reset` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatReset(const_iterator&, 
-		      const const_iterator);
+      ParsingResult treatReset(const_iterator&, 
+			       const const_iterator);
       /*!
        * \brief treat the `const` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatConst(const_iterator&, 
-		      const const_iterator);
+      ParsingResult treatConst(const_iterator&, 
+			       const const_iterator);
       /*!
        * \brief treat the `lock` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatLock(const_iterator&, 
-		     const const_iterator);
+      ParsingResult treatLock(const_iterator&, 
+			      const const_iterator);
       /*!
        * \brief treat the `nodeps` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatNoDeps(const_iterator&, 
-		       const const_iterator);
+      ParsingResult treatNoDeps(const_iterator&, 
+				const const_iterator);
       /*!
        * \brief treat the `kriging` keyword. The treatment of this
        * keyword is in fact handled by the `KrigingInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatKriging(const_iterator&, 
-			const const_iterator);
+      ParsingResult treatKriging(const_iterator&, 
+				 const const_iterator);
       /*!
        * \brief treat the `fit` keyword. The treatment of this
        * keyword is in fact handled by the `FitInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      void treatFit(const_iterator&, 
-		    const const_iterator);
+      ParsingResult treatFit(const_iterator&, 
+			     const const_iterator);
 
       std::string
 	gatherTokenGroup(const_iterator&, 
@@ -290,7 +319,9 @@ namespace tfel
       QString previousPlot;
       
       std::string dummyVariable;
+      //! output file
       std::string output;
+      //! output terminal
       std::string terminal;
       std::set<std::string> locks;
       std::map<std::string,MemFuncPtr>  callBacks;

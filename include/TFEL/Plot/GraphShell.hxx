@@ -40,26 +40,37 @@ namespace tfel{
 
     public:
 
-      GraphShell(Graph&,
-		 QWidget *const = nullptr);
+      GraphShell(Graph&,QWidget *const = nullptr);
 
-      virtual void
+      virtual GnuplotInterpreter::ParsingResult
       treatNewCommand(const QString&);
 
-      ~GraphShell();
+      virtual ~GraphShell();
 
     public slots:
 
       void displayOutputMsg(const QString&);
 
       void displayErrorMsg(const QString&);
-
+      
       void saveBuffer();
 
       void setPrompt(const QString&);
 
       void importGnuplotFile(const QString&);
 
+    signals:
+      
+      void quitCommandTreated();
+
+      void graphicalPlot();
+
+    protected slots:
+
+      void forwardQuitCommand();
+
+      void forwardGraphicalPlot();
+      
     protected:
 
       static QString

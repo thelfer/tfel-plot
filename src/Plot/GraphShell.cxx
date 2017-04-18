@@ -78,16 +78,30 @@ namespace tfel{
 		       this,SLOT(displayErrorMsg(const QString&)));
       QObject::connect(&gi,SIGNAL(outputMsg(const QString&)),
 		       this,SLOT(displayOutputMsg(const QString&)));
+      QObject::connect(&gi,SIGNAL(quitCommandTreated()),
+		       this,SLOT(forwardQuitCommand()));
+      QObject::connect(&gi,SIGNAL(graphicalPlot()),
+		       this,SLOT(forwardGraphicalPlot()));
       this->setUndoRedoEnabled(false);
       this->displayPrompt();
     }
 
-    void GraphShell::treatNewCommand(const QString& l)
+    void GraphShell::forwardQuitCommand()
     {
-      QString e;
-      this->gi.parseString(e,l);
+      emit quitCommandTreated();
+    } // end of GraphShell::forwardQuitCommand
+
+    void GraphShell::forwardGraphicalPlot()
+    {
+      emit graphicalPlot();
+    } // end of GraphShell::forwardGraphicalPlot
+    
+    GnuplotInterpreter::ParsingResult GraphShell::treatNewCommand(const QString& l)
+    {
+      const auto r = this->gi.parseString(l);
       this->history.append(l);
       this->pHistory = this->history.size();
+      return r;
     } // end of GraphShell::treatNewCommand
 
     void GraphShell::importGnuplotFile(const QString& f)
@@ -148,9 +162,9 @@ namespace tfel{
 
     void GraphShell::setCurrentLine(const QString& l)
     {
-      this->moveCursor( QTextCursor::End, QTextCursor::MoveAnchor );
-      this->moveCursor( QTextCursor::StartOfLine, QTextCursor::MoveAnchor );
-      this->moveCursor( QTextCursor::End, QTextCursor::KeepAnchor );
+      this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor );
+      this->moveCursor(QTextCursor::StartOfLine, QTextCursor::MoveAnchor );
+      this->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor );
       this->textCursor().removeSelectedText();
       this->displayPrompt();
       this->insertHtml(l);
