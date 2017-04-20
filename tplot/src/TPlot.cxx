@@ -799,7 +799,15 @@ namespace tfel
     {
       return this->in!=nullptr;
     } // end of TPlot::treatCLI()
+#else  /* TPLOT_ENABLE_CLI */
+    bool TPlot::isCLIModeEnabled() const
+    {
+      return false;
+    } // end of TPlot::treatCLI()
+#endif /* TPLOT_ENABLE_CLI */
+
     
+#ifdef TPLOT_ENABLE_CLI
     void TPlot::treatInputSocket()
     {
       auto throw_if = [](const bool b, const std::string& m){

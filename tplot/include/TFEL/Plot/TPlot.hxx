@@ -71,10 +71,10 @@ namespace tfel
 
       void treatPendingInputs();
 
-#ifdef TPLOT_ENABLE_CLI      
-      //! treat the `--cli` option
+      /*!
+       * \return if the command line interface mode has been enabled
+       */
       bool isCLIModeEnabled() const;
-#endif /* TPLOT_ENABLE_CLI */
 
       virtual ~TPlot();
 

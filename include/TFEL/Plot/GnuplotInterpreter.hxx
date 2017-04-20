@@ -55,6 +55,11 @@ namespace tfel
        * file or a string.
        */
       struct ParsingResult{
+	enum Status{
+	  SUCCESS,
+	  FAILURE,
+	  QUIT
+	};
 	//! default constructor
 	ParsingResult();
 	//! move constructor
@@ -65,11 +70,7 @@ namespace tfel
 	ParsingResult& operator=(ParsingResult&&);
 	//! standard assignement
 	ParsingResult& operator=(const ParsingResult&);
-	enum {
-	  SUCCESS,
-	  FAILURE,
-	  QUIT
-	} status = SUCCESS;
+	Status status = SUCCESS;
 	//! output message
 	QString output;
 	//! error message

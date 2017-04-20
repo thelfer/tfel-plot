@@ -260,12 +260,12 @@ namespace tfel
 	  }
 	}
       } catch(std::exception& e){
-	if(!r.status==ParsingResult::QUIT){
+	if(r.status!=ParsingResult::QUIT){
 	  r.status=ParsingResult::FAILURE;
 	}
 	append(r.error,QString::fromStdString(e.what()));
       } catch(...){
-	if(!r.status==ParsingResult::QUIT){
+	if(r.status!=ParsingResult::QUIT){
 	  r.status=ParsingResult::FAILURE;
 	}
 	append(r.error,"unknown exception");

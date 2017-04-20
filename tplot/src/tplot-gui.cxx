@@ -52,20 +52,18 @@ namespace tfel
 
 int main(int argc,char** argv)
 {
-  using namespace std;
-  using namespace tfel::plot;
   Q_INIT_RESOURCE(TFELPlotResources);
-  TPlotApplication a(argc, argv);
+  tfel::plot::TPlotApplication a(argc, argv);
   try{
-    TPlot tplot(argc,argv);
+    tfel::plot::TPlot tplot(argc,argv);
     if(tplot.graphicalOutput()){
       if(!tplot.isCLIModeEnabled()){
 	tplot.show();
       }
       tplot.treatPendingInputs();
-      return TPlotApplication::exec();
+      return tfel::plot::TPlotApplication::exec();
     }
-  } catch (exception& e) {
+  } catch (std::exception& e) {
     qDebug() << e.what();
     return EXIT_FAILURE;
   }
