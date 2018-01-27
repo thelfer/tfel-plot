@@ -16,13 +16,8 @@
 #include<QtCore/QObject>
 #include<QtCore/QVector>
 #include<QtCore/QString>
-#ifdef TFEL_QT4
-#include<QtGui/QComboBox>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
-#include<QtWidgets/QComboBox>
-#endif /* TFEL_QT5 */
 #include<QtGui/QColor>
+#include<QtWidgets/QComboBox>
 
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/Point.hxx"
@@ -80,21 +75,21 @@ namespace tfel{
       virtual void
       setThemeLineStyle(const unsigned short) = 0;
 
-      virtual void sendRemoveSignal(void) = 0;
-      virtual bool hasRange(void) const = 0;
-      virtual qreal minRange(void) const = 0;
-      virtual qreal maxRange(void) const = 0;
+      virtual void sendRemoveSignal() = 0;
+      virtual bool hasRange() const = 0;
+      virtual qreal minRange() const = 0;
+      virtual qreal maxRange() const = 0;
       virtual void
       getValues(QVector<Point>&,const qreal,
 		const qreal,const unsigned short) = 0;
-      virtual bool hasSpecifiedColor(void)   const = 0;
-      virtual bool hasSpecifiedNumberOfSamples(void)   const = 0;
-      virtual bool isFilled(void) const  = 0;
-      virtual bool       hasKey(void) const = 0;
-      virtual QString    getKey(void) const = 0;
-      virtual QColor     getColor(void)  const = 0;
-      virtual Curve::Style   getStyle(void)  const = 0;
-      virtual unsigned short getNumberOfSamples(void) const = 0;
+      virtual bool hasSpecifiedColor()   const = 0;
+      virtual bool hasSpecifiedNumberOfSamples()   const = 0;
+      virtual bool isFilled() const  = 0;
+      virtual bool       hasKey() const = 0;
+      virtual QString    getKey() const = 0;
+      virtual QColor     getColor()  const = 0;
+      virtual Curve::Style   getStyle()  const = 0;
+      virtual unsigned short getNumberOfSamples() const = 0;
       virtual unsigned short getWidth() const = 0;
       //! destructor
       virtual ~Curve();

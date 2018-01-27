@@ -25,9 +25,9 @@ namespace tfel
     {
       typedef std::shared_ptr<GraphTheme> ThemePtr;
       virtual QString
-      getName(void) const = 0;
+      getName() const = 0;
       virtual ThemePtr
-      getTheme(void) const = 0;
+      getTheme() const = 0;
       virtual ~ThemeProxy();
     }; // end of struct ThemeProxy
 
@@ -38,9 +38,9 @@ namespace tfel
       StandardThemeProxy(const QString&,
 			 const bool = true);
       virtual QString
-      getName(void) const override;
+      getName() const override;
       virtual ThemeProxy::ThemePtr
-      getTheme(void) const override;
+      getTheme() const override;
       ~StandardThemeProxy();
     private:
       const QString name;
@@ -63,7 +63,7 @@ namespace tfel
       addTheme(const ThemeProxy * const);
 
       QList<QString>
-      getAvailableThemesNames(void) const;
+      getAvailableThemesNames() const;
 
     private:
 

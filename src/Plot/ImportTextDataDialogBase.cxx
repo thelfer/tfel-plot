@@ -8,16 +8,6 @@
 #include<sstream>
 #include<stdexcept>
 
-#ifdef TFEL_QT4
-#include<QtGui/QLabel>
-#include<QtGui/QFileDialog>
-#include<QtGui/QMessageBox>
-#include<QtGui/QGridLayout>
-#include<QtGui/QVBoxLayout>
-#include<QtGui/QHBoxLayout>
-#include<QtGui/QPushButton>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QLabel>
 #include<QtWidgets/QFileDialog>
 #include<QtWidgets/QMessageBox>
@@ -25,7 +15,6 @@
 #include<QtWidgets/QVBoxLayout>
 #include<QtWidgets/QHBoxLayout>
 #include<QtWidgets/QPushButton>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/DataCurve.hxx"
@@ -89,16 +78,10 @@ namespace tfel
       this->setAttribute(Qt::WA_DeleteOnClose);
     } // end of TextDataTreeWidget
 
-#ifdef TFEL_QT4
-    bool
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
-    int
-#endif /* TFEL_QT5 */
-    ImportTextDataDialogBase::exec()
+    int ImportTextDataDialogBase::exec()
     {
-      const QString& d = this->getFileDescription();
-      const QStringList& e = this->getFileExtensions();
+      const auto& d = this->getFileDescription();
+      const auto& e = this->getFileExtensions();
       QString desc;
       desc = d;
       if(!e.empty()){
@@ -125,8 +108,7 @@ namespace tfel
       return this->ok;
     }
 
-    bool
-    ImportTextDataDialogBase::exec(const QString& f)
+    bool ImportTextDataDialogBase::exec(const QString& f)
     {
       this->file = f;
       if(this->file.isEmpty()){
@@ -145,10 +127,10 @@ namespace tfel
     {
       using namespace std;
       // get the layout created by the curve configuration dialog
-      QVBoxLayout *vl = new QVBoxLayout;
-      QHBoxLayout *hl = new QHBoxLayout;
-      QGridLayout *gl = new QGridLayout;
-      QVector<QString> l = this->getCurveKeys();
+      auto *vl = new QVBoxLayout;
+      auto *hl = new QHBoxLayout;
+      auto *gl = new QGridLayout;
+      const auto l = this->getCurveKeys();
       this->setWindowTitle(tr("Import %1").arg(this->getFileDescription()));
       if(!l.isEmpty()){
 	QVector<QString>::const_iterator pl;

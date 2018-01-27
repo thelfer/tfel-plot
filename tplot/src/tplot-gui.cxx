@@ -6,15 +6,8 @@
  */
 
 #include<QtCore/QtDebug>
-#ifdef TFEL_QT4
-#include<QtGui/QMessageBox>
-#include<QtGui/QApplication>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QMessageBox>
 #include<QtWidgets/QApplication>
-#endif /* TFEL_QT5 */
-
 #include"TFEL/Plot/TPlot.hxx"
 
 namespace tfel
@@ -30,7 +23,7 @@ namespace tfel
 	: QApplication(c, v)
       {}
 
-      virtual bool notify(QObject *rec, QEvent *ev) override
+      bool notify(QObject *rec, QEvent *ev) override
       {
 	try {
            return QApplication::notify(rec, ev);

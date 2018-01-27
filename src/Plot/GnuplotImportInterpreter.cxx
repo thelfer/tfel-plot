@@ -44,10 +44,9 @@ namespace tfel
 	interpreter(i)
     {} // end of GnuplotInterpreter::ImportInterpreter::ImportInterpreter
 
-    void
-    GnuplotInterpreter::ImportInterpreter::treatImport(const_iterator& p,
-						       const const_iterator pe,
-						       const bool b)
+    void GnuplotInterpreter::ImportInterpreter::treatImport(const_iterator& p,
+							    const const_iterator pe,
+							    const bool b)
     {
       auto throw_if = [](const bool c,const std::string& m){
 	if(c){throw(std::runtime_error("GnuplotInterpreter::ImportInterpreter::treatImport: "+m));}

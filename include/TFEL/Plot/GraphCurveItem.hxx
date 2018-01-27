@@ -8,13 +8,7 @@
 #ifndef LIB_TFEL_PLOT_GRAPHCURVEITEM_H_
 #define LIB_TFEL_PLOT_GRAPHCURVEITEM_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QGraphicsPathItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QGraphicsPathItem>
-#endif /* TFEL_QT5 */
-
 
 namespace tfel
 {
@@ -49,9 +43,9 @@ namespace tfel
 
     protected slots:
 
-      void configure(void);
+      void configure();
 
-      void remove(void);
+      void remove();
 
     protected:
 

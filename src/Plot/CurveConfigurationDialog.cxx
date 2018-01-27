@@ -5,12 +5,7 @@
  * \brief 31 mai 2012
  */
 
-#ifdef TFEL_QT4
-#include<QtGui/QPushButton>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QPushButton>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/CurveConfigurationDialog.hxx"

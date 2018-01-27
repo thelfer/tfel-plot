@@ -136,71 +136,19 @@ CHECK_TFEL
 
 ## QT
 
-AC_ARG_ENABLE([qt4],
-	       AC_HELP_STRING([--enable-qt4],
-		              [use the qt4 version of the library]))
-AC_ARG_ENABLE([qt5],
-	       AC_HELP_STRING([--enable-qt5],
-		              [use the qt5 version of the library]))
-
-if test "x$enable_qt4" == "xyes" -a "x$enable_qt5" == "xyes";
-then
-  AC_MSG_ERROR([one must enable only one Qt version])
+echo
+echo ---------------------------------------------
+echo testing Qt5
+echo ---------------------------------------------
+echo
+m4_include([m4/m4-ax_have_qt.m4])
+AX_HAVE_QT
+if test "x$have_qt" == "xno"; then
+AC_MSG_ERROR([Qt5 not detected])
 fi
-
-if test ! "x$enable_qt4" == "xyes" -a ! "x$enable_qt5" == "xyes";
-then
-  AC_MSG_ERROR([one must choose one Qt version])
-fi
-
-if test "x$enable_qt4" == "xyes";
-then
-    echo
-    echo ---------------------------------------------
-    echo testing Qt4
-    echo ---------------------------------------------
-    echo
-    AC_DEFINE(TFEL_QT4,"","")
-    AM_CONDITIONAL([TFEL_QT4],[true])
-    AM_CONDITIONAL([TFEL_QT5],[false])
-    PKG_CHECK_MODULES(QT4, [QtCore QtGui QtSvg QtXml QtNetwork >= 4.4.0], [
-			     AC_PATH_PROGS(QT_MOC, [moc-qt4 moc], moc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-			     AC_PATH_PROG(QT_RCC, rcc, rcc,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-			     AC_PATH_PROGS(QT_UIC, [uic-qt4 uic], uic,`eval $PKG_CONFIG --variable=exec_prefix QtCore`/bin)
-			 ], [
-			     AC_MSG_ERROR([Qt4 library not found])
-			 ])
-    QT_CXXFLAGS=$QT4_CFLAGS
-    QT_LIBS=$QT4_LIBS
-    QT_CXXFLAGS=$QT_CXXFLAGS
-    AC_SUBST(QT_CXXFLAGS)
-    AC_SUBST(QT_LIBS)
-    echo "qt4 C++ flags: $QT_CXXFLAGS"
-    echo "qt4 libraries: $QT_LIBS"
-    echo "qt4 moc      : $QT_MOC"
-    echo "qt4 rcc      : $QT_RCC"
-    echo "qt4 uic      : $QT_UIC"
-fi
-
-if test "x$enable_qt5" == "xyes";
-then
-    echo
-    echo ---------------------------------------------
-    echo testing Qt5
-    echo ---------------------------------------------
-    echo
-    m4_include([m4/m4-ax_have_qt.m4])
-    AX_HAVE_QT
-    if test "x$have_qt" == "xno"; then
-      AC_MSG_ERROR([Qt5 not detected])
-    fi
-    echo "qt5 C++ flags: $QT_CXXFLAGS"
-    echo "qt5 libraries: $QT_LIBS"
-    echo "qt5 moc      : $QT_MOC"
-    AC_DEFINE(TFEL_QT5,"","")
-    AM_CONDITIONAL([TFEL_QT4],[false])
-    AM_CONDITIONAL([TFEL_QT5],[true])
-fi
+echo "qt5 C++ flags: $QT_CXXFLAGS"
+echo "qt5 libraries: $QT_LIBS"
+echo "qt5 moc      : $QT_MOC"
 
 AC_ARG_ENABLE([cli],
 	       AC_HELP_STRING([--enable-cli],

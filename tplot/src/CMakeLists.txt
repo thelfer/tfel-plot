@@ -1,7 +1,3 @@
-if(enable-qt4)
-  include(${QT_USE_FILE})
-  add_definitions(${QT_DEFINITIONS})
-endif(enable-qt4)
 include_directories("${PROJECT_SOURCE_DIR}/tplot/include")
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${TFEL_INCLUDE_PATH}")
@@ -25,16 +21,12 @@ tfel_plot_executable(tplot-gui
   tplot-gui.cxx
   ${TPlot_GUI_SOURCES})
 
-if(enable-qt4)
-  if(TPLOT_ENABLE_CLI)
-    target_link_libraries(tplot 
-      ${READLINE_LIBRARY}
-      ${QT_LIBRARIES})
-  else(TPLOT_ENABLE_CLI)
-    target_link_libraries(tplot 
-      ${QT_LIBRARIES})
-  endif(TPLOT_ENABLE_CLI)
-  target_link_libraries(tplot-gui 
+if(TPLOT_ENABLE_CLI)
+  target_link_libraries(tplot 
+    ${READLINE_LIBRARY}
+    Qt5::Core
+    Qt5::Network)
+  target_link_libraries(tplot-gui
     TFELGnuplotInterpreter
     TFELPlot
     TFELMathParser
@@ -42,39 +34,22 @@ if(enable-qt4)
     TFELUtilities
     TFELSystem
     TFELException
-    ${QT_LIBRARIES})
-endif(enable-qt4)
-if(enable-qt5)
-  if(TPLOT_ENABLE_CLI)
-    target_link_libraries(tplot 
-      ${READLINE_LIBRARY}
-      Qt5::Core
-      Qt5::Network)
-    target_link_libraries(tplot-gui
-      TFELGnuplotInterpreter
-      TFELPlot
-      TFELMathParser
-      TFELMath
-      TFELUtilities
-      TFELSystem
-      TFELException
-      Qt5::Core
-      Qt5::Widgets
-      Qt5::Network
-      Qt5::PrintSupport)
-  else(TPLOT_ENABLE_CLI)
-    target_link_libraries(tplot 
-      Qt5::Core)
-    target_link_libraries(tplot-gui
-      TFELGnuplotInterpreter
-      TFELPlot
-      TFELMathParser
-      TFELMath
-      TFELUtilities
-      TFELSystem
-      TFELException
-      Qt5::Core
-      Qt5::Widgets
-      Qt5::PrintSupport)
-  endif(TPLOT_ENABLE_CLI)
-endif(enable-qt5)
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Network
+    Qt5::PrintSupport)
+else(TPLOT_ENABLE_CLI)
+  target_link_libraries(tplot 
+    Qt5::Core)
+  target_link_libraries(tplot-gui
+    TFELGnuplotInterpreter
+    TFELPlot
+    TFELMathParser
+    TFELMath
+    TFELUtilities
+    TFELSystem
+    TFELException
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::PrintSupport)
+endif(TPLOT_ENABLE_CLI)

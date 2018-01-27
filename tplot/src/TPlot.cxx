@@ -15,22 +15,6 @@
 #include<QtCore/QBuffer>
 #include<QtCore/QTextCodec>
 #include<QtCore/QTextDecoder>
-
-#ifdef TFEL_QT4
-#include<QtGui/QAction>
-#include<QtGui/QMenuBar>
-#include<QtGui/QMessageBox>
-#include<QtGui/QFileDialog>
-#include<QtGui/QPrintDialog>
-#include<QtGui/QDockWidget>
-#include<QtGui/QFontDialog>
-#include<QtGui/QRadioButton>
-#include<QtGui/QButtonGroup>
-#include<QtGui/QVBoxLayout>
-#include<QtGui/QDialogButtonBox>
-#include<QtGui/QApplication>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QAction>
 #include<QtWidgets/QMenuBar>
 #include<QtWidgets/QMessageBox>
@@ -43,11 +27,9 @@
 #include<QtWidgets/QDialogButtonBox>
 #include<QtWidgets/QApplication>
 #include<QtPrintSupport/QPrintDialog>
-#endif /* TFEL_QT5 */
 #include<QtGui/QKeyEvent>
 #include<QtGui/QClipboard>
 #include<QtGui/QImageReader>
-
 #include"TFEL/Plot/GraphConfigurationDialog.hxx"
 #include"TFEL/Plot/DataCurve.hxx"
 #include"TFEL/Plot/EvaluatedCurve.hxx"
@@ -161,10 +143,6 @@ namespace tfel
 	const auto extension = o.substr(spos+1);
 	if(extension=="pdf"){
 	  this->g->exportToPDF(this->output);
-#ifdef TFEL_QT4
-	} else if(extension=="eps"){
-	  this->g->exportToPostScript(this->output);
-#endif /* TFEL_QT4 */
 	} else if(extension=="svg"){
 	  this->g->exportToSVG(this->output);
 	} else if(extension=="png"){
@@ -273,14 +251,6 @@ namespace tfel
       this->esvga->setStatusTip(tr("Export the graph in SVG format"));
       QObject::connect(this->esvga, SIGNAL(triggered()),
 		       this, SLOT(exportToSVG()));
-#ifdef TFEL_QT4
-      this->epsa = new QAction(tr("Export to ps"), this);
-      this->epsa->setStatusTip(tr("Export the graph in PostScript format"));
-      this->epsa->setIcon(QIcon::fromTheme("document-save-as"));
-      this->epsa->setIconVisibleInMenu(true);
-      QObject::connect(this->epsa, SIGNAL(triggered()),
-		       this, SLOT(exportToPostScript()));
-#endif /* TFEL_QT4 */
       this->epnga = new QAction(tr("Export to png"), this);
       this->epnga->setStatusTip(tr("Export the graph in Portable Network Plot format"));
       this->epnga->setIcon(QIcon::fromTheme("document-save-as"));
@@ -480,9 +450,6 @@ namespace tfel
       this->em = this->fm->addMenu("E&xport");
       this->em->addAction(this->esvga);
       this->em->addAction(this->epdfa);
-#ifdef TFEL_QT4
-      this->em->addAction(this->epsa);
-#endif /* TFEL_QT4 */
       this->em->addAction(this->epnga);
       this->em->addAction(this->etxta);
       this->fm->addSeparator();
@@ -842,11 +809,8 @@ namespace tfel
     void TPlot::readCLIInput()
     {
       auto write = [this](const QString& m){
-	if(m.isEmpty()){
-	  this->out->write("\0",1u);
-	} else {
-	  this->out->write(m.toLatin1());
-	}
+	this->out->write((m+'\n').toLatin1());
+	this->out->waitForBytesWritten();
       };
       QObject::disconnect(this->in, SIGNAL(readyRead()),
 			  this, SLOT(readCLIInput()));
@@ -859,9 +823,17 @@ namespace tfel
       } else {
 	write("0");
       }
+      QMessageBox msgBox;
+      msgBox.setText("HERE");
+      msgBox.exec();
       write(r.output);
+      msgBox.setText("HERE2");
+      msgBox.exec();
       write(r.error);
+      msgBox.setText("HERE3");
+      msgBox.exec();
       if(r.status==GnuplotInterpreter::ParsingResult::QUIT){
+	this->out->waitForReadyRead();
 	this->in->readLine();
 	this->in=nullptr;
 	this->close();
@@ -1588,12 +1560,7 @@ namespace tfel
       if(m->hasText()){
 	TextDataReader dr;
 	try{
-#ifdef TFEL_QT4
-	  QTextStream qs(m->text().toAscii());
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 	  QTextStream qs(m->text().toLatin1());
-#endif /* TFEL_QT5 */
 	  dr.extractData(qs);
 	} catch(...){
 	  return;
@@ -1695,18 +1662,6 @@ namespace tfel
       }
       this->g->exportToTable(f);
     }
-
-#ifdef TFEL_QT4
-    void TPlot::exportToPostScript()
-    {
-      const auto f = QFileDialog::getSaveFileName(this,tr("Choose file"),
-						  "",tr("PostScript Format (*.ps)"));
-      if(f.isEmpty()){
-	return;
-      }
-      this->g->exportToPostScript(f);
-    }
-#endif /* TFEL_QT4 */
 
     void TPlot::print()
     {

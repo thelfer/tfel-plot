@@ -175,7 +175,7 @@ namespace tfel{
 
     QComboBox* Curve::getStyleComboBox()
     {
-      QComboBox *scb = new QComboBox();
+      auto *scb = new QComboBox();
       scb->setIconSize(QSize(100,20));
       scb->addItem(createLineIcon(Qt::SolidLine),"SolidLine");
       scb->addItem(createLineIcon(Qt::DotLine),"DotLine");

@@ -11,7 +11,6 @@ if(NOT i586-mingw32msvc_COMPILER)
   set(COMPILER_DEFAULT_VISIBILITY "-fvisibility=default")
 endif(NOT i586-mingw32msvc_COMPILER)
 
-tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS_MARCH "march=native")
 tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS_MARCH "ftree-vectorize")
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )

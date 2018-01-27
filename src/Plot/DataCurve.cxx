@@ -14,8 +14,8 @@
 #include<stdexcept>
 
 #include<QtCore/QtDebug>
+#include<QtCore/QFile>
 #include<QtCore/QTimer>
-
 
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Plot/TextDataReader.hxx"
@@ -197,8 +197,16 @@ namespace tfel{
 
     void DataCurve::updatedDataFile(const QString&)
     {
-      this->loadDataFromFile(false);
-      emit updated(this);
+      this->watcher->removePath(this->file);
+      if(!QFile(this->file).exists()){
+	// method was called to say that the file has disapeared
+	QTimer::singleShot(1000,this,[this]{
+	    this->updatedDataFile(this->file);
+	  });
+      } else {
+	this->watcher->addPath(this->file);
+	this->loadDataFromFile(false);
+      }
     } // end of DataCurve::updatedDataFile
 
     void DataCurve::getValues(QVector<double>& v,
@@ -309,6 +317,7 @@ namespace tfel{
 	this->xvalues.clear();
 	this->yvalues.clear();
       }
+      emit(updated(this));
     }
 
     void DataCurve::loadDataFromFile(const bool first)

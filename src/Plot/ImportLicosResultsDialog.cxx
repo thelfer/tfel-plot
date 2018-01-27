@@ -6,16 +6,9 @@
  */
 
 #include<QtXml/QDomDocument>
-#ifdef TFEL_QT4
-#include<QtGui/QFileDialog>
-#include<QtGui/QMessageBox>
-#include<QtGui/QVBoxLayout>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QFileDialog>
 #include<QtWidgets/QMessageBox>
 #include<QtWidgets/QVBoxLayout>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/ImportLicosCurveDialog.hxx"
 #include"TFEL/Plot/ImportLicosResultsDialog.hxx"
@@ -36,10 +29,9 @@ namespace tfel
       LicosCurveTreeWidgetItem(const QString&,
 			       QTreeWidgetItem *);
 
-      virtual QString
-      getFile() const;
+      virtual QString getFile() const;
       
-      virtual ~LicosCurveTreeWidgetItem();
+      ~LicosCurveTreeWidgetItem() override;
 
     protected:
 
@@ -137,7 +129,7 @@ namespace tfel
 	ok(true)
     {
       this->setAttribute(Qt::WA_DeleteOnClose);
-      QVBoxLayout *l = new QVBoxLayout;
+      auto *l = new QVBoxLayout;
       l->addWidget(this->tree);
       this->loadFile(f);
       this->setLayout(l);

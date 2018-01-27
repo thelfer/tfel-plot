@@ -8,12 +8,7 @@
 #ifndef LIB_TFEL_PLOT_THEMESELECTIONACTION_H_
 #define LIB_TFEL_PLOT_THEMESELECTIONACTION_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QAction>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QAction>
-#endif /* TFEL_QT5 */
 #include<TFEL/Plot/Config.hxx>
 
 namespace tfel

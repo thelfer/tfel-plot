@@ -40,13 +40,13 @@ namespace tfel{
       virtual void
       setThemeLineStyle(const unsigned short) override;
 
-      virtual void sendRemoveSignal(void) override;
-      virtual bool hasSpecifiedColor(void)   const override;
-      virtual bool isFilled(void) const override;
-      virtual bool       hasKey(void) const override;
-      virtual QString    getKey(void) const override;
-      virtual QColor     getColor(void)  const override;
-      virtual Curve::Style   getStyle(void)  const override;
+      virtual void sendRemoveSignal() override;
+      virtual bool hasSpecifiedColor()   const override;
+      virtual bool isFilled() const override;
+      virtual bool       hasKey() const override;
+      virtual QString    getKey() const override;
+      virtual QColor     getColor()  const override;
+      virtual Curve::Style   getStyle()  const override;
       virtual unsigned short getWidth() const override;
       
       virtual ~CurveBase();

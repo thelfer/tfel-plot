@@ -8,16 +8,9 @@
 #ifndef LIB_TFEL_PLOT_LICOSRESULTSTREEVIEW_H_
 #define LIB_TFEL_PLOT_LICOSRESULTSTREEVIEW_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QDialog>
-#include<QtGui/QTreeView>
-#include<QtGui/QTreeWidgetItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QDialog>
 #include<QtWidgets/QTreeView>
 #include<QtWidgets/QTreeWidgetItem>
-#endif /* TFEL_QT5 */
 #include<QtXml/QDomElement>
 
 #include"TFEL/Plot/Config.hxx"
@@ -39,7 +32,7 @@ namespace tfel
     public:
 
       LicosResultsTreeWidget(Graph&,
-			     QWidget * parent = nullptr);
+			     QWidget * = nullptr);
 
     protected slots:
 

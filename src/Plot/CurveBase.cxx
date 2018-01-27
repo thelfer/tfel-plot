@@ -13,8 +13,7 @@ namespace tfel{
         
     CurveBase::CurveBase() = default;
 
-    bool
-    CurveBase::shouldFollowThemeLineStyle() const
+    bool CurveBase::shouldFollowThemeLineStyle() const
     {
       return this->useThemeLineStyle;
     }
@@ -31,8 +30,7 @@ namespace tfel{
       this->themeLineStyle = t;
     } // end of Curve::getThemeLineStyle
 
-    unsigned short
-    CurveBase::getWidth() const
+    unsigned short CurveBase::getWidth() const
     {
       return this->width;
     }
@@ -65,9 +63,8 @@ namespace tfel{
       }
     } // end of CurveBase::setFilled
 
-    void
-    CurveBase::setKey(const QString& l,
-		      const bool b)
+    void CurveBase::setKey(const QString& l,
+			   const bool b)
     {
       this->hasLegend = !l.isEmpty();
       this->legend = l;

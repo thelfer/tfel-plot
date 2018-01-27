@@ -27,11 +27,10 @@ namespace tfel
 		       this,SLOT(setTheme()));
     } // end of ThemeSelectionAction:ThemeSelectionAction
     
-    void
-    ThemeSelectionAction::setTheme()
+    void ThemeSelectionAction::setTheme()
     {
       try{
-	ThemeManager& tm = ThemeManager::getThemeManager();
+	auto& tm = ThemeManager::getThemeManager();
 	this->g.setTheme(tm.getTheme(this->name),true);
       } catch(...){
       }

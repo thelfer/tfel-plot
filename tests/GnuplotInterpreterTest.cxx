@@ -16,17 +16,10 @@
 #include<iostream>
 
 #include<QtCore/QtDebug>
-#ifdef TFEL_QT4
-#include<QtGui/QApplication>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QApplication>
-#endif /* TFEL_QT5 */
-
 #include"TFEL/Tests/TestCase.hxx"
 #include"TFEL/Tests/TestProxy.hxx"
 #include"TFEL/Tests/TestManager.hxx"
-
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/GnuplotInterpreter.hxx"
 
@@ -37,8 +30,7 @@ struct GnuplotInterpreterTest final
     : tfel::tests::TestCase("TFEL/Plot",
 			    "GnuplotInterpreterTest")
   {} // end of GnuplotInterpreterTest
-  virtual tfel::tests::TestResult
-  execute() override
+  tfel::tests::TestResult execute() override
   {
     this->check_nodeps();
     // this->check_const();
@@ -49,12 +41,11 @@ private:
   using ParsingResult = tfel::plot::GnuplotInterpreter::ParsingResult;
   QString parse(tfel::plot::GnuplotInterpreter& i,const char* const s,
 		const ParsingResult::Status f = ParsingResult::SUCCESS){
-    using ParsingResult = tfel::plot::GnuplotInterpreter::ParsingResult;
     const auto r = i.parseString(s);
     TFEL_TESTS_ASSERT(r.status==f);
     return r.error;
   }
-  void check_nodeps(void){
+  void check_nodeps(){
     const auto eps = 10*std::numeric_limits<double>::epsilon();
     tfel::plot::Graph g;
     tfel::plot::GnuplotInterpreter i(g);
@@ -67,7 +58,7 @@ private:
     this->parse(i,"g(x)=sin(x);");
     TFEL_TESTS_ASSERT(std::abs(i.eval("f(1.4)")-std::cos(1.4))<eps);
   }
-  void check_const(void){
+  void check_const(){
     const auto eps = 10*std::numeric_limits<double>::epsilon();
     tfel::plot::Graph g;
     tfel::plot::GnuplotInterpreter i(g);
@@ -82,7 +73,7 @@ private:
     this->parse(i,"g(x)=sin(x);");
     TFEL_TESTS_ASSERT(std::abs(i.eval("f(1.4)")-std::cos(1.4))<eps);
   }
-  void check_lock(void){
+  void check_lock(){
     const auto eps = 10*std::numeric_limits<double>::epsilon();
     tfel::plot::Graph g;
     tfel::plot::GnuplotInterpreter i(g);

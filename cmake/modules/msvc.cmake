@@ -1,5 +1,3 @@
-include(cmake/modules/OptimizeForArchitecture.cmake)
-
 tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "MD")
 tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "EHsc")
 
@@ -26,5 +24,3 @@ set(COMPILER_FLAGS "-D_SCL_SECURE_NO_WARNINGS ${COMPILER_FLAGS}")
 set(OPTIMISATION_FLAGS "/O2 -DNDEBUG ${OPTIMISATION_FLAGS}")
 set(OPTIMISATION_FLAGS "-DNO_RUNTIME_CHECK_BOUNDS ${OPTIMISATION_FLAGS}")
 
-# optimise build
-OptimizeForArchitecture()

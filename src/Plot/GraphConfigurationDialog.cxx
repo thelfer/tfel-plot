@@ -6,16 +6,9 @@
  */
 
 #include<QtCore/QtDebug>
-#ifdef TFEL_QT4
-#include<QtGui/QLabel>
-#include<QtGui/QTabWidget>
-#include<QtGui/QGridLayout>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QLabel>
 #include<QtWidgets/QTabWidget>
 #include<QtWidgets/QGridLayout>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/GraphConfigurationDialog.hxx"
@@ -46,8 +39,8 @@ namespace tfel
 	ltle(new QLineEdit),
 	rtle(new QLineEdit)
     {
-      QVBoxLayout *l    = new QVBoxLayout;
-      QTabWidget* tabs  = new QTabWidget;
+      auto *l    = new QVBoxLayout;
+      auto* tabs = new QTabWidget;
       tabs->addTab(this->createRangesPage(),tr("Graph ranges"));
       tabs->addTab(this->createLabelsPage(),tr("Graph labels"));
       tabs->addTab(this->createTitlesPage(),tr("Graph titles"));
@@ -57,8 +50,8 @@ namespace tfel
 
     QWidget * GraphConfigurationDialog::createLabelsPage()
     {
-      QWidget *labels   = new QWidget;
-      QGridLayout *grid = new QGridLayout;
+      auto *labels = new QWidget;
+      auto *grid   = new QGridLayout;
       grid->addWidget(new QLabel(tr("x-axis label")),0,0);
       grid->addWidget(this->xle,0,1);
       QObject::connect(&(this->graph),SIGNAL(xLabelChanged(const QString&)),
@@ -89,8 +82,8 @@ namespace tfel
 
     QWidget* GraphConfigurationDialog::createRangesPage()
     {
-      QWidget *ranges   = new QWidget;
-      QGridLayout *grid = new QGridLayout;
+      auto *ranges = new QWidget;
+      auto *grid   = new QGridLayout;
       // x axis
       grid->addWidget(new QLabel(tr("x-axis minimum")),0,0);
       grid->addWidget(this->xmin,0,1);
@@ -377,8 +370,8 @@ namespace tfel
 
     QWidget* GraphConfigurationDialog::createTitlesPage()
     {
-      QWidget *titles   = new QWidget;
-      QGridLayout *grid = new QGridLayout;
+      auto *titles = new QWidget;
+      auto *grid   = new QGridLayout;
       grid->addWidget(new QLabel(tr("Upper title")),0,0);
       grid->addWidget(this->utle,0,1);
       QObject::connect(&(this->graph),SIGNAL(upperTitleChanged(const QString&)),

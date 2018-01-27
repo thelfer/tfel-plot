@@ -35,16 +35,16 @@ namespace tfel
 
       EvaluatedCurve(std::shared_ptr<tfel::math::Evaluator>&,
 		     const QString& = "x");
-      virtual bool  hasRange(void) const override;
-      virtual qreal minRange(void) const override;
-      virtual qreal maxRange(void) const override;
+      virtual bool  hasRange() const override;
+      virtual qreal minRange() const override;
+      virtual qreal maxRange() const override;
       virtual void
       getValues(QVector<Point>&,const qreal,
 		const qreal,const unsigned short) override;
       virtual bool
-      hasSpecifiedNumberOfSamples(void) const override;
+      hasSpecifiedNumberOfSamples() const override;
       virtual unsigned short
-      getNumberOfSamples(void) const override;
+      getNumberOfSamples() const override;
       virtual ~EvaluatedCurve();
     private:
       std::shared_ptr<tfel::math::Evaluator> ev;

@@ -7,20 +7,11 @@
 
 #include<QtCore/QtDebug>
 #include<QtCore/QMimeData>
-#ifdef TFEL_QT4
-#include<QtGui/QAction>
-#include<QtGui/QApplication>
-#include<QtGui/QShortcut>
-#include<QtGui/QFileDialog>
-#include<QtGui/QMessageBox>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QAction>
 #include<QtWidgets/QApplication>
 #include<QtWidgets/QShortcut>
 #include<QtWidgets/QFileDialog>
 #include<QtWidgets/QMessageBox>
-#endif /* TFEL_QT5 */
 #include<QtGui/QKeySequence>
 #include<QtGui/QTextBlock>
 #include<QtGui/QClipboard>

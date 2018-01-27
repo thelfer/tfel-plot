@@ -366,7 +366,6 @@ EOF
 	    if test "x$enable_debug" != "xyes"; then
 		dnl g++ debug options
 		CPPFLAGS="-DNDEBUG $CPPFLAGS"
-		AC_GCC_ARCH_OPTIMISATIONS
 	    fi
 	fi
 	

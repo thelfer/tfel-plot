@@ -18,22 +18,12 @@
 #include<QtCore/QTextStream>
 
 #include<QtCore/QtAlgorithms>
-#ifdef TFEL_QT4
-#include<QtGui/QPrinter>
-#include<QtGui/QMenu>
-#include<QtGui/QAction>
-#include<QtGui/QGraphicsSceneContextMenuEvent>
-#include<QtGui/QMessageBox>
-#include<QtGui/QGraphicsItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QMenu>
 #include<QtWidgets/QAction>
 #include<QtWidgets/QGraphicsSceneContextMenuEvent>
 #include<QtWidgets/QMessageBox>
 #include<QtWidgets/QGraphicsItem>
 #include<QtPrintSupport/QPrinter>
-#endif /* TFEL_QT5 */
 #include<QtGui/QMouseEvent>
 #include<QtGui/QResizeEvent>
 #include<QtSvg/QSvgGenerator>
@@ -813,8 +803,7 @@ namespace tfel
       l.by2 = 0.5*(yh0+yh1-l.ay2*(this->y2Axis.max+this->y2Axis.min));
     } // end of Graph::computeGraphLayout
 
-    void
-    Graph::setGrid(const unsigned short g,const bool b)
+    void Graph::setGrid(const unsigned short g,const bool b)
     {
       this->grid = g;
       if(b){
@@ -823,16 +812,14 @@ namespace tfel
       emit gridSet(g);
     } // end of Graph::setGrid
 
-    unsigned short 
-    Graph::getGrid() const
+    unsigned short Graph::getGrid() const
     {
       return this->grid;
     } // end of Graph::getGrid
 
-    void
-    Graph::plot(QGraphicsScene&,
-		const unsigned short pwidth,
-		const unsigned short pheight)
+    void Graph::plot(QGraphicsScene&,
+		     const unsigned short pwidth,
+		     const unsigned short pheight)
     {
       using namespace std;
 
@@ -983,8 +970,7 @@ namespace tfel
       emit updated();
     } // end of Graph::plot
 
-    QByteArray
-    Graph::exportToSVG()
+    QByteArray Graph::exportToSVG()
     {
       QBuffer b;
       if(this->cursorPosition!=nullptr){
@@ -1004,8 +990,7 @@ namespace tfel
       return b.buffer();
     }
 
-    QImage
-    Graph::exportToQImage()
+    QImage Graph::exportToQImage()
     {
       // Selections would also render to the file
       this->scene->clearSelection();
@@ -1026,14 +1011,12 @@ namespace tfel
       return image;
     }
 
-    void
-    Graph::insertImage(const QPixmap& i)
+    void Graph::insertImage(const QPixmap& i)
     {
       this->scene->addPixmap(i);
     }
 
-    void
-    Graph::exportToTable(const QString& file)
+    void Graph::exportToTable(const QString& file)
     {
       std::ofstream f(file.toStdString().c_str());
       if(!f){
@@ -1050,8 +1033,7 @@ namespace tfel
       }
     }
 
-    QString
-    Graph::exportToTable()
+    QString Graph::exportToTable()
     {
       QString out;
       QTextStream table(&out);
@@ -1073,8 +1055,7 @@ namespace tfel
       return out;
     } // end of Graph::exportToTable
 
-    void
-    Graph::exportToSVG(const QString& file)
+    void Graph::exportToSVG(const QString& file)
     {
       if(this->cursorPosition!=nullptr){
 	this->scene->removeItem(this->cursorPosition);
@@ -1092,9 +1073,8 @@ namespace tfel
       painter.end();
     } // end of Graph::exportToSVG
 
-    void
-    Graph::exportToFile(const QString& file,
-			const char * const f)
+    void Graph::exportToFile(const QString& file,
+			     const char * const f)
     {
       if(this->cursorPosition!=nullptr){
 	this->scene->removeItem(this->cursorPosition);
@@ -1115,64 +1095,37 @@ namespace tfel
       }
     } // end of Graph::export
 
-    void
-    Graph::exportToPNG(const QString& file)
+    void Graph::exportToPNG(const QString& file)
     {
       this->exportToFile(file,"PNG");
     } // end of Graph::exportToPNG
 
-    void
-    Graph::exportToBMP(const QString& file)
+    void Graph::exportToBMP(const QString& file)
     {
       this->exportToFile(file,"BMP");
     } // end of Graph::exportToBMP
 
-    void
-    Graph::exportToJPEG(const QString& file)
+    void Graph::exportToJPEG(const QString& file)
     {
       this->exportToFile(file,"JPEG");
     } // end of Graph::exportToJPEG
 
-    void
-    Graph::exportToPPM(const QString& file)
+    void Graph::exportToPPM(const QString& file)
     {
       this->exportToFile(file,"PPM");
     } // end of Graph::exportToPPM
 
-    void
-    Graph::exportToXBM(const QString& file)
+    void Graph::exportToXBM(const QString& file)
     {
       this->exportToFile(file,"XBM");
     } // end of Graph::exportToXBM
 
-    void
-    Graph::exportToXPM(const QString& file)
+    void Graph::exportToXPM(const QString& file)
     {
       this->exportToFile(file,"XPM");
     } // end of Graph::exportToXPM
 
-#ifdef TFEL_QT4
-    void
-    Graph::exportToPostScript(const QString& file)
-    {
-      if(this->cursorPosition!=nullptr){
-	this->scene->removeItem(this->cursorPosition);
-	delete this->cursorPosition;
-	this->cursorPosition = nullptr;
-      }
-      QPrinter printer(QPrinter::HighResolution);
-      printer.setPaperSize(this->scene->sceneRect().size().toSize(),
-			   QPrinter::Point);
-      printer.setPageMargins(0,0,0,0,QPrinter::Point);
-      printer.setOutputFormat(QPrinter::PostScriptFormat);
-      printer.setOutputFileName(file);
-      QPainter painter(&printer);
-      this->scene->render(&painter);
-    } // end of Graph::exportToPostScript
-#endif /* TFEL_QT4 */
-
-    void
-    Graph::exportToPDF(const QString& file)
+    void Graph::exportToPDF(const QString& file)
     {
       if(this->cursorPosition!=nullptr){
 	this->scene->removeItem(this->cursorPosition);
@@ -1190,8 +1143,7 @@ namespace tfel
       this->scene->render(&painter);
     } // end of Graph::print
 
-    void
-    Graph::print(QPrinter *p)
+    void Graph::print(QPrinter *p)
     {
       if(this->cursorPosition!=nullptr){
 	this->scene->removeItem(this->cursorPosition);
@@ -1202,8 +1154,7 @@ namespace tfel
       this->scene->render(&painter);
     } // end of Graph::printer
 
-    void
-    Graph::removeCurves(const bool b)
+    void Graph::removeCurves(const bool b)
     {
       using namespace std;
       this->curves.clear();
@@ -1217,10 +1168,9 @@ namespace tfel
       emit curvesRemoved();
     } // end of Graph::removeCurves
 
-    void
-    Graph::computeRange(qreal& x0,
-			qreal& x1,
-			const unsigned short axis){
+    void Graph::computeRange(qreal& x0,
+			     qreal& x1,
+			     const unsigned short axis){
       using namespace std;
       QVector<CurveHandler>::const_iterator p;
       bool found = false;

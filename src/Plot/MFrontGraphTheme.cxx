@@ -8,12 +8,7 @@
 
 
 #include<QtCore/QDebug>
-#ifdef TFEL_QT4
-#include<QtGui/QGraphicsTextItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QGraphicsTextItem>
-#endif /* TFEL_QT5 */
 #include<QtSvg/QGraphicsSvgItem>
 #include<QtSvg/QSvgRenderer>
 
@@ -31,7 +26,7 @@ namespace tfel
       : public StandardGraphTheme
     {
 
-      virtual void
+      void
       getGraphBorders(Graph& g,
 		      qreal& gl,qreal& gr,
 		      qreal& gu,qreal& gd) const override
@@ -44,7 +39,7 @@ namespace tfel
 	// }
       } // end of getGraphBorders
 
-      virtual qreal
+      qreal
       getUpperTitleHeight(Graph&,const QString&) const override
       {
 	// the title is placed in
@@ -52,7 +47,7 @@ namespace tfel
 	return 0u;
       } // end of StandardGraphTheme::getUpperTitleHeight;
 
-      virtual void
+      void
       printUpperTitle(Graph& g,
 		      const GraphLayout& l,
 		      const GraphSize& s,
@@ -68,7 +63,7 @@ namespace tfel
 	cr.addItem(text);
       } // end of StandardGraphTheme::printUpperTitle
 
-      virtual void
+      void
       drawBackGround(Graph& g,
 		     const GraphLayout&,
 		     const GraphSize& s) const override
@@ -115,8 +110,7 @@ namespace tfel
 	// }	
       } // end of StandardGraphTheme::drawBackGround
 
-      virtual ~MFrontGraphTheme()
-      {} // end of ~MFrontGraphTheme
+      ~MFrontGraphTheme() = default;
 
     };
 

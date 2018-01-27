@@ -41,10 +41,10 @@ namespace tfel{
 				   const QMap<qreal,QString>&) const = 0;
       virtual qreal getX2TicsHeight(Graph&,
 				    const QMap<qreal,QString>&) const = 0;
-      virtual qreal getLeftMargin(void) const = 0;
-      virtual qreal getRightMargin(void) const = 0;
-      virtual qreal getUpperMargin(void) const = 0;
-      virtual qreal getDownMargin(void) const = 0;
+      virtual qreal getLeftMargin() const = 0;
+      virtual qreal getRightMargin() const = 0;
+      virtual qreal getUpperMargin() const = 0;
+      virtual qreal getDownMargin() const = 0;
       virtual void printUpperTitle(Graph&,
 				   const GraphLayout&,
 				   const GraphSize&,

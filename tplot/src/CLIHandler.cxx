@@ -40,24 +40,32 @@ namespace tfel
       }
     }
     
-    void CLIHandler::socketDisconnected(void){
+    void CLIHandler::socketDisconnected(){
       emit finished();
     }
     
     void CLIHandler::process(){
       while(true){
+	auto read = [this](){
+	  this->in->waitForReadyRead();
+	  auto r = QString::fromLatin1(this->in->readLine());
+	  r.chop(1);
+	  return r;
+	};
 	auto l = readline("tplot> ");
 	if(l==nullptr){
 	  emit finished();
 	  return;
 	}
-	auto l2 = std::string(l)+'\n';
+	const auto l2 = std::string(l)+'\n';
 	this->out->write(l2.c_str());
 	this->out->waitForBytesWritten();
-	this->in->waitForReadyRead();
-	const auto s = QString::fromLatin1(this->in->readLine());
-	const auto r = QString::fromLatin1(this->in->readLine());
-	const auto e = QString::fromLatin1(this->in->readLine());
+	const auto s = read();
+	qDebug() << s;
+	const auto r = read();
+	qDebug() << r;
+	const auto e = read();
+	qDebug() << e;
 	if(s=="2"){
 	  this->out->write("ok");
 	  this->out->waitForBytesWritten();
@@ -66,6 +74,9 @@ namespace tfel
 	}
 	if(!r.isEmpty()){
 	  std::cout << r.toStdString() << std::endl;
+	}
+	if(!e.isEmpty()){
+	  std::cout << e.toStdString() << std::endl;
 	}
 	add_history(l);
 	std::free(l);

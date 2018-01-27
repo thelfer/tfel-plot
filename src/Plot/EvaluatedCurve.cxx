@@ -21,8 +21,7 @@ namespace tfel{
       using namespace std;
       const string& var = v.toStdString();
       const vector<string>& names = this->ev->getVariablesNames();
-      if((names.size()!=0u)&&
-	 (names.size()!=1u)){
+      if((!names.empty())&&(names.size()!=1u)){
 	vector<string>::const_iterator p;
 	string msg("EvaluatedCurve::EvaluatedCurve : ");
 	msg += "function declares more than one variable ";
@@ -66,8 +65,7 @@ namespace tfel{
       return numeric_limits<qreal>::max();
     } // end of EvaluatedCurve::maxRange
 
-    EvaluatedCurve::~EvaluatedCurve()
-    {} // end of EvaluatedCurve::~EvaluatedCurve
+    EvaluatedCurve::~EvaluatedCurve() = default;
 
     void
     EvaluatedCurve::getValues(QVector<Point>& points,const qreal xmin,

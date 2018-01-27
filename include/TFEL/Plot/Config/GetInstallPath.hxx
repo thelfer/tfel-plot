@@ -16,7 +16,7 @@ namespace tfel{
   namespace plot{
 
     TFELPLOT_VISIBILITY_EXPORT std::string
-    getInstallPath(void);
+    getInstallPath();
 
   } // end of namespace plot
     

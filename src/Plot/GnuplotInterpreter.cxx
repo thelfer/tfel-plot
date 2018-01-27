@@ -14,12 +14,7 @@
 #include<QtCore/QtDebug>
 #include<QtCore/QFile>
 #include<QtCore/QTextStream>
-#ifdef TFEL_QT4
-#include<QtGui/QApplication>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QApplication>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Utilities/CxxTokenizer.hxx"
@@ -356,11 +351,6 @@ namespace tfel
 	if(this->terminal=="pdf"){
 	  this->g.replot();
       	  this->g.exportToPDF(QString::fromStdString(this->output));
-#ifdef TFEL_QT4
-	} else if(this->terminal=="eps"){
-	  this->g.replot();
-      	  this->g.exportToPostScript(QString::fromStdString(this->output));
-#endif /* TFEL_QT4 */	  
       	} else if(this->terminal=="svg"){
 	  this->g.replot();
       	  this->g.exportToSVG(QString::fromStdString(this->output));
@@ -448,8 +438,8 @@ namespace tfel
       string f;
       unsigned short openedParenthesis = 0;
       bool cont=true;
-      const_iterator prev = p;
-      const_iterator pb   = p;
+      auto prev = p;
+      auto pb   = p;
       while((p!=pe)&&(cont)){
 	const bool found = find(delim.begin(),delim.end(),p->value)!=delim.end();
     	if((found)&&(openedParenthesis==0)){
@@ -751,9 +741,8 @@ namespace tfel
 	  res << this->eval(p,pe);
 	}
 	if(p!=pe){
-	  CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatPrint : ",
-					   ",",p,pe);
-	  CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint : ","",p,pe);
+	  CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatPrint",",",p,pe);
+	  CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint","",p,pe);
 	}
       }
       ParsingResult r;

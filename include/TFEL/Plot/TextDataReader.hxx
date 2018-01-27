@@ -87,7 +87,7 @@ namespace tfel
        * \return the legend associated to the curves
        */
       const QStringList&
-      getLegends(void) const;
+      getLegends() const;
       /*!
        * \return the title of the specified column
        * \param[in] c : column number
@@ -109,12 +109,12 @@ namespace tfel
        * get the first commented lines
        */
       const QStringList&
-      getPreamble(void) const;
+      getPreamble() const;
       /*!
        * \return the number of columns
        */
       unsigned short
-      getNumberOfColumns(void) const;
+      getNumberOfColumns() const;
     private:
       /*!
        * \brief copy constructor (disabled)

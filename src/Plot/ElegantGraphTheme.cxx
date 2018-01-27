@@ -8,12 +8,7 @@
 
 #include<cstdlib>
 
-#ifdef TFEL_QT4
-#include<QtGui/QGraphicsTextItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QGraphicsTextItem>
-#endif /* TFEL_QT5 */
 #include<QtSvg/QGraphicsSvgItem>
 
 #include"TFEL/Plot/ThemeManager.hxx"
@@ -30,7 +25,7 @@ namespace tfel
       : public StandardGraphTheme
     {
 
-      virtual void
+      void
       getGraphBorders(Graph&,
 		      qreal& gl,qreal& gr,
 		      qreal& gu,qreal& gd) const override
@@ -41,7 +36,7 @@ namespace tfel
 	gd = 16;
       } // end of getGraphBorders
 
-      virtual void
+      void
       drawBackGround(Graph& g,
 		     const GraphLayout&,
 		     const GraphSize& s) const override
@@ -57,7 +52,7 @@ namespace tfel
 	// cr.addItem(i);
       } // end of drawBackGround
 
-      virtual void
+      void
       drawGraphBackGround(Graph& g,
 			  const GraphLayout&,
 			  const GraphSize& s) const override
@@ -130,7 +125,7 @@ namespace tfel
 	cr.addPath(path,QPen(),QBrush(grad));
       } // end of drawVerticalBox
 
-      virtual void
+      void
       printXLabel(Graph& g,
 		  const GraphLayout& l,
 		  const GraphSize& s,
@@ -149,14 +144,14 @@ namespace tfel
 	cr.addItem(t);
       } // end of ElegantGraphGraphTheme::printXLabel
 
-      virtual void
+      void
       printYLabel(Graph& g,
 		  const GraphLayout& l,
 		  const GraphSize& s,
 		  const QString& ylabel) const override
       {
-	QGraphicsScene& cr = g.getScene();
-	QGraphicsTextItem * t = new QGraphicsTextItem(ylabel);
+	auto& cr = g.getScene();
+	auto * t = new QGraphicsTextItem(ylabel);
 	t->setDefaultTextColor(this->getTextColor());
 	t->setRotation(-90.);
 	const QRectF b = t->boundingRect();
@@ -168,14 +163,14 @@ namespace tfel
 	cr.addItem(t);
       } // end of printYLabel
 
-      virtual void
+      void
       printX2Label(Graph& g,
 		   const GraphLayout& l,
 		   const GraphSize& s,
 		   const QString& x2label) const override
       {
-	QGraphicsScene& cr = g.getScene();
-	QGraphicsTextItem *t = new QGraphicsTextItem(x2label);
+	auto& cr = g.getScene();
+	auto*t = new QGraphicsTextItem(x2label);
 	const QRectF b = t->boundingRect();
 	t->setDefaultTextColor(this->getTextColor());
         this->drawHorizontalBox(cr,s.xh0+0.5*(s.xh1-s.xh0)-0.5*b.width(),
@@ -185,14 +180,14 @@ namespace tfel
 	cr.addItem(t);
       } // end of printX2Label
 
-      virtual void
+      void
       printY2Label(Graph& g,
 		   const GraphLayout& l,
 		   const GraphSize& s,
 		   const QString& y2label) const override
       {
-	QGraphicsScene& cr = g.getScene();
-	QGraphicsTextItem * t = new QGraphicsTextItem(y2label);
+	auto& cr = g.getScene();
+	auto* t  = new QGraphicsTextItem(y2label);
 	t->setDefaultTextColor(this->getTextColor());
 	t->setRotation(-90.);
 	const QRectF b = t->boundingRect();
@@ -204,8 +199,7 @@ namespace tfel
 	cr.addItem(t);
       } // end of printY2Label
 
-      virtual ~ElegantGraphTheme()
-      {} // end of ~ElegantGraphTheme
+      ~ElegantGraphTheme() override = default;
 
     };
 

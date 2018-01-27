@@ -8,12 +8,7 @@
 #ifndef LIB_TFEL_PLOT_GRAPHTEXTITEM_H_
 #define LIB_TFEL_PLOT_GRAPHTEXTITEM_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QGraphicsTextItem>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QGraphicsTextItem>
-#endif /* TFEL_QT5 */
 
 namespace tfel
 {
@@ -42,7 +37,7 @@ namespace tfel
 						     
     public slots:
 
-      void textChanged(void);
+      void textChanged();
 
       void graphFontChanged(const QFont&);
 

@@ -10,13 +10,7 @@
 
 #include<QtCore/QObject>
 #include<QtCore/QStringList>
-
-#ifdef TFEL_QT4
-#include<QtGui/QTextEdit>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QTextEdit>
-#endif /* TFEL_QT5 */
 #include<QtGui/QKeyEvent>
 #include<QtGui/QTextCursor>
 

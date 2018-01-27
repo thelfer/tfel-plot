@@ -7,17 +7,9 @@
 
 #include<QtCore/QtDebug>
 
-#ifdef TFEL_QT4
-#include<QtGui/QMenu>
-#include<QtGui/QAction>
-#include<QtGui/QTextDocument>
-#include<QtGui/QGraphicsSceneContextMenuEvent>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QMenu>
 #include<QtWidgets/QAction>
 #include<QtWidgets/QGraphicsSceneContextMenuEvent>
-#endif /* TFEL_QT5 */
 #include<QtGui/QFocusEvent>
 #include<QtGui/QTextDocument>
 

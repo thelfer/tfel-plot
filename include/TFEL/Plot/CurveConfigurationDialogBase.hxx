@@ -8,21 +8,11 @@
 #ifndef LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H_
 #define LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QDialog>
-#include<QtGui/QLineEdit>
-#include<QtGui/QComboBox>
-#include<QtGui/QGridLayout>
-#include<QtGui/QColorDialog>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QDialog>
 #include<QtWidgets/QLineEdit>
 #include<QtWidgets/QComboBox>
 #include<QtWidgets/QGridLayout>
 #include<QtWidgets/QColorDialog>
-#endif /* TFEL_QT5 */
-
 #include"TFEL/Plot/Config.hxx"
 
 namespace tfel

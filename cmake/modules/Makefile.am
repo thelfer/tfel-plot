@@ -1,5 +1,4 @@
-EXTRA_DIST=OptimizeForArchitecture.cmake \
-	   autotools.cmake		 \
+EXTRA_DIST=autotools.cmake		 \
 	   FindReadLine.cmake		 \
 	   clang.cmake			 \
 	   common-compiler-flags.cmake	 \

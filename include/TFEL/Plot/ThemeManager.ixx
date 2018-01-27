@@ -27,14 +27,14 @@ namespace tfel
 
     template<typename T>
     QString
-    StandardThemeProxy<T>::getName(void) const
+    StandardThemeProxy<T>::getName() const
     {
       return this->name;
-    } // end of StandardThemeProxy<T>::getName(void) const
+    } // end of StandardThemeProxy<T>::getName() const
 
     template<typename T>
     ThemeProxy::ThemePtr
-    StandardThemeProxy<T>::getTheme(void) const
+    StandardThemeProxy<T>::getTheme() const
     {
       return ThemeProxy::ThemePtr(new T());
     } // end of StandardThemeProxy<T>::getTheme

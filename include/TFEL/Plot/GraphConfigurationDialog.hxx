@@ -8,15 +8,8 @@
 #ifndef LIB_TFEL_PLOT_GRAPHCONFIGURATIONDIALOG_H_
 #define LIB_TFEL_PLOT_GRAPHCONFIGURATIONDIALOG_H_ 
 
-#ifdef TFEL_QT4
-#include<QtGui/QDialog>
-#include<QtGui/QLineEdit>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QDialog>
 #include<QtWidgets/QLineEdit>
-#endif /* TFEL_QT5 */
-
 #include<TFEL/Plot/Config.hxx>
 
 namespace tfel
@@ -68,11 +61,11 @@ namespace tfel
       void graphRightTitleChanged(const QString&);
     private:
       QWidget*
-      createRangesPage(void);
+      createRangesPage();
       QWidget*
-      createLabelsPage(void);
+      createLabelsPage();
       QWidget*
-      createTitlesPage(void);
+      createTitlesPage();
       Graph&    graph;
       QLineEdit *xmin;
       QLineEdit *xmax;

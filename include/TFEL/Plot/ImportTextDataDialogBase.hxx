@@ -12,17 +12,9 @@
 
 #include<QtCore/QString>
 #include<QtCore/QVector>
-#ifdef TFEL_QT4
-#include<QtGui/QDialog>
-#include<QtGui/QLineEdit>
-#include<QtGui/QComboBox>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QDialog>
 #include<QtWidgets/QLineEdit>
 #include<QtWidgets/QComboBox>
-#endif /* TFEL_QT5 */
-
 #include<TFEL/Plot/Config.hxx>
 #include"TFEL/Plot/TextDataReader.hxx"
 #include"TFEL/Plot/CurveConfigurationDialogBase.hxx"
@@ -46,12 +38,7 @@ namespace tfel
       ImportTextDataDialogBase(Graph&,
 			       QWidget * const = nullptr);
    
-#ifdef TFEL_QT4
-      virtual bool exec();
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
-      virtual int exec() override;
-#endif /* TFEL_QT5 */
+      int exec() override;
 
       bool exec(const QString&);
    
@@ -85,7 +72,7 @@ namespace tfel
        * \return the curve keys (if available) 
        */
       virtual QVector<QString>
-      getCurveKeys(void) = 0;
+      getCurveKeys() = 0;
 
       virtual QString
       getFileDescription() const = 0;
@@ -94,10 +81,10 @@ namespace tfel
       getFileExtensions() const = 0;
 
       void
-      createGUI(void);
+      createGUI();
 
       void
-      loadFile(void);
+      loadFile();
 
       void
       fails(const QString&);

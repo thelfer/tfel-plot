@@ -10,13 +10,7 @@
 
 #include<QtNetwork/QLocalServer>
 #include<QtNetwork/QLocalSocket>
-#ifdef TFEL_QT4
-#include<QtGui/QMainWindow>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QMainWindow>
-#endif /* TFEL_QT5 */
-
 #include"TFEL/Config/TFELConfig.hxx"
 #include"TFEL/Utilities/TextData.hxx"
 #include"TFEL/Utilities/ArgumentParserBase.hxx"
@@ -95,10 +89,6 @@ namespace tfel
       virtual void exportToPDF();
       
       virtual void exportToSVG();
-      
-#ifdef TFEL_QT4
-      virtual void exportToPostScript();
-#endif /* TFEL_QT4 */
       
       virtual void exportToPNG();
 
@@ -216,7 +206,7 @@ namespace tfel
 	
       void registerArgumentCallBacks();
 
-      void treatUnknownArgument();
+      void treatUnknownArgument() override;
 #ifdef TPLOT_ENABLE_CLI
       //! treat the `--input-socket` option
       void treatInputSocket();
@@ -354,9 +344,6 @@ namespace tfel
       QAction *etxta;
       QAction *epdfa;
       QAction *esvga;
-#ifdef TFEL_QT4
-      QAction *epsa;
-#endif /* TFEL_QT4 */
       QAction *epnga;
 
       QAction *xloga;

@@ -311,7 +311,7 @@ namespace tfel
       void setDummyVariable(const std::string&);
 
       const std::string&
-	getDummyVariable(void) const;
+	getDummyVariable() const;
 
       tfel::math::parser::ExternalFunctionManagerPtr
 	getExternalFunctionManager();

@@ -29,7 +29,7 @@ namespace tfel
     protected:
       
       virtual QVector<QString>
-      getCurveKeys(void) override;
+      getCurveKeys() override;
 
       virtual QString
       getFileDescription() const override;

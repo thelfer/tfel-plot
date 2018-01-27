@@ -6,19 +6,10 @@
  */
 
 #include<QtCore/QtDebug>
-
-#ifdef TFEL_QT4
-#include<QtGui/QLabel>
-#include<QtGui/QComboBox>
-#include<QtGui/QPushButton>
-#include<QtGui/QColorDialog>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QLabel>
 #include<QtWidgets/QComboBox>
 #include<QtWidgets/QPushButton>
 #include<QtWidgets/QColorDialog>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/CurveConfigurationDialogBase.hxx"

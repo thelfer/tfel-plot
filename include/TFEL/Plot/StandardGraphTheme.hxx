@@ -9,13 +9,7 @@
 #ifndef LIB_TFEL_PLOT_STANDARDGRAPHTHEME_HXX_
 #define LIB_TFEL_PLOT_STANDARDGRAPHTHEME_HXX_ 
 
-#ifdef TFEL_QT4
-#include <QtGui/QGraphicsView>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include <QtWidgets/QGraphicsView>
-#endif /* TFEL_QT5 */
-
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/Curve.hxx"
 #include"TFEL/Plot/GraphLayout.hxx"
@@ -56,16 +50,16 @@ namespace tfel{
 		      const QMap<qreal,QString>&) const override;
 
       virtual qreal
-      getLeftMargin(void) const override;
+      getLeftMargin() const override;
 
       virtual qreal
-	getRightMargin(void) const override;
+	getRightMargin() const override;
 
       virtual qreal
-	getUpperMargin(void) const override;
+	getUpperMargin() const override;
 
       virtual qreal
-	getDownMargin(void) const override;
+	getDownMargin() const override;
 
       virtual void
 	printUpperTitle(Graph&,
@@ -421,6 +415,7 @@ namespace tfel{
       drawCurveKey(QGraphicsItemGroup&,
 		   const QColor&,
 		   const Curve::Style,
+		   const qreal,
 		   const qreal,
 		   const qreal) const;
 

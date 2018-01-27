@@ -13,18 +13,10 @@
 #include<QtCore/QMap>
 
 #include<QtGui/QFont>
-#ifdef TFEL_QT4
-#include<QtGui/QWidget>
-#include<QtGui/QGraphicsView>
-#include<QtGui/QGraphicsScene>
-#include<QtGui/QPrinter>
-#endif /* TFEL_QT4 */
-#ifdef TFEL_QT5
 #include<QtWidgets/QWidget>
 #include<QtWidgets/QGraphicsView>
 #include<QtWidgets/QGraphicsScene>
 #include<QtPrintSupport/QPrinter>
-#endif /* TFEL_QT5 */
 
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/ArrowStyle.hxx"
@@ -89,27 +81,27 @@ namespace tfel
       }; // end of enum KeyVerticalPosition
 
       virtual QImage
-      exportToQImage(void);
+      exportToQImage();
 
       virtual QByteArray
-      exportToSVG(void);
+      exportToSVG();
 
       virtual QString
-      exportToTable(void);
+      exportToTable();
 
     public slots:
 
       virtual void print(QPrinter *);
 
-      virtual void replot(void);
+      virtual void replot();
 
       virtual void setGraphWidth(const qreal);
 
       virtual void setGraphHeight(const qreal);
       
-      virtual void unsetGraphWidth(void);
+      virtual void unsetGraphWidth();
       
-      virtual void unsetGraphHeight(void);
+      virtual void unsetGraphHeight();
 
       virtual void updatedCurve(Curve*);
       
@@ -120,10 +112,6 @@ namespace tfel
       virtual void exportToPDF(const QString&);
       
       virtual void exportToSVG(const QString&);
-      
-#ifdef TFEL_QT4
-      virtual void exportToPostScript(const QString&);
-#endif /* TFEL_QT4 */
       
       virtual void exportToPNG(const QString&);
 
@@ -209,7 +197,7 @@ namespace tfel
 
       virtual void setGraphFontSize(const qreal);
 
-      virtual QFont getGraphFont(void) const;
+      virtual QFont getGraphFont() const;
       
       virtual void setXRange(const qreal,const qreal,
 			     const bool = true);
@@ -295,9 +283,9 @@ namespace tfel
       configureGraphRange(const GraphBorder&);
 
       virtual void
-      configureGraphRanges(void);
+      configureGraphRanges();
       
-      virtual void reset(void);
+      virtual void reset();
 		   
     signals:
 
@@ -357,13 +345,13 @@ namespace tfel
       
       void y2RangeChanged(const qreal,const qreal);
 
-      void xRangeUnSet(void);
+      void xRangeUnSet();
       
-      void yRangeUnSet(void);
+      void yRangeUnSet();
       
-      void x2RangeUnSet(void);
+      void x2RangeUnSet();
       
-      void y2RangeUnSet(void);
+      void y2RangeUnSet();
       
       void xAxisLogScaleSet();
       
@@ -427,7 +415,7 @@ namespace tfel
 	}; // end of enum AxisScale
 	explicit Axis(const unsigned short);
 	void
-	reset(void);
+	reset();
 	const unsigned short id;
 	QMap<qreal,QString> tics;
 	QString label;
@@ -449,7 +437,7 @@ namespace tfel
       ~Graph();
 
       GraphConfigurationDialog&
-      getConfigurationDialog(void);
+      getConfigurationDialog();
 
       /*!
        * keep aspect ratio
@@ -473,7 +461,7 @@ namespace tfel
        * retrieve curves
        */
       QVector<std::shared_ptr<Curve> >
-      getCurves(void) const;
+      getCurves() const;
 
       void
       getRange(qreal&,
@@ -488,22 +476,22 @@ namespace tfel
 		    const bool);
 
       std::shared_ptr<GraphTheme>
-      getTheme(void);
+      getTheme();
       std::shared_ptr<GraphTheme>
-      getTheme(void) const;
-      bool hasGrid(void) const;
+      getTheme() const;
+      bool hasGrid() const;
       unsigned short
-      getGrid(void) const;
+      getGrid() const;
       virtual void addCurve(std::shared_ptr<Curve>,
 			    const GraphAxis = XY);
-      qreal getXMin(void) const;
-      qreal getXMax(void) const;
-      qreal getYMin(void) const;
-      qreal getYMax(void) const;
-      qreal getX2Min(void) const;
-      qreal getX2Max(void) const;
-      qreal getY2Min(void) const;
-      qreal getY2Max(void) const;
+      qreal getXMin() const;
+      qreal getXMax() const;
+      qreal getYMin() const;
+      qreal getYMax() const;
+      qreal getX2Min() const;
+      qreal getX2Max() const;
+      qreal getY2Min() const;
+      qreal getY2Max() const;
 
       const QString&
       getUpperTitle() const;
@@ -594,7 +582,7 @@ namespace tfel
 	       const qreal,
 	       const qreal,
 	       const bool = true);
-      void updateBordersSize(void);
+      void updateBordersSize();
       void updateCurves(const Graph::Axis&);
       void updateCurve(CurveHandler&,
 		       const Graph::Axis&);
