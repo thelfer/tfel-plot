@@ -17,6 +17,7 @@
 #include<QtCore/QFile>
 #include<QtCore/QTimer>
 
+#include"TFEL/Raise.hxx"
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Plot/TextDataReader.hxx"
 #include"TFEL/Plot/DataCurve.hxx"
@@ -95,12 +96,9 @@ namespace tfel{
 	xvalues(x),
 	yvalues(y)
     {
-      using namespace std;
-      if(this->xvalues.size()!=this->yvalues.size()){
-	string msg("DataCurve::DataCurve : ");
-	msg += "x-data and y-data sizes do not match";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(this->xvalues.size()!=this->yvalues.size(),
+		     "DataCurve::DataCurve: "
+		     "x-data and y-data sizes do not match");
     } // end of DataCurve::DataCurve
 
     bool DataCurve::hasRange() const
@@ -183,14 +181,12 @@ namespace tfel{
       return 0u;
     } // end of DataCurve::getNumberOfSamples
 
-    const QVector<qreal>&
-    DataCurve::getAbscissa() const
+    const QVector<qreal>& DataCurve::getAbscissa() const
     {
       return this->xvalues;
     } // end of DataCurve::getAbscissa
 
-    const QVector<qreal>&
-    DataCurve::getValues() const
+    const QVector<qreal>& DataCurve::getValues() const
     {
       return this->yvalues;
     } // end of DataCurve::getValues
@@ -216,10 +212,13 @@ namespace tfel{
       using namespace std;
       using namespace tfel::math;
       using namespace tfel::math::parser;
+      auto throw_if = [](const bool b, const std::string& msg){
+	tfel::raise_if(b,"DataCurve::getValues: "+msg);
+      }; // end of throw_if
       const auto& s = c.toStdString();
       v.clear();
       // assuming a function
-      vector<pair<string,unsigned short> > vars;
+      vector<pair<string,unsigned short>> vars;
       shared_ptr<Evaluator> e;
       if(this->fm.get()!=nullptr){
 	e = std::make_shared<Evaluator>(s,this->fm);
@@ -227,57 +226,30 @@ namespace tfel{
 	e = std::make_shared<Evaluator>(s);
       }
       const auto& vnames = e->getVariablesNames();
-      if(vnames.empty()){
-	string msg("DataCurve::getValues : ");
-	msg += "function '"+s+"' does not declare any variable";
-	throw(runtime_error(msg));
-      }
-      vector<string>::const_iterator p;
-      QVector<TextDataReader::Line>::const_iterator p2;
-      vector<pair<string,unsigned short> >::const_iterator p3;
-      for(p=vnames.begin();p!=vnames.end();++p){
-	if(((*p)[0]!='$')){
-	  parser::ExternalFunctionManager::const_iterator p4;
-	  p4 = this->fm->find(*p);
-	  if(p4==this->fm->end()){
-	    string msg("DataCurve::getValues : ");
-	    msg += "invalid variable '"+*p+"'";
-	    throw(runtime_error(msg));
-	  }
-	  if(p4->second->getNumberOfVariables()!=0){
-	    string msg("DataCurve::getValues : ");
-	    msg += "invalid variable '"+*p+"'";
-	    throw(runtime_error(msg));
-	  }
-	  e->setVariableValue(*p,p4->second->getValue());
+      throw_if(vnames.empty(),
+	       "function '"+s+"' does not declare any variable");
+      for(const auto& vn : vnames){
+	if(vn[0]!='$'){
+	  const auto p4 = this->fm->find(vn);
+	  throw_if(p4==this->fm->end(),"invalid variable '"+vn+"'");
+	  throw_if(p4->second->getNumberOfVariables()!=0,
+		   "invalid variable '"+vn+"'.");
+	  e->setVariableValue(vn,p4->second->getValue());
 	} else {
-	  if(!DataCurve::isUnsignedInteger(p->substr(1))){
-	    string msg("DataCurve::getValues : ");
-	    msg += "invalid variable name '"+*p;
-	    msg += "' in function '"+s+"'";
-	    throw(runtime_error(msg));
-	  }
-	  const auto vc = DataCurve::convertToUnsignedShort(p->substr(1));
-	  if(vc==0){
-	    string msg("DataCurve::getValues : ");
-	    msg += "invalid variable name "+*p;
-	    msg += " in function '"+s+"'.";
-	    throw(runtime_error(msg));
-	  }
-	  vars.push_back({*p,vc});
+	  throw_if(!DataCurve::isUnsignedInteger(vn.substr(1)),
+		   "invalid variable name '"+vn+"' in function '"+s+"'.");
+	  const auto vc = DataCurve::convertToUnsignedShort(vn.substr(1));
+	  throw_if(vc==0,"invalid variable name "
+		   "'"+vn+"' in function '"+s+"').");
+	  vars.push_back({vn,vc});
 	}
       }
-      for(p2=d.begin();p2!=d.end();++p2){
-	for(p3=vars.begin();p3!=vars.end();++p3){
-	  if(p2->values.size()<p3->second){
-	    ostringstream msg;
-	    msg << "TextDataReader::getColumn : line '" 
-		<< p2->nbr << "' "
-		<< "does not have '" << p3->second << "' columns.";
-	    throw(runtime_error(msg.str()));
-	  }
-	  e->setVariableValue(p3->first,
-			      p2->values[p3->second-1]);
+      for(auto p2=d.begin();p2!=d.end();++p2){
+	for(auto p3=vars.begin();p3!=vars.end();++p3){
+	  throw_if(p2->values.size()<p3->second,
+		   "line '"+std::to_string(p2->nbr)+"' "
+		   "does not have '"+std::to_string(p3->second)+"' columns.");
+	  e->setVariableValue(p3->first,p2->values[p3->second-1]);
 	}
 	v.push_back(e->getValue());
       }
@@ -285,7 +257,6 @@ namespace tfel{
 
     void DataCurve::executeDelayedDataLoading()
     {
-      using namespace std;
       QObject::connect(this->watcher,SIGNAL(fileChanged(const QString&)),
 		       this,SLOT(updatedDataFile(const QString&)));
       try{
@@ -307,7 +278,7 @@ namespace tfel{
 	    this->getValues(this->xvalues,data,this->cx);
 	  }
 	}
-      } catch(exception& e){
+      } catch(std::exception& e){
 	qDebug() << "DataCurve::executeDelayedDataLoading : " << e.what();
 	this->xvalues.clear();
 	this->yvalues.clear();
@@ -337,47 +308,38 @@ namespace tfel{
     {
       std::istringstream converter(value);
       for(const auto& c : value){
-	if(!isdigit(c)){
-	  throw(std::runtime_error("DataCurve::convertToUnsignedShort: invalid entry"));
-	}
+	tfel::raise_if(!isdigit(c),
+		       "DataCurve::convertToUnsignedShort: "
+		       "invalid entry");
       }
       unsigned short u;
       converter >> u;
-      if(!converter&&(!converter.eof())){
-	std::string msg("DataCurve::convertToUnsignedShort: ");
-	msg += "not read value from token '"+value+"'.\n";
-	throw(std::runtime_error(msg));
-      }
+      tfel::raise_if(!converter&&(!converter.eof()),
+		     "DataCurve::convertToUnsignedShort: "
+		     "not read value from token '"+value+"'.");
       return u;
     } // end of DataCurve::convertToUnsignedShort
 
     bool DataCurve::isUnsignedInteger(const std::string& s)
     {
-      using namespace std;
-      string::const_iterator p;
-      for(p=s.begin();p!=s.end();++p){
-	if(!isdigit(*p)){
+      for(const auto c : s){
+	if(!isdigit(c)){
 	  return false;
 	}
       }
       return true;
     } // end of DataCurve::isUnsignedInteger
 
-    double
-    DataCurve::readDouble(const std::string& s,
-			  const unsigned short l)
+    double DataCurve::readDouble(const std::string& s,
+				 const unsigned short l)
     {
-      using namespace std;
+      std::istringstream is(s);
       double res;
-      istringstream is(s);
       is >> res;
-      if(!is&&(!is.eof())){
-	ostringstream msg;
-	msg << "DataCurve::readDouble : ";
-	msg << "could not read value from token '"+s+"'.\n";
-	msg << "Error at line : " << l;
-	throw(runtime_error(msg.str()));
-      }
+      tfel::raise_if(!is&&(!is.eof()),
+		     "DataCurve::readDouble: "
+		     "could not read value from token '"+s+"'.\n"
+		     "Error at line: "+std::to_string(l));
       return res;
     } // end of DataCurve::readDouble
 

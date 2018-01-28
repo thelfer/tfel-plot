@@ -17,6 +17,7 @@
 #endif
 
 #include"GetInstallPath-Prefix.hxx"
+#include"TFEL/Raise.hxx"
 #include"TFEL/Plot/Config/GetInstallPath.hxx"
 
 namespace tfel{
@@ -53,10 +54,10 @@ namespace tfel{
     {
       if(std::find(p.begin(),p.end(),' ')!=p.end()){
 #if defined _WIN32 || defined _WIN64
-	throw(std::runtime_error("tfel-config handleSpace: "
-				 "path to TFEL shall not contain space as "
-				 "MinGW can't handle it (Found '"+p+"'). "
-				 "Please change TFEL installation directory"));
+	tfel::raise("tfel-plot-config handleSpace: "
+		    "path to TFEL shall not contain space as "
+		    "MinGW can't handle it (Found '"+p+"'). "
+		    "Please change TFEL installation directory");
 #else
 	return '"'+p+'"';
 #endif

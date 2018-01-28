@@ -16,9 +16,9 @@
 #include<QtCore/QTextStream>
 #include<QtWidgets/QApplication>
 
+#include"TFEL/Raise.hxx"
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Utilities/CxxTokenizer.hxx"
-
 #include"TFEL/Plot/Config/GetInstallPath.hxx"
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/GraphCoordinates.hxx"
@@ -41,8 +41,7 @@ namespace tfel
      * If not, an empty string is returned
      * \param[in] k  : keyword
      */
-    static std::string
-    getDocumentationFilePath(const std::string& k)
+    static std::string getDocumentationFilePath(const std::string& k)
     {
       const auto root = getInstallPath();
       auto fn = root+"/share/doc/tfel-plot/tplot/gp/"+k+".md";
@@ -60,7 +59,6 @@ namespace tfel
     GnuplotInterpreter::ParsingResult::operator=(ParsingResult&&) = default;
     GnuplotInterpreter::ParsingResult&
     GnuplotInterpreter::ParsingResult::operator=(const ParsingResult&) = default;
-
     
     GnuplotInterpreter::GnuplotInterpreter(Graph& graph,
 					   QObject *const p)
@@ -74,10 +72,9 @@ namespace tfel
 
     void GnuplotInterpreter::setDummyVariable(const std::string& n)
     {
-      if(!GnuplotInterpreterBase::isValidIdentifier(n)){
-	throw(std::runtime_error("GnuplotInterpreter::setDummyVariable: "
-				 "'"+n+"' is not a valid identifer."));
-      }
+      tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(n),
+		     "GnuplotInterpreter::setDummyVariable: "
+		     "'"+n+"' is not a valid identifer.");
       this->dummyVariable = n;
     }// end of GnuplotInterpreter::setDummyVariable
     
@@ -248,10 +245,8 @@ namespace tfel
 	      append(r.output,r2.output);
 	      append(r.error,r2.error);
 	    }
-	    if(p!=pe){
-	      throw(std::runtime_error("GnuplotInterpreter::eval: "
-				       "unexpected token '"+p->value+"'"));
-	    }
+	    tfel::raise_if(p!=pe,"GnuplotInterpreter::eval: "
+			   "unexpected token '"+p->value+"'");
 	  }
 	}
       } catch(std::exception& e){
@@ -279,14 +274,13 @@ namespace tfel
     void GnuplotInterpreter::setTerminal(const std::string& t,
 					 const std::vector<std::string>&)
     {
-      if((t=="eps")||(t=="pdf")||(t=="table")||(t=="svg")||
-	 (t=="bmp")||(t=="png")||(t=="jpg")||(t=="jpeg")||
-	 (t=="ppm")||(t=="xbm")||(t=="xpm")||(t=="x11")){
-	this->terminal=t;
-      } else {
-	throw(std::runtime_error("GnuplotInterpreter::setTerminal: "
-				 "unsupported terminal '"+t+"'"));
+      if(!((t=="pdf")||(t=="table")||(t=="svg")||
+	   (t=="bmp")||(t=="png")||(t=="jpg")||(t=="jpeg")||
+	   (t=="ppm")||(t=="xbm")||(t=="xpm")||(t=="x11"))){
+	tfel::raise("GnuplotInterpreter::setTerminal: "
+		    "unsupported terminal '"+t+"'");
       }
+      this->terminal=t;
     } // end of GnuplotInterpreter::setTerminal
 
     GnuplotInterpreter::ParsingResult
@@ -324,7 +318,7 @@ namespace tfel
 				    const const_iterator pe)
     {
       auto throw_if = [](const bool c,const std::string& m){
-	if(c){throw(std::runtime_error("GnuplotInterpreter::treatRePlot: "+m));}
+	tfel::raise_if(c,"GnuplotInterpreter::treatRePlot: "+m);
       };
       throw_if(this->previousPlot.isEmpty(),"no previous plot");
       throw_if(p!=pe,"unexpected token '"+p->value+"'");
@@ -336,7 +330,7 @@ namespace tfel
 				  const const_iterator pe)
     {
       auto throw_if = [](const bool c,const std::string& m){
-	if(c){throw(std::runtime_error("GnuplotInterpreter::treatPlot: "+m));}
+	tfel::raise_if(c,"GnuplotInterpreter::treatPlot: "+m);
       };
       PlotInterpreter i(*this,this->g);
       this->g.removeCurves();
@@ -450,11 +444,9 @@ namespace tfel
     	  prev=p;
     	  ++p;
     	} else if(p->value==")"){
-    	  if(openedParenthesis==0){
-    	    string msg("GnuplotInterpreter::treatFunctionPlot : ");
-    	    msg += "unbalanced parenthesis";
-    	    throw(runtime_error(msg));
-    	  }
+	  tfel::raise_if(openedParenthesis==0,
+			 "GnuplotInterpreter::treatFunctionPlot: "
+			 "unbalanced parenthesis");
     	  --openedParenthesis;
     	  f += p->value;
     	  prev=p;
@@ -479,10 +471,9 @@ namespace tfel
     	  }
     	}
       }
-      if(openedParenthesis!=0){
-    	throw(runtime_error("GnuplotInterpreter::readFunction: "
-			    "unmatched parenthesis"));
-      }
+      tfel::raise_if(openedParenthesis!=0,
+		     "GnuplotInterpreter::readFunction: "
+		     "unmatched parenthesis");
       return std::make_shared<Evaluator>(vars,f,this->functions);
     } // end of GnuplotInterpreter::readFunction
 
@@ -570,7 +561,7 @@ namespace tfel
 					 const bool b2)
     {
       auto throw_if = [](const bool c,const std::string& m){
-	if(c){throw(std::runtime_error("GnuplotInterpreter::addFunction: "+m));}
+	tfel::raise_if(c,"GnuplotInterpreter::addFunction: "+m);
       };
       throw_if(!this->isValidIdentifier(name),"name '"+name+"' is not valid.");
       if(this->locks.find(name)!=this->locks.end()){

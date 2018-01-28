@@ -6,10 +6,9 @@
  */
 
 #include<sstream>
-
+#include"TFEL/Raise.hxx"
 #include"TFEL/Math/Parser/ExternalCFunction.hxx"
 #include"TFEL/Math/Parser/ExternalCastemFunction.hxx"
-
 #include"TFEL/Utilities/CxxTokenizer.hxx"
 #include"TFEL/System/ExternalLibraryManager.hxx"
 #include"TFEL/Plot/GnuplotImportInterpreter.hxx"
@@ -49,7 +48,7 @@ namespace tfel
 							    const bool b)
     {
       auto throw_if = [](const bool c,const std::string& m){
-	if(c){throw(std::runtime_error("GnuplotInterpreter::ImportInterpreter::treatImport: "+m));}
+	tfel::raise_if(c,"GnuplotInterpreter::ImportInterpreter::treatImport: "+m);
       };
       ImportOptions options;
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::ImportInterpreter::treatImport : ",
@@ -126,13 +125,10 @@ namespace tfel
     {
       auto& elm = tfel::system::ExternalLibraryManager::getExternalLibraryManager();
       const auto nb = elm.getCastemFunctionNumberOfVariables(library,function);
-      if(nb!=varNumber){
-	std::ostringstream msg;
-	msg << "GnuplotInterpreter::ImportInterpreter::importCastemFunction : "
-	    << "the function '" << function << "' declares "
-	    << nb << " variables, not " << varNumber << " as requested";
-	throw(std::runtime_error(msg.str()));
-      }
+      tfel::raise_if(nb!=varNumber,
+		     "GnuplotInterpreter::ImportInterpreter::importCastemFunction: "
+		     "the function '"+function+"' declares "+
+		     std::to_string(nb)+" variables, not "+std::to_string(varNumber)+" as requested");
       auto func = elm.getCastemFunction(library,function);
       interpreter.addFunction(function,std::make_shared<tfel::math::parser::ExternalCastemFunction>(func,varNumber),
 			      b,false);
@@ -200,8 +196,8 @@ namespace tfel
 	declare(std::make_shared<ExternalCFunction<15>>(elm.getCFunction15(l,f)));
 	break;
       default:
-	throw(std::runtime_error("GnuplotInterpreter::ImportInterpreter::importCFunction: "
-				 "function with more than 15 variables are not allowed."));
+	tfel::raise("GnuplotInterpreter::ImportInterpreter::importCFunction: "
+		    "function with more than 15 variables are not allowed.");
       }
     } // end of GnuplotInterpreter::ImportInterpreter::importCFunction
 
@@ -229,11 +225,10 @@ namespace tfel
 	if(p!=pe){
 	  if(p->value=="("){
 	    const auto& vars = this->readVariableList(p,pe);
-	    if(vars.size()!=static_cast<unsigned short>(options.numberOfVariables)){
-	      throw(std::runtime_error("GnuplotInterpreter::ImportInterpreter::importFunction: "
-				       "the number variables of function '"+function+"'"
-				       "is not the same as that specified in the options"));
-	    }
+	    tfel::raise_if(vars.size()!=static_cast<unsigned short>(options.numberOfVariables),
+			   "GnuplotInterpreter::ImportInterpreter::importFunction: "
+			   "the number variables of function '"+function+"'"
+			   "is not the same as that specified in the options");
 	  }
 	}
 	varNumber = static_cast<unsigned short>(options.numberOfVariables);
@@ -248,8 +243,8 @@ namespace tfel
       } else if (options.functionType==ImportOptions::Castem){
 	this->importCastemFunction(function,library,varNumber,b);
       } else {
-	throw(std::runtime_error("GnuplotInterpreter::ImportInterpreter::importFunction: "
-				 "unknown function type"));
+	tfel::raise("GnuplotInterpreter::ImportInterpreter::importFunction: "
+		    "unknown function type");
       }
     } // end of GnuplotInterpreter::ImportInterpreter::importFunction()
 

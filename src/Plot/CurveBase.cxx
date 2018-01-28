@@ -5,6 +5,7 @@
  * \brief 06 juin 2012
  */
 
+#include"TFEL/Raise.hxx"
 #include"TFEL/Plot/CurveBase.hxx"
 
 namespace tfel{
@@ -123,10 +124,9 @@ namespace tfel{
 
     QColor CurveBase::getColor() const
     {
-      if(!this->hasColor){
-	throw(std::runtime_error("CurveBase::getColor: "
-				 "no color has been specified."));
-      }
+      tfel::raise_if(!this->hasColor,
+		     "CurveBase::getColor: "
+		     "no color has been specified.");
       return this->color;
     } // end of CurveBase::getColor
 

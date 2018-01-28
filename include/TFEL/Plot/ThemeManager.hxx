@@ -24,10 +24,8 @@ namespace tfel
     struct TFELPLOT_VISIBILITY_EXPORT ThemeProxy
     {
       typedef std::shared_ptr<GraphTheme> ThemePtr;
-      virtual QString
-      getName() const = 0;
-      virtual ThemePtr
-      getTheme() const = 0;
+      virtual QString  getName() const = 0;
+      virtual ThemePtr getTheme() const = 0;
       virtual ~ThemeProxy();
     }; // end of struct ThemeProxy
 
@@ -37,10 +35,8 @@ namespace tfel
     {
       StandardThemeProxy(const QString&,
 			 const bool = true);
-      virtual QString
-      getName() const override;
-      virtual ThemeProxy::ThemePtr
-      getTheme() const override;
+      QString getName() const override;
+      ThemeProxy::ThemePtr getTheme() const override;
       ~StandardThemeProxy();
     private:
       const QString name;
@@ -48,37 +44,28 @@ namespace tfel
 
     struct TFELPLOT_VISIBILITY_EXPORT ThemeManager
     {
-      typedef std::shared_ptr<GraphTheme> ThemePtr;
+      //! a simple alias
+      using ThemePtr = std::shared_ptr<GraphTheme>;
 
-      static ThemeManager&
-      getThemeManager();
+      static ThemeManager& getThemeManager();
 
-      void
-      loadLibrary(const QString&);
+      void loadLibrary(const QString&);
       
-      const ThemePtr
-      getTheme(const QString&) const;
+      ThemePtr getTheme(const QString&) const;
 
-      void
-      addTheme(const ThemeProxy * const);
+      void addTheme(const ThemeProxy * const);
 
-      QList<QString>
-      getAvailableThemesNames() const;
+      QList<QString> getAvailableThemesNames() const;
 
     private:
+      
+      TFEL_VISIBILITY_LOCAL ThemeManager();
+      TFEL_VISIBILITY_LOCAL ~ThemeManager();
 
-      TFEL_VISIBILITY_LOCAL 
-      ThemeManager();
-
-      TFEL_VISIBILITY_LOCAL 
-      ThemeManager(const ThemeManager&);
-
-      TFEL_VISIBILITY_LOCAL 
-      ThemeManager&
-      operator=(const ThemeManager&);
-
-      TFEL_VISIBILITY_LOCAL 
-      ~ThemeManager();
+      ThemeManager(ThemeManager&&) = delete;
+      ThemeManager(const ThemeManager&) = delete;
+      ThemeManager& operator=(ThemeManager&&) = delete;
+      ThemeManager& operator=(const ThemeManager&) = delete;
 
       QMap<QString,std::shared_ptr<const ThemeProxy> > proxies;
 

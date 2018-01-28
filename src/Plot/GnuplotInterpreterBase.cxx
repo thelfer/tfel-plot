@@ -8,10 +8,9 @@
 #include<sstream>
 #include<iterator>
 #include<stdexcept>
-
+#include"TFEL/Raise.hxx"
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Utilities/CxxTokenizer.hxx"
-
 #include"TFEL/Plot/TextDataReader.hxx"
 #include"TFEL/Plot/GnuplotInterpreterBase.hxx"
 
@@ -30,80 +29,49 @@ namespace tfel
     unsigned short
     GnuplotInterpreterBase::convertToUnsignedShort(const std::string& value)
     {
-      using namespace std;
-      string::const_iterator p;
-      istringstream converter(value);
-      for(p=value.begin();p!=value.end();++p){
-	if(!isdigit(*p)){
-	  throw(runtime_error("GnuplotInterpreterBase::convertToUnsignedShort : invalid entry"));
-	}
+      std::istringstream converter(value);
+      for(const auto c : value){
+	tfel::raise_if(!isdigit(c),
+		       "GnuplotInterpreterBase::convertToUnsignedShort: invalid entry");
       }
       unsigned short u;
       converter >> u;
-      if(!converter&&(!converter.eof())){
-	string msg("GnuplotInterpreterBase::convertToUnsignedShort : ");
-	msg += "not read value from token '"+value+"'.\n";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(!converter&&(!converter.eof()),
+		     "GnuplotInterpreterBase::convertToUnsignedShort: "
+		     "not read value from token '"+value+"'.");
       return u;
     } // end of GnuplotInterpreterBase::convertToUnsignedShort
 
-    void
-    GnuplotInterpreterBase::readVariableList(QVector<std::string>& vars,
-					     const_iterator& p,
-					     const const_iterator pe,
-					     const bool b)
+    void GnuplotInterpreterBase::readVariableList(QVector<std::string>& vars,
+						  const_iterator& p,
+						  const const_iterator pe,
+						  const bool b)
     {
-      using namespace std;
+      const std::string m = "GnuplotInterpreterBase::readVariableList";
+      auto throw_if = [&m](const bool c,const std::string& msg){
+	tfel::raise_if(c,m+": "+msg);
+      };
       vars.clear();
       if(b){
-	CxxTokenizer::readSpecifiedToken("GnuplotInterpreterBase::readVariableList","(",p,pe);
+	CxxTokenizer::readSpecifiedToken(m,"(",p,pe);
       }
-      if(p==pe){
-	string msg("GnuplotInterpreterBase::readVariableList : ");
-	msg += "unexpected end of line";
-	throw(runtime_error(msg));
-      }
-      if(!GnuplotInterpreterBase::isValidIdentifier(p->value)){
-	string msg("GnuplotInterpreterBase::readVariableList : ");
-	msg += p->value+" is not a valid identifer.";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(p==pe,"unexpected end of line");
+      tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(p->value),
+		     p->value+" is not a valid identifer.");
       vars.push_back(p->value);
       ++p;
-      if(b){
-	if(p==pe){
-	  string msg("GnuplotInterpreterBase::readVariableList : ");
-	  msg += "unexpected end of line";
-	  throw(runtime_error(msg));
-	}
-      }
+      tfel::raise_if(b&&(p==pe),"unexpected end of line");
       while(((p!=pe))&&(p->value==",")){
 	++p;
-	CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readVariableList",
-					"expected variable name",p,pe);
-	if(p==pe){
-	  string msg("GnuplotInterpreterBase::readVariableList : ");
-	  msg += "unexpected end of line";
-	  throw(runtime_error(msg));
-	}
-	if(!GnuplotInterpreterBase::isValidIdentifier(p->value)){
-	  string msg("GnuplotInterpreterBase::readVariableList : ");
-	  msg += p->value+" is not a valid variable name.";
-	  throw(runtime_error(msg));
-	}
+	CxxTokenizer::checkNotEndOfLine(m,"expected variable name",p,pe);
+	tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(p->value),
+		       p->value+" is not a valid variable name.");
 	vars.push_back(p->value);
 	++p;
-	if(b){
-	  if(p==pe){
-	    string msg("GnuplotInterpreterBase::readVariableList : ");
-	    msg += "unexpected end of line";
-	    throw(runtime_error(msg));
-	  }
-	}
+	throw_if(b&&(p==pe),"unexpected end of line");
       } // p!=pe
       if(b){
-	CxxTokenizer::readSpecifiedToken("GnuplotInterpreterBase::readVariableList",")",p,pe);
+	CxxTokenizer::readSpecifiedToken(m,")",p,pe);
       }
     } // end of GnuplotInterpreterBase::readVariableList
 
@@ -112,14 +80,12 @@ namespace tfel
 					     const const_iterator pe,
 					     const bool b)
     {
-      using namespace std;
-      QVector<string> vars;
+      QVector<std::string> vars;
       GnuplotInterpreterBase::readVariableList(vars,p,pe,b);
       return vars;
     } // end of GnuplotInterpreterBase::readVariableList
 
-    bool
-    GnuplotInterpreterBase::isValidIdentifier(const std::string& name)
+    bool GnuplotInterpreterBase::isValidIdentifier(const std::string& name)
     {
       using namespace tfel::math;
       if(!Evaluator::isValidIdentifier(name)){
@@ -128,41 +94,32 @@ namespace tfel
       return CxxTokenizer::isValidIdentifier(name);
     } // end of GnuplotInterpreterBase::isValidIdentifier
 
-    QString
-    GnuplotInterpreterBase::readQString(const_iterator& p,
-					const const_iterator pe)
+    QString GnuplotInterpreterBase::readQString(const_iterator& p,
+						const const_iterator pe)
     {
       return QString::fromStdString(CxxTokenizer::readString(p,pe));
     } // end of GnuplotInterpreterBase::readQString
 
-    void
-    GnuplotInterpreterBase::throwKeyAlreadyRegistredCallBack(const std::string& k)
+    void GnuplotInterpreterBase::throwKeyAlreadyRegistredCallBack(const std::string& k)
     {
-      using namespace std;
-      string msg("GnuplotInterpreterBase::registerCallBack : ");
-      msg += "key '"+k+"' already declared";
-      throw(runtime_error(msg));
+      tfel::raise("GnuplotInterpreterBase::throwKeyAlreadyRegistredCallBack: "
+		  "key '"+k+"' already declared");
     } // end of GnuplotInterpreterBase::throwKeyAlreadyRegistredCallBack
 
-    bool
-    GnuplotInterpreterBase::isUnsignedInteger(const std::string& s)
+    bool GnuplotInterpreterBase::isUnsignedInteger(const std::string& s)
     {
-      using namespace std;
-      string::const_iterator p;
-      for(p=s.begin();p!=s.end();++p){
-	if(!isdigit(*p)){
+      for(const auto c : s){
+	if(!isdigit(c)){
 	  return false;
 	}
       }
       return true;
     } // end of GnuplotInterpreterBase::isUnsignedInteger
   
-    std::string
-    GnuplotInterpreterBase::readNextGroup(const_iterator& p,
-					  const const_iterator pe)
+    std::string GnuplotInterpreterBase::readNextGroup(const_iterator& p,
+						      const const_iterator pe)
     {
-      using namespace std;
-      string res;
+      std::string res;
       unsigned short openedParenthesis=0;
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readNextGroup","",p,pe);
       while((p!=pe)&&(!((p->value==",")&&(openedParenthesis==0)))){
@@ -170,50 +127,37 @@ namespace tfel
 	  ++openedParenthesis;
 	}
 	if(p->value==")"){
-	  if(openedParenthesis==0){
-	    string msg("GnuplotInterpreterBase::readNextGroup : ");
-	    msg += "unbalanced parenthesis";
-	    throw(runtime_error(msg));
-	  }
+	  tfel::raise_if(openedParenthesis==0,"GnuplotInterpreterBase::readNextGroup: "
+			 "unbalanced parenthesis");
 	  --openedParenthesis;
 	}
 	res += p->value;
 	++p;
       }
-      if(openedParenthesis!=0){
-	string msg("GnuplotInterpreterBase::readNextGroup : ");
-	msg += "unclosed parenthesis";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(openedParenthesis!=0,"GnuplotInterpreterBase::readNextGroup: "
+		     "unclosed parenthesis");
       return res;
     } // end of GnuplotInterpreterBase::readNextGroup
 
-    double
-    GnuplotInterpreterBase::readDouble(const std::string& s,
-				       const unsigned short l)
+    double GnuplotInterpreterBase::readDouble(const std::string& s,
+					      const unsigned short l)
     {
-      using namespace std;
       double res;
-      istringstream is(s);
+      std::istringstream is(s);
       is >> res;
-      if(!is&&(!is.eof())){
-	ostringstream msg;
-	msg << "GnuplotInterpreterBase::readDouble : ";
-	msg << "could not read value from token '"+s+"'.\n";
-	msg << "Error at line : " << l;
-	throw(runtime_error(msg.str()));
-      }
+      tfel::raise_if(!is&&(!is.eof()),"GnuplotInterpreterBase::readDouble: "
+		     "could not read value from token '"+s+"'.\n"
+		     "Error at line: "+std::to_string(l));
       return res;
     } // end of GnuplotInterpreterBase::readDouble
 
-    void
-    GnuplotInterpreterBase::readRange(bool& hasRMinValue,
-				      bool& hasRMaxValue,
-				      double& rmin,
-				      double& rmax,
-				      tfel::math::parser::ExternalFunctionManagerPtr& functions,
-				      const_iterator& p, 
-				      const const_iterator pe)
+    void GnuplotInterpreterBase::readRange(bool& hasRMinValue,
+					   bool& hasRMaxValue,
+					   double& rmin,
+					   double& rmax,
+					   tfel::math::parser::ExternalFunctionManagerPtr& functions,
+					   const_iterator& p, 
+					   const const_iterator pe)
     {
       using namespace std;
       using namespace tfel::math;
@@ -224,17 +168,18 @@ namespace tfel
 	Evaluator ev(vars,GnuplotInterpreterBase::readUntil(p,pe,":"),functions);
 	ev.removeDependencies();
 	if(ev.getNumberOfVariables()!=0u){
-	  const vector<string>& ev_vars = ev.getVariablesNames();
+	  const auto& ev_vars = ev.getVariablesNames();
 	  ostringstream msg;
 	  if(ev_vars.size()!=1u){
-	    msg << "GnuplotInterpreterBase::readRange : invalid range declaration (unknown variables ";
+	    msg << "GnuplotInterpreterBase::readRange : invalid range declaration"
+		<< " (unknown variables ";
 	    copy(ev_vars.begin(),ev_vars.end(),ostream_iterator<string>(msg," "));
 	    msg << ")";
 	  } else {
 	    msg << "GnuplotInterpreterBase::readRange : invalid range declaration (unknown variable "
 		<< ev_vars[0] << ")";
 	  }
-	  throw(runtime_error(msg.str()));
+	  tfel::raise(msg.str());
 	}
 	rmin = ev.getValue();
 	hasRMinValue = true;
@@ -248,7 +193,7 @@ namespace tfel
 	Evaluator ev(vars,GnuplotInterpreterBase::readUntil(p,pe,"]"),functions);
 	ev.removeDependencies();
 	if(ev.getNumberOfVariables()!=0u){
-	  const vector<string>& ev_vars = ev.getVariablesNames();
+	  const auto& ev_vars = ev.getVariablesNames();
 	  ostringstream msg;
 	  if(ev_vars.size()!=1u){
 	    msg << "GnuplotInterpreterBase::readRange : invalid range declaration (unknown variables ";
@@ -258,7 +203,7 @@ namespace tfel
 	    msg << "GnuplotInterpreterBase::readRange : invalid range declaration (unknown variable "
 		<< ev_vars[0] << ")";
 	  }
-	  throw(runtime_error(msg.str()));
+	  tfel::raise(msg.str());
 	}
 	rmax = ev.getValue();
 	hasRMaxValue = true;
@@ -273,8 +218,7 @@ namespace tfel
 				      const const_iterator pe,
 				      const std::string& delim)
     {
-      using namespace std;
-      string res;
+      std::string res;
       unsigned short openedParenthesis=0;
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readUntil","",p,pe);
       while((p!=pe)&&(p->value!=delim)){
@@ -282,26 +226,20 @@ namespace tfel
 	  ++openedParenthesis;
 	}
 	if(p->value==")"){
-	  if(openedParenthesis==0){
-	    string msg("GnuplotInterpreterBase::readUntil : ");
-	    msg += "unbalanced parenthesis";
-	    throw(runtime_error(msg));
-	  }
+	  tfel::raise_if(openedParenthesis==0,
+			 "GnuplotInterpreterBase::readUntil: "
+			 "unbalanced parenthesis");
 	  --openedParenthesis;
 	}
 	res += p->value;
 	++p;
       }
-      if(p->value!=delim){
-	string msg("GnuplotInterpreterBase::readUntil : ");
-	msg += "did not find token '"+delim+"'";
-	throw(runtime_error(msg));
-      }
-      if(openedParenthesis!=0){
-	string msg("GnuplotInterpreterBase::readUntil : ");
-	msg += "unclosed parenthesis";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(p->value!=delim,
+		     "GnuplotInterpreterBase::readUntil: "
+		     "did not find token '"+delim+"'");
+      tfel::raise_if(openedParenthesis!=0,
+		     "GnuplotInterpreterBase::readUntil: "
+		     "unclosed parenthesis");
       ++p;
       return res;
     } // end of GnuplotInterpreterBase::readUntil
@@ -311,38 +249,30 @@ namespace tfel
 							       const_iterator& p,
 							       const const_iterator pe)
     {
-      using namespace std;
+      const std::string m("GnuplotInterpreterBase::readDataFunctionInUsingDeclaration: ");
       unsigned short openedParenthesis;
-      CxxTokenizer::checkNotEndOfLine("readDataFunctionInUsingDeclaration",
-    				      "expected using declaration",p,pe);
+      CxxTokenizer::checkNotEndOfLine(m,"expected using declaration",p,pe);
       if(p->value=="("){
     	++p;
-    	CxxTokenizer::checkNotEndOfLine("readDataFunctionInUsingDeclaration","",p,pe);
+    	CxxTokenizer::checkNotEndOfLine(m,"",p,pe);
     	openedParenthesis = 0;
     	while(!((p->value==")")&&(openedParenthesis==0))){
     	  if(p->value=="("){
     	    ++openedParenthesis;
     	  }
     	  if(p->value==")"){
-    	    if(openedParenthesis==0){
-    	      string msg("readDataFunctionInUsingDeclaration : ");
-    	      msg += "unbalanced parenthesis";
-    	      throw(runtime_error(msg));
-    	    }
+	    tfel::raise_if(openedParenthesis==0,m+": unbalanced parenthesis");
     	    --openedParenthesis;
     	  }
     	  d += p->value;
     	  ++p;
-    	  CxxTokenizer::checkNotEndOfLine("readDataFunctionInUsingDeclaration","",p,pe);
+    	  CxxTokenizer::checkNotEndOfLine(m,"",p,pe);
     	}
     	++p;
       } else {
     	// this shall be a column number
-    	if(!GnuplotInterpreterBase::isUnsignedInteger(p->value)){
-    	  string msg("readDataFunctionInUsingDeclaration : ");
-    	  msg += "unexpected token '"+p->value+"', expected column number";
-    	  throw(runtime_error(msg));
-    	}
+	tfel::raise_if(!GnuplotInterpreterBase::isUnsignedInteger(p->value),
+		       m+": unexpected token '"+p->value+"', expected column number");
     	d = p->value;
     	++p;
       }
@@ -355,7 +285,6 @@ namespace tfel
 				    const_iterator& p,
 				    const const_iterator pe)
     {
-      using namespace std;
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::getData : ",
     				      "expected column number",p,pe);
       if(p->value=="("){
@@ -377,66 +306,46 @@ namespace tfel
       using namespace tfel::math;
       using namespace tfel::math::parser;
       using namespace tfel::utilities;
+      auto throw_if = [](const bool c,const std::string& msg){
+	tfel::raise_if(c,"GnuplotInterpreterBase::getData: "+msg);
+      };
       if(GnuplotInterpreterBase::isUnsignedInteger(s)){
-    	unsigned short c = GnuplotInterpreterBase::convertToUnsignedShort(s);
+    	const auto c = GnuplotInterpreterBase::convertToUnsignedShort(s);
     	fdata.getColumn(v,c);
     	return fdata.getLegend(c);
       } else {
     	// assuming a function
-    	vector<pair<string,unsigned short> > vars;
+    	vector<pair<string,unsigned short>> vars;
     	Evaluator e(s,functions);
-    	const vector<string>& vnames = e.getVariablesNames();
-    	if(vnames.empty()){
-    	  string msg("GnuplotInterpreterBase::getData : ");
-    	  msg += "function '"+s+"' does not declare any variable";
-    	  throw(runtime_error(msg));
-    	}
+    	const auto& vnames = e.getVariablesNames();
+    	throw_if(vnames.empty(),"function '"+s+"' does not declare any variable");
     	vector<string>::const_iterator p;
     	QVector<TextDataReader::Line>::const_iterator p2;
     	vector<pair<string,unsigned short> >::const_iterator p3;
     	for(p=vnames.begin();p!=vnames.end();++p){
     	  if(((*p)[0]!='$')){
-    	    parser::ExternalFunctionManager::const_iterator p4;
-    	    p4 = functions->find(*p);
-    	    if(p4==functions->end()){
-    	      string msg("GnuplotInterpreterBase::getData : ");
-    	      msg += "invalid variable '"+*p+"'";
-    	      throw(runtime_error(msg));
-    	    }
-    	    if(p4->second->getNumberOfVariables()!=0){
-    	      string msg("GnuplotInterpreterBase::getData : ");
-    	      msg += "invalid variable '"+*p+"'";
-    	      throw(runtime_error(msg));
-    	    }
+    	    const auto p4 = functions->find(*p);
+    	    throw_if(p4==functions->end(),"invalid variable '"+*p+"'");
+    	    throw_if(p4->second->getNumberOfVariables()!=0,"invalid variable '"+*p+"'");
     	    e.setVariableValue(*p,p4->second->getValue());
     	  } else {
-    	    if(!GnuplotInterpreterBase::isUnsignedInteger(p->substr(1))){
-    	      string msg("GnuplotInterpreterBase::getData : ");
-    	      msg += "invalid variable name '"+*p;
-    	      msg += "' in function '"+s+"'";
-    	      throw(runtime_error(msg));
-    	    }
-    	    const unsigned short vc = GnuplotInterpreterBase::convertToUnsignedShort(p->substr(1));
-    	    if(vc==0){
-    	      string msg("GnuplotInterpreterBase::getData : ");
-    	      msg += "invalid variable name "+*p;
-    	      msg += " in function '"+s+"'.";
-    	      throw(runtime_error(msg));
-    	    }
+    	    throw_if(!GnuplotInterpreterBase::isUnsignedInteger(p->substr(1)),
+		     "invalid variable name '"+*p+"' in function '"+s+"'");
+    	    const auto vc = GnuplotInterpreterBase::convertToUnsignedShort(p->substr(1));
+    	    throw_if(vc==0,"invalid variable name '"+*p+"' in function '"+s+"'.");
     	    vars.push_back(make_pair(*p,vc));
     	  }
     	}
     	for(p2=fdata.begin();p2!=fdata.end();++p2){
     	  for(p3=vars.begin();p3!=vars.end();++p3){
     	    if(p2->values.size()<p3->second){
-    	      ostringstream msg;
+	      std::ostringstream msg;
     	      msg << "TextDataReader::getColumn : line '" 
     		  << p2->nbr << "' "
     		  << "does not have '" << p3->second << "' columns.";
-    	      throw(runtime_error(msg.str()));
+	      tfel::raise(msg.str());
     	    }
-    	    e.setVariableValue(p3->first,
-    			       p2->values[p3->second-1]);
+    	    e.setVariableValue(p3->first,p2->values[p3->second-1]);
     	  }
     	  v.push_back(e.getValue());
     	}
