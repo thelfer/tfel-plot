@@ -1264,7 +1264,7 @@ namespace tfel
 	i.set(r);
 	this->inputs.push_back(i);
       } else if(a.startsWith("csv:")){
-	import_data(a.mid(4),";");
+	import_data(a.mid(4),"(;|,)");
       } else {
 	import_data(a,"");
       }
