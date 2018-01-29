@@ -18,8 +18,7 @@ namespace tfel
   namespace plot
   {
 
-    static QString
-    getGraphBorderName(const Graph::GraphBorder b)
+    static QString getGraphBorderName(const Graph::GraphBorder b)
     {
       if(b==Graph::X){
 	return "X";
@@ -43,21 +42,18 @@ namespace tfel
 	width(w)
     {}
 
-    void
-    GraphBorderItem::configure()
+    void GraphBorderItem::configure()
     {
       this->graph->configureGraphRange(this->border);
     } // edn of GraphBorderItem::configure
 
-    QPainterPath
-    GraphBorderItem::shape() const
+    QPainterPath GraphBorderItem::shape() const
     {
       QPainterPathStroker ps;
       return ps.createStroke(this->path());
     }
 
-    void
-    GraphBorderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * e)
+    void GraphBorderItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * e)
     {
       if(e->button()==Qt::LeftButton){
 	QPointF pev = e->pos();
@@ -75,8 +71,7 @@ namespace tfel
       }
     } // end of GraphBorderItem::mouseDoubleClickEvent
 
-    void
-    GraphBorderItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * ev)
+    void GraphBorderItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * ev)
     {
       QPointF pev   = ev->pos();
       const qreal w = this->width;
@@ -85,13 +80,13 @@ namespace tfel
       QRectF r(pev,QSizeF(4*w,4*w));
       if(this->shape().intersects(r)){
 	QMenu   menu;
-	QAction *ca  = menu.addAction(tr("Configure")+" "+
-				      getGraphBorderName(this->border)+" range");
-	QObject::connect(ca, SIGNAL(triggered()),
-			 this, SLOT(configure()));
-	QAction *ca2  = menu.addAction(tr("Configure graph ranges"));
-	QObject::connect(ca2, SIGNAL(triggered()),
-			 this->graph, SLOT(configureGraphRanges()));
+	auto *ca = menu.addAction(tr("Configure")+" "+
+				  getGraphBorderName(this->border)+" range");
+	QObject::connect(ca,&QAction::triggered,
+			 this,&GraphBorderItem::configure);
+	auto *ca2 = menu.addAction(tr("Configure graph ranges"));
+	QObject::connect(ca2,&QAction::triggered,
+			 this->graph,&Graph::configureGraphRanges);
 	menu.exec(ev->screenPos());
       } else {
 	ev->ignore();

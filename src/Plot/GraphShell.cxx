@@ -18,6 +18,7 @@
 #include<QtGui/QTextDocumentWriter>
 
 #include"TFEL/Math/Parser/ExternalFunctionManager.hxx"
+#include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/GraphShell.hxx"
 
 namespace tfel{
@@ -55,7 +56,7 @@ namespace tfel{
     }
 
     GraphShell::GraphShell(Graph& g,
-			       QWidget *const p)
+			   QWidget *const p)
       : QTextEdit(p),
 	gi(g),
 	prompt(""),
@@ -65,14 +66,14 @@ namespace tfel{
 	ctrlc(false),
 	yank(false)
     {
-      QObject::connect(&gi,SIGNAL(errorMsg(const QString&)),
-		       this,SLOT(displayErrorMsg(const QString&)));
-      QObject::connect(&gi,SIGNAL(outputMsg(const QString&)),
-		       this,SLOT(displayOutputMsg(const QString&)));
-      QObject::connect(&gi,SIGNAL(quitCommandTreated()),
-		       this,SLOT(forwardQuitCommand()));
-      QObject::connect(&gi,SIGNAL(graphicalPlot()),
-		       this,SLOT(forwardGraphicalPlot()));
+      QObject::connect(&gi,&GnuplotInterpreter::errorMsg,
+		       this,&GraphShell::displayErrorMsg);
+      QObject::connect(&gi,&GnuplotInterpreter::outputMsg,
+		       this,&GraphShell::displayOutputMsg);
+      QObject::connect(&gi,&GnuplotInterpreter::quitCommandTreated,
+		       this,&GraphShell::forwardQuitCommand);
+      QObject::connect(&gi,&GnuplotInterpreter::graphicalPlot,
+		       this,&GraphShell::forwardGraphicalPlot);
       this->setUndoRedoEnabled(false);
       this->displayPrompt();
     }
@@ -169,11 +170,10 @@ namespace tfel{
     void GraphShell::insertFromMimeData(const QMimeData * m)
     {
       if (m->hasText()) {
-	QStringList slist = m->text().split("\n",QString::SkipEmptyParts);
-	QStringList::const_iterator p;
+	const auto slist = m->text().split("\n",QString::SkipEmptyParts);
 	QString line;
-	for(p=slist.begin();p!=slist.end();++p){
-	  line += *p;
+	for(const auto& l : slist){
+	  line += l;
 	  if(!line.endsWith('\\')){
 	    this->setCurrentLine(line);
 	    this->treatNewCommand(line);

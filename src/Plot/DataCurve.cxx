@@ -27,9 +27,11 @@ namespace tfel{
   namespace plot{
 
     DataCurve::DataCurve(const QString& f,
+			 const QString& s,
 			 const unsigned short c1,
 			 const unsigned short c2)
       : file(f),
+	separator(s),
 	ucx(c1),
 	ucy(c2)
     {
@@ -40,11 +42,13 @@ namespace tfel{
     } // end of DataCurve::DataCurve
 
     DataCurve::DataCurve(const QString& f,
+			 const QString& s,
 			 const QString& c1,
 			 const unsigned short c2,
 			 DataCurve::ExternalFunctionManagerPtr functions)
       : fm(functions),
 	file(f),
+	separator(s),
 	cx(c1),
 	ucx(0),
 	ucy(c2)
@@ -56,11 +60,13 @@ namespace tfel{
     } // end of DataCurve::DataCurve
 
     DataCurve::DataCurve(const QString& f,
+			 const QString& s,
 			 const unsigned short c1,
 			 const QString& c2,
 			 DataCurve::ExternalFunctionManagerPtr functions)
       : fm(functions),
 	file(f),
+	separator(s),
 	cy(c2),
 	ucx(c1),
 	ucy(0)
@@ -72,11 +78,13 @@ namespace tfel{
     } // end of DataCurve::DataCurve
 
     DataCurve::DataCurve(const QString& f,
+			 const QString& s,
 			 const QString& c1,
 			 const QString& c2,
 			 DataCurve::ExternalFunctionManagerPtr functions)
       : fm(functions),
 	file(f),
+	separator(s),
 	cx(c1),
 	cy(c2),
 	ucx(0),
@@ -257,10 +265,11 @@ namespace tfel{
 
     void DataCurve::executeDelayedDataLoading()
     {
-      QObject::connect(this->watcher,SIGNAL(fileChanged(const QString&)),
-		       this,SLOT(updatedDataFile(const QString&)));
+      QObject::connect(this->watcher,&QFileSystemWatcher::fileChanged,
+		       this,&DataCurve::updatedDataFile);
       try{
-	TextDataReader data(this->file);
+	TextDataReader data(this->separator);
+	data.extractData(this->file);
 	if(this->cy.isEmpty()){
 	  this->yvalues = data.getColumn(this->ucy);
 	} else {
@@ -297,9 +306,9 @@ namespace tfel{
 	this->executeDelayedDataLoading();
       } else {
 	// wait 100 micro-seconds for the data to be effectively ready
-	QTimer::singleShot(100, this, SLOT(executeDelayedDataLoading()));
-	QObject::disconnect(this->watcher,SIGNAL(fileChanged(const QString&)),
-			    this,SLOT(updatedDataFile(const QString&)));
+	QTimer::singleShot(100,this,&DataCurve::executeDelayedDataLoading);
+	QObject::disconnect(this->watcher,&QFileSystemWatcher::fileChanged,
+			    this,&DataCurve::updatedDataFile);
       }
     }
 

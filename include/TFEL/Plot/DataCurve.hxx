@@ -38,20 +38,24 @@ namespace tfel{
       typedef tfel::math::parser::ExternalFunctionManagerPtr ExternalFunctionManagerPtr;
 
       DataCurve(const QString&,
+		const QString&,
 		const unsigned short,
 		const unsigned short);
 
       DataCurve(const QString&,
 		const QString&,
+		const QString&,
 		const unsigned short,
 		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
       DataCurve(const QString&,
+		const QString&,
 		const unsigned short,
 		const QString&,
 		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
       DataCurve(const QString&,
+		const QString&,
 		const QString&,
 		const QString&,
 		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
@@ -59,19 +63,16 @@ namespace tfel{
       DataCurve(const QVector<qreal>&,
 		const QVector<qreal>&);
 
-      virtual bool  hasRange() const override;
-      virtual qreal minRange() const override;
-      virtual qreal maxRange() const override;
+      bool  hasRange() const override;
+      qreal minRange() const override;
+      qreal maxRange() const override;
 
-      virtual void
-      getValues(QVector<Point>&,const qreal,
-		const qreal,const unsigned short) override;
+      void getValues(QVector<Point>&,const qreal,
+		     const qreal,const unsigned short) override;
 
-      virtual bool
-      hasSpecifiedNumberOfSamples() const override;
+      bool hasSpecifiedNumberOfSamples() const override;
 
-      virtual unsigned short
-      getNumberOfSamples() const override;
+      unsigned short getNumberOfSamples() const override;
 
       const QVector<qreal>&
       getAbscissa() const;
@@ -79,7 +80,7 @@ namespace tfel{
       const QVector<qreal>&
       getValues() const;
 
-      virtual ~DataCurve();
+      ~DataCurve() override;
 
     public slots:
       
@@ -112,6 +113,7 @@ namespace tfel{
       ExternalFunctionManagerPtr fm;
 
       const QString file;
+      const QString separator;
       const QString cx;
       const QString cy;
       const unsigned short ucx;

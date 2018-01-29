@@ -349,17 +349,19 @@ namespace tfel
       shared_ptr<Curve> c;
       QString ty;
       if((bcx)&&(bcy)){
-	c = shared_ptr<Curve>(new DataCurve(qfile,cx,cy));
-	TextDataReader d(QString::fromStdString(file));
+	c = shared_ptr<Curve>(new DataCurve(qfile,"",cx,cy));
+	TextDataReader d;
+	d.extractData(QString::fromStdString(file));
 	ty = d.getLegend(cy);
       } else if((!bcx)&&(bcy)){
-	c = shared_ptr<Curve>(new DataCurve(qfile,qx,cy,efcts));
-	TextDataReader d(QString::fromStdString(file));
+	c = shared_ptr<Curve>(new DataCurve(qfile,"",qx,cy,efcts));
+	TextDataReader d;
+	d.extractData(QString::fromStdString(file));
 	ty = d.getLegend(cy);
       } else if((bcx)&&(!bcy)){
-	c = shared_ptr<Curve>(new DataCurve(qfile,cx,qy,efcts));
+	c = shared_ptr<Curve>(new DataCurve(qfile,"",cx,qy,efcts));
       } else {
-	c = shared_ptr<Curve>(new DataCurve(qfile,qx,qy,efcts));
+	c = shared_ptr<Curve>(new DataCurve(qfile,"",qx,qy,efcts));
       }
       this->applyCurveOptions(c,options);
       if(!options.hasTitle){

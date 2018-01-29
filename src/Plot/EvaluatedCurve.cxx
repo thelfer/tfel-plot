@@ -6,6 +6,7 @@
  * \date   14 fév 2008
  */
 
+#include<cmath>
 #include"TFEL/Plot/EvaluatedCurve.hxx"
 
 namespace tfel{

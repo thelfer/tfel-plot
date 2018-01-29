@@ -39,7 +39,7 @@ namespace tfel
        */
       virtual void connect(const QString&);
       //! destructor
-      virtual ~CLIHandler();
+      ~CLIHandler() override;
     public slots:
       //! \brief execute an infinite loop.
       virtual void process();

@@ -106,8 +106,7 @@ namespace tfel
       this->reset();
     } // end of Graph::Axis::Axis()
     
-    void
-    Graph::Axis::reset(){
+    void Graph::Axis::reset(){
       this->min    = Graph::defaultLinearScaleMinValue;
       this->max    = Graph::defaultLinearScaleMaxValue;
       this->label.clear();
@@ -202,8 +201,7 @@ namespace tfel
       return static_cast<int>((static_cast<qreal>(this->width)/this->height)*w);
     }
     
-    void
-    Graph::getCurvesTitles(QVector<QString>& t) const{
+    void Graph::getCurvesTitles(QVector<QString>& t) const{
       t.clear();
       for(const auto & ch : this->curves){
 	t.push_back(ch.curve->getKey());
@@ -219,8 +217,7 @@ namespace tfel
       return c;
     } // end of Graph::getCurvesTitles
 
-    void
-    Graph::reset(){
+    void Graph::reset(){
       this->width  = Graph::defaultWidth;
       this->height = Graph::defaultHeight;
       this->keyHorizontalPosition = RIGHT;
@@ -281,8 +278,7 @@ namespace tfel
       this->height = Graph::defaultHeight;
     } // end of Graph::unsetHeight
 
-    void
-    Graph::setLogScale(Graph::Axis& axis)
+    void Graph::setLogScale(Graph::Axis& axis)
     {
       bool abscissa = (axis.id&Graph::xaxis)||(axis.id&Graph::x2axis);
       bool found = false;
@@ -359,8 +355,7 @@ namespace tfel
       r1 = axis->max;
     } // end of Graph::getRange
 
-    void
-    Graph::unsetLogScale(Graph::Axis& axis)
+    void Graph::unsetLogScale(Graph::Axis& axis)
     {
       bool abscissa = (axis.id&Graph::xaxis)||(axis.id&Graph::x2axis);
       bool found = false;
@@ -395,8 +390,7 @@ namespace tfel
 		     axis.userDefinedRange);
     } // end of Graph::unsetLogScale
 
-    void
-    Graph::setXAxisLogScale(const bool b)
+    void Graph::setXAxisLogScale(const bool b)
     {
       this->setLogScale(this->xAxis);
       if(b){
@@ -405,8 +399,7 @@ namespace tfel
       emit xAxisLogScaleSet();
     } // end of Graph::setXAxisLogScale
 
-    void
-    Graph::unsetXAxisLogScale(const bool b)
+    void Graph::unsetXAxisLogScale(const bool b)
     {
       this->unsetLogScale(this->xAxis);
       if(b){
@@ -415,8 +408,7 @@ namespace tfel
       emit xAxisLogScaleUnSet();
     } // end of Graph::unsetXAxisLogScale
 
-    void
-    Graph::setX2AxisLogScale(const bool b)
+    void Graph::setX2AxisLogScale(const bool b)
     {
       this->setLogScale(this->x2Axis);
       if(b){
@@ -425,8 +417,7 @@ namespace tfel
       emit x2AxisLogScaleSet();
     } // end of Graph::setX2AxisLogScale
 
-    void
-    Graph::unsetX2AxisLogScale(const bool b)
+    void Graph::unsetX2AxisLogScale(const bool b)
     {
       this->unsetLogScale(this->x2Axis);
       if(b){
@@ -435,8 +426,7 @@ namespace tfel
       emit x2AxisLogScaleUnSet();
     } // end of Graph::unsetX2AxisLogScale
 
-    void
-    Graph::setYAxisLogScale(const bool b)
+    void Graph::setYAxisLogScale(const bool b)
     {
       this->setLogScale(this->yAxis);
       if(b){
@@ -445,8 +435,7 @@ namespace tfel
       emit yAxisLogScaleSet();
     } // end of Graph::setYAxisLogScale
 
-    void
-    Graph::unsetYAxisLogScale(const bool b)
+    void Graph::unsetYAxisLogScale(const bool b)
     {
       this->unsetLogScale(this->yAxis);
       if(b){
@@ -455,8 +444,7 @@ namespace tfel
       emit yAxisLogScaleUnSet();
     } // end of Graph::unsetYAxisLogScale
 
-    void
-    Graph::setY2AxisLogScale(const bool b)
+    void Graph::setY2AxisLogScale(const bool b)
     {
       this->setLogScale(this->y2Axis);
       if(b){
@@ -465,8 +453,7 @@ namespace tfel
       emit y2AxisLogScaleSet();
     } // end of Graph::setY2AxisLogScale
 
-    void
-    Graph::unsetY2AxisLogScale(const bool b)
+    void Graph::unsetY2AxisLogScale(const bool b)
     {
       this->unsetLogScale(this->y2Axis);
       if(b){
@@ -517,8 +504,7 @@ namespace tfel
       return yp;
     } // end of Graph::convertVerticalGraphCoordinatesToAbsolutePosition
 
-    void
-    Graph::setTheme(const std::shared_ptr<GraphTheme>& t,
+    void Graph::setTheme(const std::shared_ptr<GraphTheme>& t,
 		    const bool b)
     {
       this->theme = t;
@@ -603,8 +589,7 @@ namespace tfel
       return Graph::convertToString(d);
     }
 
-    void
-    Graph::computeLinearScaleTics(Graph::Axis& axis)
+    void Graph::computeLinearScaleTics(Graph::Axis& axis)
     {
       using namespace std;
       const qreal d     = this->computeTicsIncrements(axis.min,axis.max);
@@ -636,16 +621,14 @@ namespace tfel
       }
     } // end of Graph::computeLinearScaleTics
 
-    void
-    Graph::insertIntoTics(QMap<qreal,QString>& tics,
+    void Graph::insertIntoTics(QMap<qreal,QString>& tics,
 			  const qreal d,
 			  const qreal d2)
     {
       tics.insert(d,Graph::convertToString(d2));
     } // end of Graph::insertIntoTics
 
-    void
-    Graph::computeLogScaleTics(QMap<qreal,QString>& tics,
+    void Graph::computeLogScaleTics(QMap<qreal,QString>& tics,
 			       qreal& logmin,
 			       qreal& logmax)
     {
@@ -728,8 +711,7 @@ namespace tfel
       }
     } // end of Graph::computeLogScaleTics
 
-    void
-    Graph::computeTics(Graph::Axis& axis)
+    void Graph::computeTics(Graph::Axis& axis)
     {
       if(axis.scale==Graph::Axis::LOGSCALE){
 	this->computeLogScaleTics(axis.tics,axis.min,axis.max);
@@ -738,8 +720,7 @@ namespace tfel
       }
     } // end of Graph::computeTics
 
-    void
-    Graph::computeGraphLayout(const qreal gwidth,
+    void Graph::computeGraphLayout(const qreal gwidth,
 			      const qreal gheight,
 			      GraphLayout& l)
     {
@@ -1197,8 +1178,7 @@ namespace tfel
       }
     } // end of Graph::computeRange()
 
-    void
-    Graph::computeRange2(qreal& x0,
+    void Graph::computeRange2(qreal& x0,
 			 qreal& x1,
 			 const unsigned short axis){
       using namespace std;
@@ -1259,8 +1239,7 @@ namespace tfel
       }
     } // end of Graph::computePoints
 
-    void
-    Graph::addCurve(CurveHandler& h)
+    void Graph::addCurve(CurveHandler& h)
     {
       this->curves.push_back(h);
       Graph::Axis& a1 = h.axis&Graph::xaxis ? this->xAxis : this->x2Axis;
@@ -1273,8 +1252,7 @@ namespace tfel
       }
     } // end of Graph::addCurve
 
-    void
-    Graph::addCurve(CurveHandler& h,
+    void Graph::addCurve(CurveHandler& h,
 		    Graph::Axis& axis)
     {
       if(!axis.userDefinedRange){
@@ -1296,9 +1274,8 @@ namespace tfel
       }
     } // end of Graph::addCurve
     
-    void
-    Graph::addCurve(std::shared_ptr<Curve> c,
-		    const GraphAxis axis)
+    void Graph::addCurve(std::shared_ptr<Curve> c,
+			 const GraphAxis axis)
     {
       using namespace std;
       CurveHandler h;
@@ -1327,16 +1304,17 @@ namespace tfel
       // 	nbr << "Curve " << this->curves.size();
       // 	c->setKey(QString::fromStdString(nbr.str()),true);
       // }
-      QObject::connect(c.get(),SIGNAL(updated(Curve*)),
-		       this,SLOT(updatedCurve(Curve*)));
-      QObject::connect(c.get(),SIGNAL(remove(Curve*)),
-		       this,SLOT(removeCurve(Curve*)));
+      QObject::connect(c.get(),&Curve::updated,
+		       this,&Graph::updatedCurve);
+      QObject::connect(c.get(),&Curve::remove,
+		       this,[this](Curve *rc){
+			 this->removeCurve(rc);
+		       });
       emit curveAdded(c.get());
     } // end of Graph::addCurve
 
-    void
-    Graph::setUpperTitle(const QString& l,
-			 const bool b)
+    void Graph::setUpperTitle(const QString& l,
+			      const bool b)
     {
       this->uTitle = l;
       if(b){
@@ -1345,9 +1323,8 @@ namespace tfel
       emit upperTitleChanged(l);
     } // end of Graph::setUpperTitle
 
-    void
-    Graph::setDownTitle(const QString& l,
-			const bool b)
+    void Graph::setDownTitle(const QString& l,
+			     const bool b)
     {
       this->dTitle = l;
       if(b){
@@ -1356,8 +1333,7 @@ namespace tfel
       emit downTitleChanged(l);
     } // end of Graph::setDownTitle
 
-    void
-    Graph::setLeftTitle(const QString& l,
+    void Graph::setLeftTitle(const QString& l,
 			const bool b)
     {
       this->lTitle = l;
@@ -1367,8 +1343,7 @@ namespace tfel
       emit leftTitleChanged(l);
     } // end of Graph::setLeftTitle
 
-    void
-    Graph::setRightTitle(const QString& l,
+    void Graph::setRightTitle(const QString& l,
 			 const bool b)
     {
       this->rTitle = l;
@@ -1378,8 +1353,7 @@ namespace tfel
       emit rightTitleChanged(l);
     } // end of Graph::setRightTitle
 
-    void
-    Graph::setXLabel(const QString& l,
+    void Graph::setXLabel(const QString& l,
 		     const bool b)
     {
       this->xAxis.label = l;
@@ -1389,8 +1363,7 @@ namespace tfel
       emit xLabelChanged(l);
     } // end of Graph::setXLabel
 
-    void
-    Graph::setYLabel(const QString& l,
+    void Graph::setYLabel(const QString& l,
 		     const bool b)
     {
       this->yAxis.label = l;
@@ -1400,8 +1373,7 @@ namespace tfel
       emit yLabelChanged(l);
     } // end of Graph::setYLabel
 
-    void
-    Graph::setX2Label(const QString& l,
+    void Graph::setX2Label(const QString& l,
 		      const bool b)
     {
       this->x2Axis.label = l;
@@ -1411,8 +1383,7 @@ namespace tfel
       emit x2LabelChanged(l);
     } // end of Graph::setX2Label
 
-    void
-    Graph::setY2Label(const QString& l,
+    void Graph::setY2Label(const QString& l,
 		      const bool b)
     {
       this->y2Axis.label = l;
@@ -1428,32 +1399,28 @@ namespace tfel
       return this->font;
     } // end of Graph::getGraphFont
 
-    void
-    Graph::setGraphFont(const QFont& f)
+    void Graph::setGraphFont(const QFont& f)
     {
       this->font = f;
       emit fontChanged(this->font);
       emit updated();
     }
 
-    void
-    Graph::setGraphFontFamily(const QString& family)
+    void Graph::setGraphFontFamily(const QString& family)
     {
       this->font.setFamily(family);
       emit fontChanged(this->font);
       emit updated();
     } // end of Graph::setFontFamily
 
-    void
-    Graph::setGraphFontSize(const qreal fs)
+    void Graph::setGraphFontSize(const qreal fs)
     {
       this->font.setPointSize(fs);
       emit fontChanged(this->font);
       emit updated();
     } // end of Graph::setFontFamily
 
-    void
-    Graph::unsetXRange(const bool b)
+    void Graph::unsetXRange(const bool b)
     {
       this->xAxis.userDefinedRange = false;
       this->computeRange(this->xAxis.min,this->xAxis.max,Graph::xaxis);
@@ -1470,8 +1437,7 @@ namespace tfel
       emit xRangeUnSet();
     } // end of Graph::unsetXRange()
 
-    void
-    Graph::unsetX2Range(const bool b)
+    void Graph::unsetX2Range(const bool b)
     {
       this->x2Axis.userDefinedRange = false;
       this->computeRange(this->x2Axis.min,this->x2Axis.max,Graph::x2axis);
@@ -1488,8 +1454,7 @@ namespace tfel
       emit x2RangeUnSet();
     } // end of Graph::unsetX2Range(const bool b)
 
-    void
-    Graph::unsetYRange(const bool b)
+    void Graph::unsetYRange(const bool b)
     {
       this->yAxis.userDefinedRange = false;
       this->updateRange(this->yAxis);
@@ -1499,8 +1464,7 @@ namespace tfel
       emit yRangeUnSet();
     } // end of Graph::unsetYRange(const bool b)
 
-    void
-    Graph::unsetY2Range(const bool b)
+    void Graph::unsetY2Range(const bool b)
     {
       this->y2Axis.userDefinedRange = false;
       this->updateRange(this->y2Axis);
@@ -1510,8 +1474,7 @@ namespace tfel
       emit yRangeUnSet();
     } // end of Graph::unsetY2Range()
 
-    void
-    Graph::setXRange(const qreal x0,const qreal x1,
+    void Graph::setXRange(const qreal x0,const qreal x1,
 		     const bool b)
     {
       this->xAxis.userDefinedRange = true;
@@ -1526,8 +1489,7 @@ namespace tfel
       emit xRangeChanged(x0,x1);
     } // end of Graph::setXRange
 
-    void
-    Graph::setX2Range(const qreal x0,const qreal x1,
+    void Graph::setX2Range(const qreal x0,const qreal x1,
 		      const bool b)
     {
       this->x2Axis.userDefinedRange = true;
@@ -1542,8 +1504,7 @@ namespace tfel
       emit x2RangeChanged(x0,x1);
     } // end of Graph::setX2Range
     
-    void
-    Graph::setTics(Graph::Axis& axis,
+    void Graph::setTics(Graph::Axis& axis,
 		   const QMap<qreal,QString>& tics)
     {
       axis.userDefinedTics = true;
@@ -1551,8 +1512,7 @@ namespace tfel
       axis.tics = tics;
     } // end of Graph::setXTics
 
-    void
-    Graph::setXTics(const QMap<qreal,QString>& tics,
+    void Graph::setXTics(const QMap<qreal,QString>& tics,
 		    const bool b)
     {
       this->setTics(this->xAxis,tics);
@@ -1562,8 +1522,7 @@ namespace tfel
       emit xTicsChanged();
     } // end of Graph::setXTics
 
-    void
-    Graph::setX2Tics(const QMap<qreal,QString>& tics,
+    void Graph::setX2Tics(const QMap<qreal,QString>& tics,
 		     const bool b)
     {
       this->setTics(this->x2Axis,tics);
@@ -1573,8 +1532,7 @@ namespace tfel
       emit x2TicsChanged();
     } // end of Graph::setX2Tics
 
-    void
-    Graph::setYTics(const QMap<qreal,QString>& tics,
+    void Graph::setYTics(const QMap<qreal,QString>& tics,
 		    const bool b)
     {
       this->setTics(this->yAxis,tics);
@@ -1646,8 +1604,7 @@ namespace tfel
       }
     } // end of Graph::updateCurve
 
-    void
-    Graph::updateCurves(const Graph::Axis& axis)
+    void Graph::updateCurves(const Graph::Axis& axis)
     {
       for(auto& c : this->curves){
 	if(c.axis&axis.id){
@@ -1702,8 +1659,7 @@ namespace tfel
       return found;
     } // end of Graph::computeMinMax
 
-    void
-    Graph::updateRange(Graph::Axis& axis)
+    void Graph::updateRange(Graph::Axis& axis)
     {
       bool found;
       if(!axis.userDefinedRange){
@@ -1734,8 +1690,7 @@ namespace tfel
       }
     } // end of Graph::updateRange
     
-    void
-    Graph::updateRange(Graph::Axis& axis,
+    void Graph::updateRange(Graph::Axis& axis,
 		       const qreal x0,const qreal x1)
     {
       this->setRange(axis.min,axis.max,x0,x1,axis.scale);
@@ -1747,8 +1702,7 @@ namespace tfel
       this->updateRange(this->y2Axis);
     } // end of Graph::updateXRange
     
-    void
-    Graph::setRange(qreal& rmin, qreal& rmax,
+    void Graph::setRange(qreal& rmin, qreal& rmax,
 		    const qreal r0,const qreal r1,
 		    const Graph::Axis::AxisScale s)
     {
@@ -1780,8 +1734,7 @@ namespace tfel
       }
     } // end of Graph::setRange
 
-    void
-    Graph::setRange(Graph::Axis& axis,
+    void Graph::setRange(Graph::Axis& axis,
 		    const qreal y0,const qreal y1,
 		    const bool b)
     {
@@ -1792,8 +1745,7 @@ namespace tfel
       }
     } // end of Graph::setRange
 
-    void
-    Graph::setYRange(const qreal y0,const qreal y1,
+    void Graph::setYRange(const qreal y0,const qreal y1,
 		     const bool b)
     {
       if(this->yAxis.scale==Graph::Axis::LOGSCALE){
@@ -1807,8 +1759,7 @@ namespace tfel
       emit yRangeChanged(y0,y1);
     } // end of Graph::setYRange
 
-    void
-    Graph::setY2Range(const qreal y0,const qreal y1,
+    void Graph::setY2Range(const qreal y0,const qreal y1,
 		      const bool b)
     {
       if(this->y2Axis.scale==Graph::Axis::LOGSCALE){
@@ -1822,8 +1773,7 @@ namespace tfel
       emit y2RangeChanged(y0,y1);
     } // end of Graph::setY2Range
 
-    void
-    Graph::addLabel(const QString& label,
+    void Graph::addLabel(const QString& label,
 		    const GraphCoordinates xc,
 		    const GraphCoordinates yc,
 		    const bool b)
@@ -1835,8 +1785,7 @@ namespace tfel
       emit labelAdded(label);
     } // end of Graph::addLabel
 
-    void
-    Graph::addLabel(const QString& name,
+    void Graph::addLabel(const QString& name,
 		    const QString& label,
 		    const GraphCoordinates xc,
 		    const GraphCoordinates yc,
@@ -1854,8 +1803,7 @@ namespace tfel
       emit labelAdded(name,label);
     } // end of Graph::addLabel
 
-    void
-    Graph::addArrow(const GraphCoordinates x0,
+    void Graph::addArrow(const GraphCoordinates x0,
 		    const GraphCoordinates y0,
 		    const GraphCoordinates x1,
 		    const GraphCoordinates y1,
@@ -1869,8 +1817,7 @@ namespace tfel
       emit arrowAdded();
     } // end of Graph::addArrow
 
-    void
-    Graph::addArrow(const QString& name,
+    void Graph::addArrow(const QString& name,
 		    const GraphCoordinates x0,
 		    const GraphCoordinates y0,
 		    const GraphCoordinates x1,
@@ -1910,8 +1857,7 @@ namespace tfel
       return this->arrows.end();
     } // end of Graph::findArrow
 
-    void
-    Graph::removeLabel(const QString& n,
+    void Graph::removeLabel(const QString& n,
 		       const bool b)
     {
       auto p = this->findLabel(n);
@@ -1926,8 +1872,7 @@ namespace tfel
       emit labelRemoved(n);
     } // end of Graph::removeLabels()
 
-    void
-    Graph::removeLabels(const bool b)
+    void Graph::removeLabels(const bool b)
     {
       this->labels.clear();
       if(b){
@@ -1936,8 +1881,7 @@ namespace tfel
       emit labelsRemoved();
     } // end of Graph::removeLabels()
 
-    void
-    Graph::removeArrow(const QString& n,
+    void Graph::removeArrow(const QString& n,
 		       const bool b)
     {
       auto p = this->findArrow(n);
@@ -1952,8 +1896,7 @@ namespace tfel
       emit arrowRemoved(n);
     } // end of Graph::removeArrows()
 
-    void
-    Graph::removeArrows(const bool b)
+    void Graph::removeArrows(const bool b)
     {
       this->arrows.clear();
       if(b){
@@ -1962,8 +1905,7 @@ namespace tfel
       emit arrowsRemoved();
     } // end of Graph::removeArrows()
 
-    void
-    Graph::showGrid(const bool b)
+    void Graph::showGrid(const bool b)
     {
       this->showGraphGrid = true;
       if(b){
@@ -1972,8 +1914,7 @@ namespace tfel
       emit gridChanged();
     } // end of Graph::showGrid
 
-    void
-    Graph::showBorder(const bool b)
+    void Graph::showBorder(const bool b)
     {
       this->showGraphBorder = true;
       if(b){
@@ -1981,8 +1922,7 @@ namespace tfel
       }
     } // end of Graph::showBorder
 
-    void
-    Graph::hideBorder(const bool b)
+    void Graph::hideBorder(const bool b)
     {
       this->showGraphBorder = false;
       if(b){
@@ -1990,8 +1930,7 @@ namespace tfel
       }
     } // end of Graph::hideBorder
 
-    void
-    Graph::toggleGrid(const bool b)
+    void Graph::toggleGrid(const bool b)
     {
       if(this->showGraphGrid){
 	this->hideGrid(false);
@@ -2004,8 +1943,7 @@ namespace tfel
       emit gridChanged();
     } // end of Graph::toggleGrid
 
-    void
-    Graph::hideGrid(const bool b)
+    void Graph::hideGrid(const bool b)
     {
       this->showGraphGrid = false;
       if(b){
@@ -2080,8 +2018,7 @@ namespace tfel
       return this->theme;
     } // end of Graph::getTheme
 
-    void
-    Graph::setKeyHorizontalPosition(const KeyHorizontalPosition& p,
+    void Graph::setKeyHorizontalPosition(const KeyHorizontalPosition& p,
 				    const bool b)
     {
       this->keyHorizontalPosition = p;
@@ -2091,8 +2028,7 @@ namespace tfel
       emit keyHorizontalPositionChanged(p);
     } // end of Graph::setKeyHorizontalPosition
 
-    void
-    Graph::setKeyVerticalPosition(const KeyVerticalPosition& p,
+    void Graph::setKeyVerticalPosition(const KeyVerticalPosition& p,
 				  const bool b)
     {
       this->keyVerticalPosition = p;
@@ -2102,8 +2038,7 @@ namespace tfel
       emit keyVerticalPositionChanged(p);
     } // end of Graph::setKeyVerticalPosition
     
-    void
-    Graph::setKeyPositions(const KeyHorizontalPosition& hp,
+    void Graph::setKeyPositions(const KeyHorizontalPosition& hp,
 			   const KeyVerticalPosition& vp,
 			   const bool b)
     {
@@ -2115,8 +2050,7 @@ namespace tfel
       emit keyPositionsChanged(hp,vp);
     } // end of Graph::setKeyPositions
 
-    void
-    Graph::setKeyAlignment(const KeyAlignment& a,
+    void Graph::setKeyAlignment(const KeyAlignment& a,
 			   const bool b)
     {
       this->keyAlignment = a;
@@ -2126,8 +2060,7 @@ namespace tfel
       emit keyAlignmentChanged(a);
     } // end of Graph::setKeyAlignment
 
-    void
-    Graph::mousePressEvent(QMouseEvent * ev)
+    void Graph::mousePressEvent(QMouseEvent * ev)
     {
       QGraphicsView::mousePressEvent(ev);
       if(!ev->isAccepted()){
@@ -2142,8 +2075,7 @@ namespace tfel
       }
     }
     
-    void
-    Graph::mouseMoveEvent(QMouseEvent * ev)
+    void Graph::mouseMoveEvent(QMouseEvent * ev)
     {
       QPointF pev = this->mapToScene(ev->pos());
       const qreal xc = pev.x();
@@ -2186,8 +2118,7 @@ namespace tfel
       ev->accept();
     }
 
-    void
-    Graph::mouseReleaseEvent(QMouseEvent * ev)
+    void Graph::mouseReleaseEvent(QMouseEvent * ev)
     {
       if(ev->button()==Qt::LeftButton){
 	if(this->showRubberBand){
@@ -2243,15 +2174,13 @@ namespace tfel
       }
     }
 
-    void
-    Graph::replot()
+    void Graph::replot()
     {
       this->plot(*(this->scene),this->width,this->height);
       emit updated();
     }
 
-    void
-    Graph::resizeEvent(QResizeEvent *ev)
+    void Graph::resizeEvent(QResizeEvent *ev)
     {
       const QSize s = ev->size();
       this->width  = s.width();
@@ -2268,16 +2197,15 @@ namespace tfel
     } // end of Graph::findCurveHandler
 
 
-    void
-    Graph::updatedCurve(Curve * c)
+    void Graph::updatedCurve(Curve * c)
     {
       auto p = this->findCurveHandler(c);
       if(p==this->curves.end()){
 	return;
       }
-      CurveHandler& h = *p;
-      Graph::Axis& a1 = h.axis&Graph::xaxis ? this->xAxis : this->x2Axis;
-      Graph::Axis& a2 = h.axis&Graph::yaxis ? this->yAxis : this->y2Axis;
+      auto& h = *p;
+      auto& a1 = h.axis&Graph::xaxis ? this->xAxis : this->x2Axis;
+      auto& a2 = h.axis&Graph::yaxis ? this->yAxis : this->y2Axis;
       if(!a1.userDefinedRange){
 	if(h.curve->hasRange()){
 	  qreal x0 = h.curve->minRange();
@@ -2296,16 +2224,15 @@ namespace tfel
       this->replot();
     } // end of Graph::updatedCurve
 
-    void
-    Graph::removeCurve(Curve * c,const bool b)
+    void Graph::removeCurve(Curve * c,const bool b)
     {
       auto p = this->findCurveHandler(c);
       if(p==this->curves.end()){
 	return;
       }
-      CurveHandler& h = *p;
-      Graph::Axis& a1 = h.axis&Graph::xaxis ? this->xAxis : this->x2Axis;
-      Graph::Axis& a2 = h.axis&Graph::yaxis ? this->yAxis : this->y2Axis;
+      auto& h = *p;
+      auto& a1 = h.axis&Graph::xaxis ? this->xAxis : this->x2Axis;
+      auto& a2 = h.axis&Graph::yaxis ? this->yAxis : this->y2Axis;
       this->curves.erase(p);
       if(!a1.userDefinedRange){
 	qreal x0 = Graph::defaultLinearScaleMinValue;
@@ -2326,82 +2253,69 @@ namespace tfel
       emit curveRemoved(c);
     } // end of Graph::removeCurve
 
-    QGraphicsScene&
-    Graph::getScene()
+    QGraphicsScene& Graph::getScene()
     {
       return *(this->scene);
     }
 
-    qreal
-    Graph::getGraphWidth() const
+    qreal Graph::getGraphWidth() const
     {
       return this->width;
     }
     
-    qreal
-    Graph::getGraphHeight() const
+    qreal Graph::getGraphHeight() const
     {
       return this->height;
     }
 
-    const QString&
-    Graph::getUpperTitle() const
+    const QString& Graph::getUpperTitle() const
     {
       return this->uTitle;
     }
 
-    const QString&
-    Graph::getDownTitle() const
+    const QString& Graph::getDownTitle() const
     {
       return this->dTitle;
     }
     
-    const QString&
-    Graph::getLeftTitle() const
+    const QString& Graph::getLeftTitle() const
     {
       return this->lTitle;
     }
 
-    const QString&
-    Graph::getRightTitle() const
+    const QString& Graph::getRightTitle() const
     {
       return this->rTitle;
     }
     
-    const QString&
-    Graph::getXLabel() const
+    const QString& Graph::getXLabel() const
     {
       return this->xAxis.label;
     }
     
-    const QString&
-    Graph::getX2Label() const
+    const QString& Graph::getX2Label() const
     {
       return this->x2Axis.label;
     }
 
-    const QString&
-    Graph::getYLabel() const
+    const QString& Graph::getYLabel() const
     {
       return this->yAxis.label;
     }
 
-    const QString&
-    Graph::getY2Label() const
+    const QString& Graph::getY2Label() const
     {
       return this->y2Axis.label;
     }
 
-    void
-    Graph::configureGraphRange(const GraphBorder&)
+    void Graph::configureGraphRange(const GraphBorder&)
     {
       if(!this->gcd->isVisible()){
 	this->gcd->show();
       }
     } // end of Graph::configureGraphRange
 
-    void
-    Graph::configureGraphRanges()
+    void Graph::configureGraphRanges()
     {
       if(!this->gcd->isVisible()){
 	this->gcd->show();

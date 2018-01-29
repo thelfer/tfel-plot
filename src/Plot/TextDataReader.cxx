@@ -5,13 +5,14 @@
  * \date   13 Nov 2007
  */
 
+#include<cmath>
 #include<sstream>
 #include<stdexcept>
-
+#include<QtCore/QDebug>
 #include<QtCore/QFile>
 #include<QtCore/QRegExp>
 #include<QtCore/QTextStream>
-
+#include"TFEL/Raise.hxx"
 #include"TFEL/Plot/TextDataReader.hxx"
 
 namespace tfel
@@ -20,168 +21,178 @@ namespace tfel
   namespace plot
   {
 
-    TextDataReader::TextDataReader(const QString& file)
-    {
-      using namespace std;
-      QFile f(file);
-      if(!f.open(QIODevice::ReadOnly)){
-	throw(runtime_error("TextDataReader::TextDataReader: "
-			    "can't open '"+file.toStdString()+"'"));
-      }
-      QTextStream s(&f);
+    TextDataReader::TextDataReader()
+      : separator("")
+    {} // end of TextDataReader::TextDataReader
+
+    TextDataReader::TextDataReader(const QString& s)
+      : separator(s)
+    {} // end of TextDataReader::TextDataReader
+
+    void TextDataReader::extractData(const QString& f){
+      QFile file(f);
+      tfel::raise_if(!file.open(QIODevice::ReadOnly),
+		     "TextDataReader::TextDataReader: "
+		     "can't open '"+f.toStdString()+"'.");
+      QTextStream s(&file);
       this->extractData(s);
     }
-
-    TextDataReader::TextDataReader()
-    {}// end of TextDataReader::TextDataReader
-
-    void
-    TextDataReader::extractData(QTextStream& in)
+    
+    void TextDataReader::extractData(QTextStream& in)
     {
+      auto splitLine = [this](const QString line){
+	if(this->separator.isEmpty()){
+	  return line.split(QRegExp("\\s+"),QString::SkipEmptyParts);
+	}
+	return line.split(QRegExp("\\s+"+this->separator+"\\s+"),
+			  QString::SkipEmptyParts);
+      };
       lines.clear();
       legends.clear();
       preamble.clear();
-      bool firstLine     = true;
       bool firstComments = true;
       unsigned short nbr = 1;
-      while(!in.atEnd()){
-	QString line = in.readLine();
-	if(!line.isEmpty()){
-	  if(line[0]=='#'){
-	    line.remove(0,1u);
-	    if(firstLine){
-	      this->legends  = line.split(" ");
-	    }
-	    if(firstComments){
-	      this->preamble.push_back(line);
-	    }
+      auto treatLine = [this,splitLine,&nbr](const QString& line){
+	if(line.isEmpty()){
+	  return;
+	}
+	if(line[0]=='#'){
+	  return;
+	}
+	const auto tokens = splitLine(line);
+	if(tokens.empty()){
+	  return;
+	}
+	Line l;
+	l.nbr = nbr;
+	for(const auto& t : tokens){
+	  bool b = true;
+	  const auto v = t.toDouble(&b);
+	  if(b){
+	    l.values.push_back(v);
 	  } else {
-	    QStringList tokens(line.split(QRegExp("\\s+"),QString::SkipEmptyParts));
-	    if(!tokens.empty()){
-	      QStringList::const_iterator p;
-	      bool b = true;
-	      for(p=tokens.begin();(p!=tokens.end())&&(b);++p){
-		p->toDouble(&b);
-	      }
-	      if(b){
-		Line l;
-		l.nbr = nbr;
-		for(p=tokens.begin();(p!=tokens.end())&&(b);++p){
-		  l.values.push_back(p->toDouble());
-		}
-		this->lines.push_back(l);
-	      } else {
-		if(firstLine){
-		  this->preamble.push_back(line);
-		}
-	      }
-	      firstComments = false;
-	    }
-	    firstLine = false;
+	    l.values.push_back(nan("invalid value"));
 	  }
 	}
+	qDebug() << l.values;
+	this->lines.push_back(l);
+      };
+      auto line = in.readLine();
+      if(!line.isEmpty()){
+	if(line[0]=='#'){
+	  line.remove(0,1u);
+	  this->legends = splitLine(line);
+	  while((firstComments)&&(!in.atEnd())){
+	    line = in.readLine();
+	    const auto tokens = splitLine(line);
+	    if(tokens.empty()){
+	      break;
+	    }
+	    if(tokens[0][0]!='#'){
+	      treatLine(line);
+	      break;
+	    }
+	    this->preamble.push_back(line);
+	  }
+	} else {
+	  const auto tokens = splitLine(line);
+	  if(!tokens.empty()){
+	    bool b = true;
+	    const auto v = tokens[0].toDouble(&b);
+	    if(b){
+	      treatLine(line);
+	    } else {
+	      this->legends = line.split(QRegExp(this->separator),
+					 QString::SkipEmptyParts);
+	    }
+	  }
+	}
+      }
+      while(!in.atEnd()){
 	++nbr;
+	treatLine(in.readLine());
       }
     } // end of TextDataReader::TextDataReader
-      
-    const QStringList&
-    TextDataReader::getLegends() const
+    
+    const QStringList& TextDataReader::getLegends() const
     {
       return this->legends;
     } // end of TextDataReader::getLegends
 
-    const QStringList&
-    TextDataReader::getPreamble() const
+    const QStringList& TextDataReader::getPreamble() const
     {
       return this->preamble;
     } // end of TextDataReader::getPreamble
 
-    QString
-    TextDataReader::getLegend(const unsigned short c) const
+    QString TextDataReader::getLegend(const unsigned short c) const
     {
-      using namespace std;
-      if(c==0){
-	string msg("TextDataReader::getLegend : ");
-	msg += "invalid column index";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(c==0,"TextDataReader::getLegend: "
+		     "invalid column index.");
       if(c>=this->legends.size()+1){
 	return "";
       }
       return this->legends[c-1];
     } // end of TextDataReader::getLegend
 
-    unsigned short
-    TextDataReader::findColumn(const QString& name) const
+    unsigned short TextDataReader::findColumn(const QString& name) const
     {
-      using namespace std;
-      if(!this->legends.contains(name)){
-	string msg("TextDataReader::findColumn : ");
-	msg += "no column named '"+name.toStdString()+"' found'.";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(!this->legends.contains(name),
+		     "TextDataReader::findColumn: "
+		     "no column named '"+name.toStdString()+"' found'.");
       return static_cast<unsigned short>(this->legends.indexOf(name)+1);
     } // end of TextDataReader::findColumn
 
-    QVector<double>
-    TextDataReader::getColumn(const unsigned short i) const
+    QVector<double> TextDataReader::getColumn(const unsigned short i) const
     {
-      using namespace std;
       QVector<double> tab;
       this->getColumn(tab,i);
       return tab;
     } // end of TextDataReader::getColumn
 
-    void
-    TextDataReader::getColumn(QVector<double>& tab,
-			      const unsigned short i) const
+    void TextDataReader::getColumn(QVector<double>& tab,
+				   const unsigned short i) const
     {
-      using namespace std;
       tab.reserve(this->lines.size());
       int j;
       // current line
       QVector<Line>::const_iterator line;
       // sanity check
-      if(i==0u){
-	string msg("TextDataReader::getColumn : ");
-	msg += "column '0' requested (column numbers begins at '1').";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(i==0u,"TextDataReader::getColumn: "
+		     "column '0' requested (column numbers begins at '1').");
       // treatment
       for(line=this->lines.begin(),j=0;line!=this->lines.end();++line,++j){
-	if(line->values.size()<i){
-	  ostringstream msg;
-	  msg << "TextDataReader::getColumn : line '" 
-	      << line->nbr << "' "
-	      << "does not have '" << i << "' columns.";
-	  throw(runtime_error(msg.str()));
-	}
+	tfel::raise_if(line->values.size()<i,
+		       "TextDataReader::getColumn: "
+		       "line '"+std::to_string(line->nbr)+"' "
+		       "does not have '"+std::to_string(i)+"' columns.");
 	tab.push_back(line->values[i-1]);
       }
     } // end of TextDataReader::getColumn
 
-    QVector<TextDataReader::Line>::const_iterator
-    TextDataReader::begin() const
+    QVector<TextDataReader::Line>::const_iterator TextDataReader::begin() const
     {
       return this->lines.begin();
-    } // end of TextDataReader::begin()
+    } // end of TextDataReader::begin
 
-    QVector<TextDataReader::Line>::const_iterator
-    TextDataReader::end() const
+    QVector<TextDataReader::Line>::const_iterator TextDataReader::end() const
     {
       return this->lines.end();
-    } // end of TextDataReader::end()
+    } // end of TextDataReader::end
 
-    unsigned short
-    TextDataReader::getNumberOfColumns() const
+    unsigned short TextDataReader::getNumberOfColumns() const
     {
       if(this->lines.isEmpty()){
 	return 0u;
       }
       return static_cast<unsigned short>(this->lines[0].values.size());
-    }// 
+    } // end of TextDataReader::getNumberOfColumns
 
-      
+    const QString& TextDataReader::getSeparator() const{
+      return this->separator;
+    } // end of TextDataReader::getSeparator
+
+    TextDataReader::~TextDataReader() = default;
+    
   } // end of namespace plot
 
 } // end of namespace tfel

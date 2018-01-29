@@ -83,7 +83,8 @@ namespace tfel
       }
       CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatKriging : ",
     				      "expected file name",p,pe);
-      TextDataReader data(QString::fromStdString(CxxTokenizer::readString(p,pe)));
+      TextDataReader data;
+      data.extractData(QString::fromStdString(CxxTokenizer::readString(p,pe)));
       if(p==pe){
     	if(varNumber==1){
     	  data.getColumn(vx1,1);

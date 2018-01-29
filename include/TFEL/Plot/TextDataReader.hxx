@@ -39,30 +39,31 @@ namespace tfel
 	//! line tokens
 	QVector<double> values;
       }; // end of struct Line
-      /*!
-       * \brief constructor
-       */
+      //! \brief constructor
       TextDataReader();
       /*!
        * \brief constructor
-       * \param[in] file : file name
+       * \param[in] s: separator
        */
       TextDataReader(const QString&);
       /*!
-       * extract data from the device
-       * \param[in] f : input device
+       * \brief extract data from the file
+       * \param[in] f: file name
        */
-      void
-      extractData(QTextStream&);
+      void extractData(const QString&);
       /*!
-       * \param[in] i : column number
+       * \brief extract data from the device
+       * \param[in] f: input device
+       */
+      void extractData(QTextStream&);
+      /*!
+       * \param[in] i: column number
        * \return the specified column, converting all values to double
        * \throw std::runtime_error if a line is shorter than the
        * specified column number or if a value can't be converted to
        * a double
        */
-      QVector<double>
-      getColumn(const unsigned short) const;
+      QVector<double> getColumn(const unsigned short) const;
       /*!
        * \brief extract the specified column, converting all values to
        * double
@@ -72,66 +73,60 @@ namespace tfel
        * specified column number or if a value can't be converted to
        * a double
        */
-      void
-      getColumn(QVector<double>&,
-		const unsigned short) const;
+      void getColumn(QVector<double>&,
+		     const unsigned short) const;
       /*!
        * \return the column having the specified title
        * \param[in] name : column title
        * \throw std::runtime_error if no column with the specified
        * title is found
        */
-      unsigned short
-      findColumn(const QString&) const;
+      unsigned short findColumn(const QString&) const;
       /*!
        * \return the legend associated to the curves
        */
-      const QStringList&
-      getLegends() const;
+      const QStringList& getLegends() const;
       /*!
        * \return the title of the specified column
        * \param[in] c : column number
        * \throw std::runtime_error if no title is found
        */
-      QString
-      getLegend(const unsigned short c) const;
+      QString getLegend(const unsigned short c) const;
       /*!
        * \return an iterator to the first line
        */
-      QVector<Line>::const_iterator
-      begin() const;
+      QVector<Line>::const_iterator begin() const;
       /*!
        * \return an iterator past the last line
        */
-      QVector<Line>::const_iterator
-      end() const;
+      QVector<Line>::const_iterator end() const;
       /*!
        * get the first commented lines
        */
-      const QStringList&
-      getPreamble() const;
-      /*!
-       * \return the number of columns
-       */
-      unsigned short
-      getNumberOfColumns() const;
+      const QStringList& getPreamble() const;
+      //! \return the number of columns
+      unsigned short getNumberOfColumns() const;
+      //! \return the separator
+      const QString& getSeparator() const;
+      //! destructor
+      ~TextDataReader();
     private:
-      /*!
-       * \brief copy constructor (disabled)
-       */
-      TextDataReader(const TextDataReader&);
-      /*!
-       * \brief assignement operator (disabled)
-       */
-      TFEL_VISIBILITY_LOCAL 
-      TextDataReader&
-      operator = (const TextDataReader&);
+      //! \brief move constructor (disabled)
+      TextDataReader(TextDataReader&&) = delete;
+      //! \brief copy constructor (disabled)
+      TextDataReader(const TextDataReader&) = delete;
+      //! \brief move assignement (disabled)
+      TextDataReader& operator=(TextDataReader&&) = delete;
+      //! \brief copy assignement (disabled)
+      TextDataReader& operator=(const TextDataReader&) = delete;
       //! list of all tokens of the file, sorted by line
       QVector<Line> lines;
       //! list of column titles
       QStringList legends;
       //! first commented lines
       QStringList preamble;
+      //! separator
+      const QString separator;
     }; // end of struct TextDataReader
 
   } // end of namespace plot

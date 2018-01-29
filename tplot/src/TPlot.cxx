@@ -61,8 +61,7 @@ namespace tfel
 	axis(Graph::XY)
     {} // end of TPlot::CurveOptions::CurveOptions
 
-    TPlot::CurveOptions&
-    TPlot::Input::getCurveOptions()
+    TPlot::CurveOptions& TPlot::Input::getCurveOptions()
     {
       if(this->is<TPlot::Data>()){
 	return this->get<TPlot::Data>();
@@ -153,12 +152,12 @@ namespace tfel
 	}
 	this->goutput = false;
       }
-      QObject::connect(this->shell,SIGNAL(quitCommandTreated()),
-		       this,SLOT(close()));
-      QObject::connect(this->shell,SIGNAL(graphicalPlot()),
-		       this,SLOT(show()));
-      QObject::connect(this->g,SIGNAL(updated()),
-		       this,SLOT(createCurvesMenu()));
+      QObject::connect(this->shell,&GraphShell::quitCommandTreated,
+		       this,&TPlot::close);
+      QObject::connect(this->shell,&GraphShell::graphicalPlot,
+		       this,&TPlot::show);
+      QObject::connect(this->g,&Graph::updated,
+		       this,&TPlot::createCurvesMenu);
     }
 
     void TPlot::close()
@@ -196,7 +195,8 @@ namespace tfel
 	vl->addWidget(bbox);
 	this->setLayout(vl);
 	// signals
-	QObject::connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
+	QObject::connect(bbox,&QDialogButtonBox::accepted,
+			 this,&ChooseImportFilter::accept);
       }
       int getFilterId(){
 	return this->bgrp->checkedId();
@@ -243,158 +243,161 @@ namespace tfel
       this->epdfa->setIcon(QIcon::fromTheme("document-save-as"));
       this->epdfa->setIconVisibleInMenu(true);
       this->epdfa->setStatusTip(tr("Export the graph in PDF format"));
-      QObject::connect(this->epdfa, SIGNAL(triggered()),
-		       this, SLOT(exportToPDF()));
+      QObject::connect(this->epdfa,&QAction::triggered,
+		       this,&TPlot::exportToPDF);
       this->esvga = new QAction(tr("Export to svg"), this);
       this->esvga->setIcon(QIcon::fromTheme("document-save-as"));
       this->esvga->setIconVisibleInMenu(true);
       this->esvga->setStatusTip(tr("Export the graph in SVG format"));
-      QObject::connect(this->esvga, SIGNAL(triggered()),
-		       this, SLOT(exportToSVG()));
+      QObject::connect(this->esvga,&QAction::triggered,
+		       this,&TPlot::exportToSVG);
       this->epnga = new QAction(tr("Export to png"), this);
       this->epnga->setStatusTip(tr("Export the graph in Portable Network Plot format"));
       this->epnga->setIcon(QIcon::fromTheme("document-save-as"));
       this->epnga->setIconVisibleInMenu(true);
-      QObject::connect(this->epnga, SIGNAL(triggered()),
-		       this, SLOT(exportToPNG()));
+      QObject::connect(this->epnga,&QAction::triggered,
+		       this,&TPlot::exportToPNG);
       this->etxta = new QAction(tr("Export to txt"), this);
       this->etxta->setIcon(QIcon::fromTheme("document-save-as"));
       this->etxta->setIconVisibleInMenu(true);
       this->etxta->setStatusTip(tr("Export the graph in text format"));
-      QObject::connect(this->etxta, SIGNAL(triggered()),
-		       this, SLOT(exportToTable()));
+      QObject::connect(this->etxta,&QAction::triggered,
+		       this,&TPlot::exportToTable);
       
       this->pa = new QAction(QIcon(":/images/print.png"), tr("&Print"), this);
       this->pa->setStatusTip(tr("Print the graph"));
       this->pa->setIcon(QIcon::fromTheme("document-print"));
       this->pa->setIconVisibleInMenu(true);
-      QObject::connect(this->pa, SIGNAL(triggered()), this, SLOT(print()));
+      QObject::connect(this->pa,&QAction::triggered,this,&TPlot::print);
 
       this->na = new QAction(tr("&New window"), this);
       this->na->setShortcuts(QKeySequence::New);
       this->na->setStatusTip(tr("Open a new window"));
       this->na->setIcon(QIcon::fromTheme("document-new"));
       this->na->setIconVisibleInMenu(true);
-      QObject::connect(this->na, SIGNAL(triggered()), this,
-		       SLOT(newWindow()));
-
+      QObject::connect(this->na,&QAction::triggered,
+		       this,&TPlot::newWindow);
       this->ea = new QAction(tr("E&xit"), this);
       this->ea->setShortcuts(QKeySequence::Quit);
       this->ea->setStatusTip(tr("Exit the application"));
       this->ea->setIcon(QIcon::fromTheme("window-close"));
       this->ea->setIconVisibleInMenu(true);
-      QObject::connect(this->ea, SIGNAL(triggered()), this,
-		       SLOT(close()));
-
+      QObject::connect(this->ea,&QAction::triggered,
+		       this,&TPlot::close);
       this->gca = new QAction(tr("&Configuration"), this);
       this->gca->setStatusTip(tr("Open the graph configuration dialog"));
-      QObject::connect(this->gca, SIGNAL(triggered()),
-		       this, SLOT(showGraphConfigurationDialog()));
+      QObject::connect(this->gca,&QAction::triggered,
+		       this,&TPlot::showGraphConfigurationDialog);
       this->fa = new QAction(tr("&Select Font"), this);
       this->fa->setStatusTip(tr("Open the font selection dialog"));
-      QObject::connect(this->fa, SIGNAL(triggered()),
-		       this, SLOT(selectFontDialog()));
+      QObject::connect(this->fa,&QAction::triggered,
+		       this,&TPlot::selectFontDialog);
       this->xloga  = new QAction(tr("set logscale"),this); 
-      QObject::connect(this->xloga, SIGNAL(triggered()),
-		       this->g, SLOT(setXAxisLogScale()));
+      QObject::connect(this->xloga,&QAction::triggered,
+		       this->g,&Graph::setXAxisLogScale);
       this->x2loga = new QAction(tr("set logscale"),this); 
-      QObject::connect(this->x2loga, SIGNAL(triggered()),
-		       this->g, SLOT(setX2AxisLogScale()));
+      QObject::connect(this->x2loga,&QAction::triggered,
+		       this->g,&Graph::setX2AxisLogScale);
       this->yloga  = new QAction(tr("set logscale"),this); 
-      QObject::connect(this->yloga, SIGNAL(triggered()),
-		       this->g, SLOT(setYAxisLogScale()));
+      QObject::connect(this->yloga,&QAction::triggered,
+		       this->g,&Graph::setYAxisLogScale);
       this->y2loga = new QAction(tr("set logscale"),this); 
-      QObject::connect(this->y2loga, SIGNAL(triggered()),
-		       this->g, SLOT(setY2AxisLogScale()));
+      QObject::connect(this->y2loga,&QAction::triggered,
+		       this->g,&Graph::setY2AxisLogScale);
       this->xuloga  = new QAction(tr("unset logscale"),this); 
-      QObject::connect(this->xuloga, SIGNAL(triggered()),
-		       this->g, SLOT(unsetXAxisLogScale()));
+      QObject::connect(this->xuloga,&QAction::triggered,
+		       this->g,&Graph::unsetXAxisLogScale);
       this->x2uloga = new QAction(tr("unset logscale"),this); 
-      QObject::connect(this->x2uloga, SIGNAL(triggered()),
-		       this->g, SLOT(unsetX2AxisLogScale()));
+      QObject::connect(this->x2uloga,&QAction::triggered,
+		       this->g,&Graph::unsetX2AxisLogScale);
       this->yuloga  = new QAction(tr("unset logscale"),this); 
-      QObject::connect(this->yuloga, SIGNAL(triggered()),
-		       this->g, SLOT(unsetYAxisLogScale()));
+      QObject::connect(this->yuloga,&QAction::triggered,
+		       this->g,&Graph::unsetYAxisLogScale);
       this->y2uloga = new QAction(tr("unset logscale"),this); 
-      QObject::connect(this->y2uloga, SIGNAL(triggered()),
-		       this->g, SLOT(unsetY2AxisLogScale()));
+      QObject::connect(this->y2uloga,&QAction::triggered,
+		       this->g,&Graph::unsetY2AxisLogScale);
 
       this->igsa = new QAction(tr("Import Gnuplot Script"), this);
       this->igsa->setStatusTip(tr("Import a gnuplot script"));
       this->igsa->setIcon(QIcon::fromTheme("document-open"));
       this->igsa->setIconVisibleInMenu(true);
 
-      connect(this->igsa, SIGNAL(triggered()),this,SLOT(importGnuplotScript()));
+      connect(this->igsa,&QAction::triggered,
+	      this,&TPlot::importGnuplotScript);
       this->itda = new QAction(tr("Import Text Data"), this);
       this->itda->setStatusTip(tr("Open a dialog box to import text data"));
       this->itda->setIcon(QIcon::fromTheme("document-open"));
       this->itda->setIconVisibleInMenu(true);
-      connect(this->itda, SIGNAL(triggered()),this,SLOT(importTextData()));
+      connect(this->itda,&QAction::triggered,
+	      this,&TPlot::importTextData);
 
       this->ilca = new QAction(tr("Import Licos Curve"), this);
       this->ilca->setStatusTip(tr("Open a dialog box to import licos curves"));
       this->ilca->setIcon(QIcon::fromTheme("document-open"));
       this->ilca->setIconVisibleInMenu(true);
-      connect(this->ilca, SIGNAL(triggered()),this,SLOT(importLicosCurve()));
+      connect(this->ilca,&QAction::triggered,
+	      this,&TPlot::importLicosCurve);
 
       this->ilra = new QAction(tr("Import Licos Results"), this);
       this->ilra->setStatusTip(tr("Open a dialog box to import licos results"));
       this->ilra->setIcon(QIcon::fromTheme("document-open"));
       this->ilra->setIconVisibleInMenu(true);
-      connect(this->ilra, SIGNAL(triggered()),this,SLOT(importLicosResults()));
+      connect(this->ilra,&QAction::triggered,
+	      this,&TPlot::importLicosResults);
 
       this->cba = new QAction(tr("Copy to clipboard as bitmap"), this);
       this->cba->setStatusTip(tr("Copy to clipboard as bitmap"));
       this->cba->setIcon(QIcon::fromTheme("edit-copy"));
       this->cba->setIconVisibleInMenu(true);
-      connect(this->cba, SIGNAL(triggered()),
-	      this,SLOT(copyToClipboardAsBitmap()));
+      connect(this->cba,&QAction::triggered,
+	      this,&TPlot::copyToClipboardAsBitmap);
 
       this->csvga = new QAction(tr("Copy to clipboard as svg"), this);
       this->csvga->setStatusTip(tr("Copy to clipboard as svg"));
       this->csvga->setIcon(QIcon::fromTheme("edit-copy"));
       this->csvga->setIconVisibleInMenu(true);
-      connect(this->csvga, SIGNAL(triggered()),
-	      this,SLOT(copyToClipboardAsSVG()));
+      connect(this->csvga,&QAction::triggered,
+	      this,&TPlot::copyToClipboardAsSVG);
 
       this->ctablea = new QAction(tr("Copy to clipboard as plain text"), this);
       this->ctablea->setStatusTip(tr("Copy to clipboard as plain text"));
       this->ctablea->setIcon(QIcon::fromTheme("edit-copy"));
       this->ctablea->setIconVisibleInMenu(true);
-      connect(this->ctablea, SIGNAL(triggered()),
-	      this,SLOT(copyToClipboardAsTable()));
+      connect(this->ctablea,&QAction::triggered,
+	      this,&TPlot::copyToClipboardAsTable);
 
       this->pastea = new QAction(tr("Paste"), this);
       this->pastea->setStatusTip(tr("Paste from clipboard"));
-      connect(this->pastea, SIGNAL(triggered()),
-	      this,SLOT(paste()));
+      connect(this->pastea,&QAction::triggered,
+	      this,&TPlot::paste);
       this->pastea->setIcon(QIcon::fromTheme("edit-paste"));
       this->pastea->setIconVisibleInMenu(true);
 
       this->iia = new QAction(tr("Insert image from file"), this);
       this->iia->setStatusTip(tr("Insert image from file"));
-      connect(this->iia, SIGNAL(triggered()),
-	      this,SLOT(insertImageFromFile()));
+      connect(this->iia,&QAction::triggered,
+	      this,&TPlot::insertImageFromFile);
 
       if(!this->isCLIModeEnabled()){
 	this->showShellAction = new QAction(tr("Show shell"),this);
 	this->showShellAction->setStatusTip(tr("Show the tplot shell"));
-	connect(this->showShellAction, SIGNAL(triggered()),
-		this,SLOT(showShell()));
+	connect(this->showShellAction,&QAction::triggered,
+		this,&TPlot::showShell);
       }
       
       this->showGridAction = new QAction(tr("Show grid"),this);
       this->showGridAction->setStatusTip(tr("Show the graph grid"));
-      connect(this->showGridAction, SIGNAL(triggered()),
-	      this->g,SLOT(toggleGrid()));
+      connect(this->showGridAction,&QAction::triggered,
+	      this->g,&Graph::toggleGrid);
 
       this->aa = new QAction(tr("&About"), this);
 
       this->aa->setStatusTip(tr("Show the application's About box"));
-      connect(this->aa, SIGNAL(triggered()), this, SLOT(about()));
+      connect(this->aa,&QAction::triggered,this,&TPlot::about);
       this->aa2 = new QAction(tr("About &Qt"), this);
       this->aa2->setStatusTip(tr("Show the Qt library's About box"));
-      connect(this->aa2, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+      connect(this->aa2,&QAction::triggered,
+	      qApp,&QApplication::aboutQt);
     }
 
     void TPlot::createCurvesMenu()
@@ -473,12 +476,12 @@ namespace tfel
       y2axis->addAction(this->y2uloga);
       this->cm = this->menuBar()->addMenu(tr("&Curves"));
       this->createCurvesMenu();
-      QObject::connect(g,SIGNAL(curvesRemoved()),
-		       this,SLOT(createCurvesMenu()));
-      QObject::connect(g,SIGNAL(curveRemoved(Curve *)),
-		       this,SLOT(createCurvesMenu()));
-      QObject::connect(g,SIGNAL(curveAdded(Curve *)),
-		       this,SLOT(createCurvesMenu()));
+      QObject::connect(g,&Graph::curvesRemoved,
+		       this,&TPlot::createCurvesMenu);
+      QObject::connect(g,&Graph::curveRemoved,
+		       this,&TPlot::createCurvesMenu);
+      QObject::connect(g,&Graph::curveAdded,
+		       this,&TPlot::createCurvesMenu);
       this->sm = this->menuBar()->addMenu(tr("&Show"));
       this->sm->addAction(this->showGridAction);
       if(!this->isCLIModeEnabled()){
@@ -812,8 +815,8 @@ namespace tfel
 	this->out->write((m+'\n').toLatin1());
 	this->out->waitForBytesWritten();
       };
-      QObject::disconnect(this->in, SIGNAL(readyRead()),
-			  this, SLOT(readCLIInput()));
+      QObject::disconnect(this->in,&QLocalSocket::readyRead,
+			  this,&TPlot::readCLIInput);
       const auto l = QString::fromLatin1(this->in->readLine());
       const auto r = this->shell->treatNewCommand(l);
       if(r.status==GnuplotInterpreter::ParsingResult::QUIT){
@@ -838,8 +841,8 @@ namespace tfel
 	this->in=nullptr;
 	this->close();
       }
-      QObject::connect(this->in, SIGNAL(readyRead()),
-		       this, SLOT(readCLIInput()));
+      QObject::connect(this->in,&QLocalSocket::readyRead,
+		       this,&TPlot::readCLIInput);
     } // end of TPlot::readCLIInput
 
 #endif /* TPLOT_ENABLE_CLI */
@@ -1182,6 +1185,22 @@ namespace tfel
       auto throw_if = [](const bool b, const std::string& m){
 	if(b)(throw(std::runtime_error("TPlot::treatUnknownArgument: "+std::string(m))));
       };
+      auto import_data = [this,throw_if](const QString& f,const QString& s){
+	Data d;
+	d.fileName = f;
+	const auto pd = this->dataSources.find(d.fileName);
+	if(pd==this->dataSources.end()){
+	  auto tdr = std::make_shared<TextDataReader>(s);
+	  tdr->extractData(d.fileName);
+	  this->dataSources.insert({d.fileName,tdr});
+	} else {
+	  throw_if(pd->second->getSeparator()!=s,
+		   "inconsistent separator specificed for file '"+f.toStdString()+"'");
+	}
+	Input i;
+	i.set(d);
+	this->inputs.push_back(i);
+      };
       const auto arg = std::string{*(this->currentArgument)};
       throw_if(arg[0]=='-',"unknown argument " + arg);
       const auto a = QString::fromStdString(arg);
@@ -1244,15 +1263,10 @@ namespace tfel
 	Input i;
 	i.set(r);
 	this->inputs.push_back(i);
+      } else if(a.startsWith("csv:")){
+	import_data(a.mid(4),";");
       } else {
-	Data d;
-	d.fileName = a;
-	if(this->dataSources.find(d.fileName)==this->dataSources.end()){
-	  this->dataSources.insert({d.fileName,std::make_shared<TextDataReader>(d.fileName)});
-	}
-	Input i;
-	i.set(d);
-	this->inputs.push_back(i);
+	import_data(a,"");
       }
     } // end of TPlot::treatUnknownArgument()
 
@@ -1303,7 +1317,7 @@ namespace tfel
       } else {
 	if(this->inputs.size()==1u){
 	  if(this->inputs.front().is<Data>()){
-	    const Data& d = this->inputs.front().get<Data>();
+	    const auto& d = this->inputs.front().get<Data>();
 	    if(d.axis&Graph::x2axis){
 	      auto p2 = this->dataSources.find(d.fileName);
 	      assert(p2!=this->dataSources.end());
@@ -1481,13 +1495,13 @@ namespace tfel
 	}
       }
       if(bcx&&bcy){
-	curve = new DataCurve(d.fileName,cx,cy);
+	curve = new DataCurve(d.fileName,p2->second->getSeparator(),cx,cy);
       } else if(bcx&&(!bcy)){
-	curve = new DataCurve(d.fileName,cx,d.yvalues);
+	curve = new DataCurve(d.fileName,p2->second->getSeparator(),cx,d.yvalues);
       } else if((!bcx)&&bcy){
-	curve = new DataCurve(d.fileName,d.xvalues,cy);
+	curve = new DataCurve(d.fileName,p2->second->getSeparator(),d.xvalues,cy);
       } else {
-	curve = new DataCurve(d.fileName,d.xvalues,d.yvalues);
+	curve = new DataCurve(d.fileName,p2->second->getSeparator(),d.xvalues,d.yvalues);
       }
       if(d.hasThemeLineStyle){
 	curve->setThemeLineStyle(d.themestyle);

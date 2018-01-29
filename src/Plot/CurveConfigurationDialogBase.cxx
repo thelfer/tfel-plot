@@ -20,8 +20,7 @@ namespace tfel
   namespace plot
   {
 
-    QIcon
-    CurveConfigurationDialogBase::createColorToolButtonIcon(const QColor& color)
+    QIcon CurveConfigurationDialogBase::createColorToolButtonIcon(const QColor& color)
     {
       QPixmap pixmap(50, 80);
       pixmap.fill(Qt::transparent);
@@ -58,12 +57,11 @@ namespace tfel
       // 					  QObject::tr("Remove"),this),4,1);
     } // end of CurveConfigurationDialogBase::CurveConfigurationDialogBase()
     
-    void
-    CurveConfigurationDialogBase::createColorButton(const QColor& c)
+    void CurveConfigurationDialogBase::createColorButton(const QColor& c)
     {
       auto *cb = new QPushButton("Choose color");
-      QObject::connect(cb,SIGNAL(clicked()),
-		       this,SLOT(chooseCurveColor()));
+      QObject::connect(cb,&QPushButton::clicked,
+		       this,&CurveConfigurationDialogBase::chooseCurveColor);
       cb->setIcon(createColorToolButtonIcon(c));
       this->cl->addWidget(cb,1,1);
     }

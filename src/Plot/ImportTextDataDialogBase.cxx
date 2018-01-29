@@ -122,8 +122,7 @@ namespace tfel
       return this->ok;
     } // end of ImportTextDataDialogBase
 
-    void
-    ImportTextDataDialogBase::createGUI()
+    void ImportTextDataDialogBase::createGUI()
     {
       using namespace std;
       // get the layout created by the curve configuration dialog
@@ -169,24 +168,24 @@ namespace tfel
       hl->addWidget(cb);
       hl->addWidget(ib);
       hl->addWidget(ib2);
-      QObject::connect(&g,SIGNAL(destroyed ()),
-		       this,SLOT(close()));
-      QObject::connect(cb,SIGNAL(pressed ()),
-		       this,SLOT(close()));
-      QObject::connect(ib,SIGNAL(pressed ()),
-		       this,SLOT(import()));
-      QObject::connect(ib2,SIGNAL(pressed ()),
-		       this,SLOT(importAndClose()));
-      QObject::connect(this->a,SIGNAL(textChanged(const QString&)),
-		       this,SLOT(abscissaChanged(const QString&)));
-      QObject::connect(this->o,SIGNAL(textChanged(const QString&)),
-		       this,SLOT(ordinateChanged(const QString&)));
-      QObject::connect(this->la,SIGNAL(activated(int)),
-		       this,SLOT(currentAbscissaIndexChanged(int)));
-      QObject::connect(this->lo,SIGNAL(activated(int)),
-		       this,SLOT(currentOrdinateIndexChanged(int)));
-      QObject::connect(this->ke,SIGNAL(textChanged(const QString&)),
-		       this,SLOT(keyChanged(const QString&)));
+      QObject::connect(&g,&Graph::destroyed,
+		       this,&ImportTextDataDialogBase::close);
+      QObject::connect(cb,&QPushButton::pressed,
+		       this,&ImportTextDataDialogBase::close);
+      QObject::connect(ib,&QPushButton::pressed,
+		       this,&ImportTextDataDialogBase::import);
+      QObject::connect(ib2,&QPushButton::pressed,
+		       this,&ImportTextDataDialogBase::importAndClose);
+      QObject::connect(this->a,&QLineEdit::textChanged,
+		       this,&ImportTextDataDialogBase::abscissaChanged);
+      QObject::connect(this->o,&QLineEdit::textChanged,
+		       this,&ImportTextDataDialogBase::ordinateChanged);
+      QObject::connect(this->la,static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+		       this,&ImportTextDataDialogBase::currentAbscissaIndexChanged);
+      QObject::connect(this->lo,static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+		       this,&ImportTextDataDialogBase::currentOrdinateIndexChanged);
+      QObject::connect(this->ke,&QLineEdit::textChanged,
+		       this,&ImportTextDataDialogBase::keyChanged);
       vl->addLayout(this->cl);
       vl->addLayout(gl);
       vl->addLayout(hl);
@@ -194,8 +193,7 @@ namespace tfel
       this->setWindowTitle(this->file);
     }
 
-    void
-    ImportTextDataDialogBase::import()
+    void ImportTextDataDialogBase::import()
     {
       using namespace std;
       shared_ptr<Curve> c;
@@ -213,19 +211,19 @@ namespace tfel
 	  cy = ImportTextDataDialogBase::convertToUnsignedShort(yl);
 	}
 	if(bcx&&bcy){
-	  c = shared_ptr<Curve>(new DataCurve(this->file,cx,cy));
+	  c = shared_ptr<Curve>(new DataCurve(this->file,"",cx,cy));
 	} else if((!bcx)&&bcy){
-	  c = shared_ptr<Curve>(new DataCurve(this->file,xl,cy));
+	  c = shared_ptr<Curve>(new DataCurve(this->file,"",xl,cy));
 	} else if(bcx&&(!bcy)){
-	  c = shared_ptr<Curve>(new DataCurve(this->file,cx,yl));
+	  c = shared_ptr<Curve>(new DataCurve(this->file,"",cx,yl));
 	} else {
-	  c = shared_ptr<Curve>(new DataCurve(this->file,xl,yl));
+	  c = shared_ptr<Curve>(new DataCurve(this->file,"",xl,yl));
 	}
-	QColor nc = this->cd->selectedColor();
+	auto nc = this->cd->selectedColor();
 	if(nc.isValid()){
 	  c->setColor(nc,false);
 	}
-	Curve::Style s = Curve::intToCurveStyle(this->scb->currentIndex());
+	auto s = Curve::intToCurveStyle(this->scb->currentIndex());
 	c->setKey(this->ke->text());
 	c->setStyle(s,false);
 	this->g.addCurve(c);
@@ -237,71 +235,65 @@ namespace tfel
       }
     } // end of ImportTextDataDialogBase::import
 
-    void
-    ImportTextDataDialogBase::importAndClose()
+    void ImportTextDataDialogBase::importAndClose()
     {
       this->import();
       this->close();
     } // end of ImportTextDataDialogBase::close
 
-    void
-    ImportTextDataDialogBase::abscissaChanged(const QString&)
+    void ImportTextDataDialogBase::abscissaChanged(const QString&)
     {
       this->afirst = false;
     } // end of ImportTextDataDialogBase::abscissaChanged
 
-    void
-    ImportTextDataDialogBase::ordinateChanged(const QString&)
+    void ImportTextDataDialogBase::ordinateChanged(const QString&)
     {
       this->ofirst = false;
     } // end of ImportTextDataDialogBase::ordinateChanged
 
-    void
-    ImportTextDataDialogBase::currentAbscissaIndexChanged(int i)
+    void ImportTextDataDialogBase::currentAbscissaIndexChanged(int i)
     {
-      QObject::disconnect(this->a,SIGNAL(textChanged(const QString&)),
-			  this,SLOT(abscissaChanged(const QString&)));
+      QObject::disconnect(this->a,&QLineEdit::textChanged,
+			  this,&ImportTextDataDialogBase::abscissaChanged);
       if(this->afirst){
 	this->a->setText("$"+QString::number(i+1));
       } else {
 	this->a->setText(this->a->text()+"$"+QString::number(i+1));
       }
-      QObject::connect(this->a,SIGNAL(textChanged(const QString&)),
-		       this,SLOT(abscissaChanged(const QString&)));
+      QObject::connect(this->a,&QLineEdit::textChanged,
+		       this,&ImportTextDataDialogBase::abscissaChanged);
     } // end of ImportTextDataDialogBase::currentAbscissaIndexChanged
 
-    void
-    ImportTextDataDialogBase::currentOrdinateIndexChanged(int i)
+    void ImportTextDataDialogBase::currentOrdinateIndexChanged(int i)
     {
-      QObject::disconnect(this->o,SIGNAL(textChanged(const QString&)),
-			  this,SLOT(ordinateChanged(const QString&)));
+      QObject::disconnect(this->o,&QLineEdit::textChanged,
+			  this,&ImportTextDataDialogBase::ordinateChanged);
       if(this->ofirst){
 	this->o->setText("$"+QString::number(i+1));
       } else {
 	this->o->setText(this->o->text()+"$"+QString::number(i+1));
       }
-      QObject::connect(this->o,SIGNAL(textChanged(const QString&)),
-		       this,SLOT(ordinateChanged(const QString&)));
+      QObject::connect(this->o,&QLineEdit::textChanged,
+		       this,&ImportTextDataDialogBase::ordinateChanged);
       if(!this->userDefinedKey){
-	QObject::disconnect(this->ke,SIGNAL(textChanged(const QString&)),
-			 this,SLOT(keyChanged(const QString&)));
+	QObject::disconnect(this->ke,&QLineEdit::textChanged,
+			    			 this,&ImportTextDataDialogBase::keyChanged);
 	this->ke->setText(this->legends[i]);
-	QObject::connect(this->ke,SIGNAL(textChanged(const QString&)),
-			 this,SLOT(keyChanged(const QString&)));
+	QObject::connect(this->ke,&QLineEdit::textChanged,
+			 this,&ImportTextDataDialogBase::keyChanged);
       }
     } // end of ImportTextDataDialogBase::currentOrdinateIndexChanged
 
-    void
-    ImportTextDataDialogBase::keyChanged(const QString&)
+    void ImportTextDataDialogBase::keyChanged(const QString&)
     {
       this->userDefinedKey = true;
     } // end of ImportTextDataDialogBase::keyChanged
 
-    void
-    ImportTextDataDialogBase::loadFile()
+    void ImportTextDataDialogBase::loadFile()
     {
       try{
-	this->data = std::make_shared<TextDataReader>(this->file);
+	this->data = std::make_shared<TextDataReader>();
+	this->data->extractData(this->file);
       } catch(std::exception& e){
 	QString msg("ImportTextDataDialogBase::loadFile :\n");
 	msg += e.what();
@@ -318,8 +310,7 @@ namespace tfel
       return this->ok;
     }
 
-    void
-    ImportTextDataDialogBase::fails(const QString& msg)
+    void ImportTextDataDialogBase::fails(const QString& msg)
     {
       QMessageBox::information(this,tr("Text Data"),msg);
       this->ok = false;

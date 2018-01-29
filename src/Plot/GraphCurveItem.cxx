@@ -84,13 +84,13 @@ namespace tfel
       QRectF r(pev,QSizeF(2*w,2*w));
       if(this->shape().intersects(r)){
 	QMenu   menu;
-	QAction *ca  = menu.addAction(tr("Configure"));
-	QObject::connect(ca, SIGNAL(triggered()),
-			 this, SLOT(configure()));
-	QAction *ra  = menu.addAction(tr("Remove"));
+	auto *ca  = menu.addAction(tr("Configure"));
+	QObject::connect(ca,&QAction::triggered,
+			 this,&GraphCurveItem::configure);
+	auto *ra  = menu.addAction(tr("Remove"));
 	ra->setStatusTip(tr("Remove the selected curve"));
-	QObject::connect(ra, SIGNAL(triggered()),
-			 this, SLOT(remove()));
+	QObject::connect(ra,&QAction::triggered,
+			 this,&GraphCurveItem::remove);
 	menu.exec(ev->screenPos());
       } else {
 	ev->ignore();

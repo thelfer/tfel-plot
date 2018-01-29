@@ -21,7 +21,7 @@ namespace tfel
 
   namespace plot
   {
-
+    
     GraphTextItem::GraphTextItem(Graph *const g,
 				 void (Graph:: *m)(const QString&,
 						   const bool))
@@ -31,10 +31,10 @@ namespace tfel
       this->setFlag(QGraphicsItem::ItemIsSelectable);
       this->setTextInteractionFlags(Qt::TextEditorInteraction);
       this->setFont(this->graph->getGraphFont());
-      QObject::connect(this->document(),SIGNAL(contentsChanged()),
-		       this,SLOT(textChanged()));
-      QObject::connect(g,SIGNAL(fontChanged(const QFont&)),
-		       this,SLOT(graphFontChanged(const QFont&)));
+      QObject::connect(this->document(),&QTextDocument::contentsChanged,
+		       this,&GraphTextItem::textChanged);
+      QObject::connect(g,&Graph::fontChanged,
+		       this,&GraphTextItem::graphFontChanged);
     }
 
     GraphTextItem::GraphTextItem(const QString& text,
@@ -49,10 +49,10 @@ namespace tfel
       this->setFlag(QGraphicsItem::ItemIsSelectable);
       this->setTextInteractionFlags(Qt::TextEditorInteraction);
       this->setFont(this->graph->getGraphFont());
-      QObject::connect(this->document(),SIGNAL(contentsChanged()),
-		       this,SLOT(textChanged()));
-      QObject::connect(g,SIGNAL(fontChanged(const QFont&)),
-		       this,SLOT(graphFontChanged(const QFont&)));
+      QObject::connect(this->document(),&QTextDocument::contentsChanged,
+		       this,&GraphTextItem::textChanged);
+      QObject::connect(g,&Graph::fontChanged,
+		       this,&GraphTextItem::graphFontChanged);
     }
 
     void GraphTextItem::textChanged()

@@ -109,7 +109,8 @@ namespace tfel
       auto nev = ev->createFunctionByChangingParametersIntoVariables(params.toStdVector());
       // reading data
       values.resize(vars.size()+1);
-      TextDataReader data(QString::fromStdString(file));
+      TextDataReader data;
+      data.extractData(QString::fromStdString(file));
       for(i=0;i!=vars.size()+1;++i){
     	GnuplotInterpreterBase::getData(values[i],functions,data,columns[i]);
       }

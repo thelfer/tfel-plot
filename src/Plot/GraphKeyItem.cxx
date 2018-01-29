@@ -28,10 +28,10 @@ namespace tfel
       this->setHtml(k);
       this->setFlag(QGraphicsItem::ItemIsSelectable);
       this->setTextInteractionFlags(Qt::TextEditorInteraction);
-      QObject::connect(this->document(),SIGNAL(contentsChanged()),
-		       this,SLOT(textChanged()));
-      QObject::connect(g,SIGNAL(fontChanged(const QFont&)),
-		       this,SLOT(graphFontChanged(const QFont&)));
+      QObject::connect(this->document(),&QTextDocument::contentsChanged,
+		       this,&GraphKeyItem::textChanged);
+      QObject::connect(g,&Graph::fontChanged,
+		       this,&GraphKeyItem::graphFontChanged);
     } // end of GraphKeyItem::GraphKeyItem
 						     
     void GraphKeyItem::textChanged()

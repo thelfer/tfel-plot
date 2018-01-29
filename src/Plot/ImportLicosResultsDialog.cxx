@@ -51,8 +51,7 @@ namespace tfel
 	file(f)
     {}
     
-    QString
-    LicosCurveTreeWidgetItem::getFile() const
+    QString LicosCurveTreeWidgetItem::getFile() const
     {
       return this->file;
     }
@@ -64,15 +63,14 @@ namespace tfel
       : QTreeWidget(p),
 	graph(g)
     {
-      QObject::connect(this,SIGNAL(clicked(const QModelIndex &)),
-		       this,SLOT(itemSelected(const QModelIndex &)));
+      QObject::connect(this,&LicosResultsTreeWidget::clicked,
+		       this,&LicosResultsTreeWidget::itemSelected);
     } // end of LicosResultsTreeWidget::LicosResultsTreeWidget
 
-    void
-    LicosResultsTreeWidget::itemSelected(const QModelIndex& i)
+    void LicosResultsTreeWidget::itemSelected(const QModelIndex& i)
     {
-      QTreeWidgetItem * tw = this->itemFromIndex(i);
-      LicosCurveTreeWidgetItem *c = dynamic_cast<LicosCurveTreeWidgetItem *>(tw);
+      auto *tw = this->itemFromIndex(i);
+      auto *c = dynamic_cast<LicosCurveTreeWidgetItem *>(tw);
       if(c!=nullptr){
 	auto d = new ImportLicosCurveDialog(this->graph,this);
 	d->exec(c->getFile());

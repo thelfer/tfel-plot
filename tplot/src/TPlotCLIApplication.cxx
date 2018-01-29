@@ -38,25 +38,25 @@ namespace tfel{
       this->h = new tfel::plot::CLIHandler(fout);
       this->h->connect(fin);
       this->h->moveToThread(th);
-      QObject::connect(this->th,SIGNAL(started()),
-		       this->h, SLOT(process()));
-      QObject::connect(this->h, SIGNAL(finished()),
-		       this->th,SLOT(quit()));
-      QObject::connect(this->h, SIGNAL(finished()),
-		       this->h, SLOT(deleteLater()));
-      QObject::connect(this->th,SIGNAL(finished()),
-		       this,SLOT(quit()));
-      QObject::connect(this->th,SIGNAL(finished()),
-		       this->th,SLOT(deleteLater()));
-      QObject::connect(this->g, SIGNAL(finished(int)),
-		       this,    SLOT(exit(int)));
+      QObject::connect(this->th,&QThread::started,
+		       this->h, &CLIHandler::process);
+      QObject::connect(this->h, &CLIHandler::finished,
+		       this->th,&QThread::quit);
+      QObject::connect(this->h, &CLIHandler::finished,
+		       this->h, &CLIHandler::deleteLater);
+      QObject::connect(this->th,&QTread::finished,
+		       this,TPlotCLIApplication::quit);
+      QObject::connect(this->th,&QThread::finished,
+		       this->th,&QThread::deleteLater);
+      QObject::connect(this->g, &QProcess::finished,
+		       this,&TPlotCLIApplication::exit);
       this->th->start();
     }
 
     void TPlotCLIApplication::quit()
     {
-      QObject::disconnect(this->g, SIGNAL(finished(int)),
-			  this,    SLOT(exit(int)));
+      QObject::disconnect(this->g,&QProcess::finished,
+			  this,&TPlotCLIApplication::exit);
       this->g->waitForFinished();
       QCoreApplication::quit();
     } // end of TPlotCLIApplication::quit

@@ -24,31 +24,26 @@ namespace tfel
 	curve(c)
     {
       if(this->curve->hasSpecifiedColor()){
-	QColor color = this->curve->getColor();
-	this->updateIcon(color);
+	this->updateIcon(this->curve->getColor());
       } else  {
 	this->updateIcon(Qt::white);
       }
-      QObject::connect(this,SIGNAL(triggered()),
-		       this,SLOT(showCurveConfigurationDialog()));
-      QObject::connect(this->curve,SIGNAL(colorChanged(const QColor&)),
-		       this,SLOT(updateIcon(const QColor&)));
+      QObject::connect(this,&CurveConfigurationAction::triggered,
+		       this,&CurveConfigurationAction::showCurveConfigurationDialog);
+      QObject::connect(this->curve,&Curve::colorChanged,
+		       this,&CurveConfigurationAction::updateIcon);
     } // end of CurveConfigurationAction::CurveConfigurationAction
 
-    void
-    CurveConfigurationAction::updateIcon(const QColor& c)
+    void CurveConfigurationAction::updateIcon(const QColor& c)
     {
-      typedef CurveConfigurationDialogBase CCDBase;
-      this->setIcon(CCDBase::createColorToolButtonIcon(c));
+      this->setIcon(CurveConfigurationDialogBase::createColorToolButtonIcon(c));
       this->setIconVisibleInMenu(true);
     } // CurveConfigurationAction::updateIcon
 
-    void
-    CurveConfigurationAction::showCurveConfigurationDialog()
+    void CurveConfigurationAction::showCurveConfigurationDialog()
     {
-      CurveConfigurationDialog *d;
-      d = new CurveConfigurationDialog(this->curve,
-				       qobject_cast<QWidget *>(this->parent()));
+      auto w = qobject_cast<QWidget *>(this->parent());
+      auto d = new CurveConfigurationDialog(this->curve,w);
       d->setModal(false);
       d->show();
     } 

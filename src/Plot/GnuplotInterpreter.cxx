@@ -203,7 +203,10 @@ namespace tfel
       };
       const auto s = l.trimmed();
       ParsingResult r;
-      if((s.isEmpty())||(s.startsWith('#'))){
+      if((s.isEmpty())){
+	return r;
+      }
+      if(s.startsWith('#')){
 	return r;
       }
       this->currentLine = s;
@@ -223,11 +226,11 @@ namespace tfel
 	  ++p;
 	}
 	for(const auto& tokens : i){
-	  p=tokens.begin();
-	  pe=tokens.end();
 	  if(tokens.empty()){
 	    continue;
 	  }
+	  p=tokens.begin();
+	  pe=tokens.end();
 	  while(p!=pe){
 	    auto pf = this->callBacks.find(p->value);
 	    if(pf==this->callBacks.end()){
@@ -245,8 +248,10 @@ namespace tfel
 	      append(r.output,r2.output);
 	      append(r.error,r2.error);
 	    }
-	    tfel::raise_if(p!=pe,"GnuplotInterpreter::eval: "
-			   "unexpected token '"+p->value+"'");
+	    if(p!=pe){
+	      tfel::raise("GnuplotInterpreter::eval: "
+			  "unexpected token '"+p->value+"'");
+	    }
 	  }
 	}
       } catch(std::exception& e){

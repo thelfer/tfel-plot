@@ -23,8 +23,8 @@ namespace tfel
 	g(g_),
 	name(n)
     {
-      QObject::connect(this,SIGNAL(triggered()),
-		       this,SLOT(setTheme()));
+      QObject::connect(this,&ThemeSelectionAction::triggered,
+		       this,&ThemeSelectionAction::setTheme);
     } // end of ThemeSelectionAction:ThemeSelectionAction
     
     void ThemeSelectionAction::setTheme()
