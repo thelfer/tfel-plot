@@ -8,7 +8,6 @@
 #include<cmath>
 #include<sstream>
 #include<stdexcept>
-#include<QtCore/QDebug>
 #include<QtCore/QFile>
 #include<QtCore/QRegExp>
 #include<QtCore/QTextStream>
@@ -74,7 +73,6 @@ namespace tfel
 	    l.values.push_back(nan("invalid value"));
 	  }
 	}
-	qDebug() << l.values;
 	this->lines.push_back(l);
       };
       auto line = in.readLine();
