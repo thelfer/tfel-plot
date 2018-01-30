@@ -106,7 +106,6 @@ namespace tfel
 	  }
 	}
       }
-      qDebug() << "Legends: " << this->legends;
       while(!in.atEnd()){
 	++nbr;
 	treatLine(in.readLine());
@@ -133,12 +132,16 @@ namespace tfel
       return this->legends[c-1];
     } // end of TextDataReader::getLegend
 
-    unsigned short TextDataReader::findColumn(const QString& name) const
+    bool TextDataReader::hasColumn(const QString& n) const{
+      return this->legends.contains(n);
+    }
+    
+    unsigned short TextDataReader::findColumn(const QString& n) const
     {
-      tfel::raise_if(!this->legends.contains(name),
+      tfel::raise_if(!this->hasColumn(n),
 		     "TextDataReader::findColumn: "
-		     "no column named '"+name.toStdString()+"' found'.");
-      return static_cast<unsigned short>(this->legends.indexOf(name)+1);
+		     "no column named '"+n.toStdString()+"' found'.");
+      return static_cast<unsigned short>(this->legends.indexOf(n)+1);
     } // end of TextDataReader::findColumn
 
     QVector<double> TextDataReader::getColumn(const unsigned short i) const

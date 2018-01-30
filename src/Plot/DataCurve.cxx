@@ -223,43 +223,52 @@ namespace tfel{
       auto throw_if = [](const bool b, const std::string& msg){
 	tfel::raise_if(b,"DataCurve::getValues: "+msg);
       }; // end of throw_if
-      const auto& s = c.toStdString();
-      v.clear();
-      // assuming a function
-      vector<pair<string,unsigned short>> vars;
-      shared_ptr<Evaluator> e;
-      if(this->fm.get()!=nullptr){
-	e = std::make_shared<Evaluator>(s,this->fm);
+      if(d.hasColumn(c)){
+	v = d.getColumn(d.findColumn(c));
       } else {
-	e = std::make_shared<Evaluator>(s);
-      }
-      const auto& vnames = e->getVariablesNames();
-      throw_if(vnames.empty(),
-	       "function '"+s+"' does not declare any variable");
-      for(const auto& vn : vnames){
-	if(vn[0]!='$'){
-	  const auto p4 = this->fm->find(vn);
-	  throw_if(p4==this->fm->end(),"invalid variable '"+vn+"'");
-	  throw_if(p4->second->getNumberOfVariables()!=0,
-		   "invalid variable '"+vn+"'.");
-	  e->setVariableValue(vn,p4->second->getValue());
+	const auto& s = c.toStdString();
+	v.clear();
+	// assuming a function
+	vector<pair<string,unsigned short>> vars;
+	shared_ptr<Evaluator> e;
+	if(this->fm.get()!=nullptr){
+	  e = std::make_shared<Evaluator>(s,this->fm);
 	} else {
-	  throw_if(!DataCurve::isUnsignedInteger(vn.substr(1)),
-		   "invalid variable name '"+vn+"' in function '"+s+"'.");
-	  const auto vc = DataCurve::convertToUnsignedShort(vn.substr(1));
-	  throw_if(vc==0,"invalid variable name "
-		   "'"+vn+"' in function '"+s+"').");
-	  vars.push_back({vn,vc});
+	  e = std::make_shared<Evaluator>(s);
 	}
-      }
-      for(auto p2=d.begin();p2!=d.end();++p2){
-	for(auto p3=vars.begin();p3!=vars.end();++p3){
-	  throw_if(p2->values.size()<p3->second,
-		   "line '"+std::to_string(p2->nbr)+"' "
-		   "does not have '"+std::to_string(p3->second)+"' columns.");
-	  e->setVariableValue(p3->first,p2->values[p3->second-1]);
+	const auto& vnames = e->getVariablesNames();
+	throw_if(vnames.empty(),
+		 "function '"+s+"' does not declare any variable");
+	for(const auto& vn : vnames){
+	  if(vn[0]!='$'){
+	    if(d.hasColumn(QString::fromStdString(vn))){
+	      vars.push_back({vn,d.findColumn(QString::fromStdString(vn))});
+	    } else {
+	      throw_if(this->fm==nullptr,"invalid variable '"+vn+"'");
+	      const auto p4 = this->fm->find(vn);
+	      throw_if(p4==this->fm->end(),"invalid function '"+vn+"'");
+	      throw_if(p4->second->getNumberOfVariables()!=0,
+		       "invalid variable '"+vn+"'.");
+	      e->setVariableValue(vn,p4->second->getValue());
+	    }
+	  } else {
+	    throw_if(!DataCurve::isUnsignedInteger(vn.substr(1)),
+		     "invalid variable name '"+vn+"' in function '"+s+"'.");
+	    const auto vc = DataCurve::convertToUnsignedShort(vn.substr(1));
+	    throw_if(vc==0,"invalid variable name "
+		     "'"+vn+"' in function '"+s+"').");
+	    vars.push_back({vn,vc});
+	  }
 	}
-	v.push_back(e->getValue());
+	for(auto p2=d.begin();p2!=d.end();++p2){
+	  for(auto p3=vars.begin();p3!=vars.end();++p3){
+	    throw_if(p2->values.size()<p3->second,
+		     "line '"+std::to_string(p2->nbr)+"' "
+		     "does not have '"+std::to_string(p3->second)+"' columns.");
+	    e->setVariableValue(p3->first,p2->values[p3->second-1]);
+	  }
+	  v.push_back(e->getValue());
+	}
       }
     } // end of DataCurve::getValues
 

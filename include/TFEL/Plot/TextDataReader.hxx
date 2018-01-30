@@ -76,8 +76,13 @@ namespace tfel
       void getColumn(QVector<double>&,
 		     const unsigned short) const;
       /*!
+       * \return if a column has the specified title
+       * \param[in] n: column title
+       */
+      bool hasColumn(const QString&) const;
+      /*!
        * \return the column having the specified title
-       * \param[in] name : column title
+       * \param[in] n: column title
        * \throw std::runtime_error if no column with the specified
        * title is found
        */

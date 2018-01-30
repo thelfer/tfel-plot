@@ -1475,7 +1475,6 @@ namespace tfel
     {
       auto p2 = this->dataSources.find(d.fileName);
       assert(p2!=this->dataSources.end());
-      DataCurve * curve;
       unsigned short cx = 1;
       unsigned short cy = 2;
       bool bcx = true;
@@ -1494,6 +1493,7 @@ namespace tfel
 	  bcy = false;
 	}
       }
+      DataCurve * curve;
       if(bcx&&bcy){
 	curve = new DataCurve(d.fileName,p2->second->getSeparator(),cx,cy);
       } else if(bcx&&(!bcy)){
