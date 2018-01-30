@@ -24,18 +24,15 @@ namespace tfel
       ImportAlcyoneCurveDialog(Graph&,
 			       QWidget * const = nullptr);
       //! destructor
-      virtual ~ImportAlcyoneCurveDialog();
+      ~ImportAlcyoneCurveDialog() override;
       
     protected:
       
-      virtual QVector<QString>
-      getCurveKeys() override;
+      QVector<QString> getCurveKeys() override;
 
-      virtual QString
-      getFileDescription() const override;
+      QString getFileDescription() const override;
     
-      virtual QStringList
-      getFileExtensions() const override;
+      QStringList getFileExtensions() const override;
 
     }; // end of ImportAlcyoneCurveDialog
 

@@ -15,7 +15,7 @@
 #include<QtWidgets/QVBoxLayout>
 #include<QtWidgets/QHBoxLayout>
 #include<QtWidgets/QPushButton>
-
+#include"TFEL/Raise.hxx"
 #include"TFEL/Plot/Graph.hxx"
 #include"TFEL/Plot/DataCurve.hxx"
 #include"TFEL/Plot/ImportTextDataDialogBase.hxx"
@@ -29,33 +29,25 @@ namespace tfel
     unsigned short
     ImportTextDataDialogBase::convertToUnsignedShort(const QString& qvalue)
     {
-      using namespace std;
-      const string& value = qvalue.toStdString();
-      string::const_iterator p;
-      istringstream converter(value);
-      for(p=value.begin();p!=value.end();++p){
-	if(!isdigit(*p)){
-	  throw(runtime_error("ImportTextDataDialogBase::convertToUnsignedShort : invalid entry"));
-	}
+      const auto& value = qvalue.toStdString();
+      for(const auto& c : value){
+	tfel::raise_if(!isdigit(c),
+		       "ImportTextDataDialogBase::convertToUnsignedShort:"
+		       " invalid entry");
       }
       unsigned short u;
+      std::istringstream converter(value);
       converter >> u;
-      if(!converter&&(!converter.eof())){
-	string msg("ImportTextDataDialogBase::convertToUnsignedShort : ");
-	msg += "not read value from token '"+value+"'.\n";
-	throw(runtime_error(msg));
-      }
+      tfel::raise_if(!converter&&(!converter.eof()),
+		     "ImportTextDataDialogBase::convertToUnsignedShort: "
+		     "not read value from token '"+value+"'.");
       return u;
     } // end of ImportTextDataDialogBase::convertToUnsignedShort
 
-    bool
-    ImportTextDataDialogBase::isUnsignedShort(const QString& qs)
+    bool ImportTextDataDialogBase::isUnsignedShort(const QString& qs)
     {
-      using namespace std;
-      const string& s = qs.toStdString();
-      string::const_iterator p;
-      for(p=s.begin();p!=s.end();++p){
-	if(!isdigit(*p)){
+      for(const auto c : qs.toStdString()){
+	if(!isdigit(c)){
 	  return false;
 	}
       }
@@ -86,7 +78,7 @@ namespace tfel
       desc = d;
       if(!e.empty()){
 	desc += "(";
-	for(QStringList::const_iterator pe=e.begin();pe!=e.end();){
+	for(auto pe=e.begin();pe!=e.end();){
 	  desc += "*."+*pe;
 	  if(++pe!=e.end()){
 	    desc += " ";

@@ -8,6 +8,7 @@
 #include<cmath>
 #include<sstream>
 #include<stdexcept>
+#include<QtCore/QDebug>
 #include<QtCore/QFile>
 #include<QtCore/QRegExp>
 #include<QtCore/QTextStream>
@@ -46,9 +47,9 @@ namespace tfel
 	return line.split(QRegExp("\\s+"+this->separator+"\\s+"),
 			  QString::SkipEmptyParts);
       };
-      lines.clear();
-      legends.clear();
-      preamble.clear();
+      this->lines.clear();
+      this->legends.clear();
+      this->preamble.clear();
       bool firstComments = true;
       unsigned short nbr = 1;
       auto treatLine = [this,splitLine,&nbr](const QString& line){
@@ -96,16 +97,16 @@ namespace tfel
 	  const auto tokens = splitLine(line);
 	  if(!tokens.empty()){
 	    bool b = true;
-	    const auto v = tokens[0].toDouble(&b);
+	    tokens[0].toDouble(&b);
 	    if(b){
 	      treatLine(line);
 	    } else {
-	      this->legends = line.split(QRegExp(this->separator),
-					 QString::SkipEmptyParts);
+	      this->legends = splitLine(line);
 	    }
 	  }
 	}
       }
+      qDebug() << "Legends: " << this->legends;
       while(!in.atEnd()){
 	++nbr;
 	treatLine(in.readLine());
