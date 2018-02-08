@@ -7,26 +7,20 @@
 
 #include"TFEL/Plot/ImportMTestResultsDialog.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
     ImportMTestResultsDialog::ImportMTestResultsDialog(Graph& graph,
-						       QWidget * const p)
-      : ImportLicosCurveDialog(graph,p)
-    {} // end of ImportMTestResultsDialog
+                                                       QWidget* const p)
+        : ImportLicosCurveDialog(graph, p) {
+    }  // end of ImportMTestResultsDialog
 
-    QString
-    ImportMTestResultsDialog::getFileDescription() const
-    {
+    QString ImportMTestResultsDialog::getFileDescription() const {
       return "MTest results";
     }
-    
-    QStringList
-    ImportMTestResultsDialog::getFileExtensions() const
-    {
+
+    QStringList ImportMTestResultsDialog::getFileExtensions() const {
       return QStringList() << "res";
     }
 
