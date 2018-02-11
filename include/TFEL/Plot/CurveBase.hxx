@@ -22,34 +22,30 @@ namespace tfel{
 
     public slots:
 
-      virtual void setFilled(const bool,const bool) override;
-      virtual void setKey(const QString&,const bool) override;
-      virtual void setColor(const QColor&,const bool) override;
-      virtual void setStyle(const Style&,const bool) override;
-      virtual void setWidth(const unsigned short,const bool) override;
-      virtual void unsetColor(const bool) override;
+      void setFilled(const bool,const bool) override;
+      void setKey(const QString&,const bool) override;
+      void setColor(const QColor&,const bool) override;
+      void setStyle(const Style&,const bool) override;
+      void setWidth(const unsigned short,const bool) override;
+      void unsetColor(const bool) override;
 
     public:
+     bool shouldFollowThemeLineStyle() const override;
 
-      virtual bool
-      shouldFollowThemeLineStyle() const override;
-      
-      virtual unsigned short
-      getThemeLineStyle() const override;
+     unsigned short getThemeLineStyle() const override;
 
-      virtual void
-      setThemeLineStyle(const unsigned short) override;
+     void setThemeLineStyle(const unsigned short) override;
 
-      virtual void sendRemoveSignal() override;
-      virtual bool hasSpecifiedColor()   const override;
-      virtual bool isFilled() const override;
-      virtual bool       hasKey() const override;
-      virtual QString    getKey() const override;
-      virtual QColor     getColor()  const override;
-      virtual Curve::Style   getStyle()  const override;
-      virtual unsigned short getWidth() const override;
-      
-      virtual ~CurveBase();
+     void sendRemoveSignal() override;
+     bool hasSpecifiedColor() const override;
+     bool isFilled() const override;
+     bool hasKey() const override;
+     QString getKey() const override;
+     QColor getColor() const override;
+     Curve::Style getStyle() const override;
+     unsigned short getWidth() const override;
+
+     ~CurveBase() override;
 
     protected:
 

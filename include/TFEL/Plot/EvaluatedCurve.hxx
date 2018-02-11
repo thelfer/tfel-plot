@@ -3,7 +3,7 @@
  * \brief  
  * 
  * \author Helfer Thomas
- * \date   14 fév 2008
+ * \date   14 fÃ©v 2008
  */
 
 #ifndef LIB_TFEL_PLOT_EVALUATEDCURVE_HXX_
@@ -27,30 +27,27 @@ namespace tfel
 
     public slots:
 
-      virtual void
-      setNumberOfSamples(const unsigned short,
-			 const bool) override;
+     void setNumberOfSamples(const unsigned short, const bool) override;
 
     public:
-
-      EvaluatedCurve(std::shared_ptr<tfel::math::Evaluator>&,
-		     const QString& = "x");
-      virtual bool  hasRange() const override;
-      virtual qreal minRange() const override;
-      virtual qreal maxRange() const override;
-      virtual void
-      getValues(QVector<Point>&,const qreal,
-		const qreal,const unsigned short) override;
-      virtual bool
-      hasSpecifiedNumberOfSamples() const override;
-      virtual unsigned short
-      getNumberOfSamples() const override;
-      virtual ~EvaluatedCurve();
+     EvaluatedCurve(std::shared_ptr<tfel::math::Evaluator>&,
+                    const QString& = "x");
+     bool hasRange() const override;
+     qreal minRange() const override;
+     qreal maxRange() const override;
+     void getValues(QVector<Point>&,
+                    const qreal,
+                    const qreal,
+                    const unsigned short) override;
+     bool hasSpecifiedNumberOfSamples() const override;
+     unsigned short getNumberOfSamples() const override;
+     //! destructor
+     ~EvaluatedCurve() override;
     private:
-      std::shared_ptr<tfel::math::Evaluator> ev;
-      unsigned short samples;
-      bool hasSamples;
-      bool isConstant;
+     std::shared_ptr<tfel::math::Evaluator> ev;
+     unsigned short samples;
+     bool hasSamples;
+     bool isConstant;
     }; // end of struct EvaluatedCurve
 
   } // end of namespace plot

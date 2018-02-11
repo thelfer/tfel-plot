@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GraphShell.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,108 +6,90 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GRAPHSHELL_H_
-#define LIB_TFEL_PLOT_GRAPHSHELL_H_ 
+#define LIB_TFEL_PLOT_GRAPHSHELL_H_
 
-#include<QtCore/QObject>
-#include<QtCore/QStringList>
-#include<QtWidgets/QTextEdit>
-#include<QtGui/QKeyEvent>
-#include<QtGui/QTextCursor>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtWidgets/QTextEdit>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QTextCursor>
 
-#include<TFEL/Math/Parser/ExternalFunctionManager.hxx>
-#include<TFEL/Plot/GnuplotInterpreter.hxx>
-#include<TFEL/Plot/Config.hxx>
+#include <TFEL/Math/Parser/ExternalFunctionManager.hxx>
+#include <TFEL/Plot/GnuplotInterpreter.hxx>
+#include <TFEL/Plot/Config.hxx>
 
-namespace tfel{
+namespace tfel {
 
-  namespace plot{
-    
+  namespace plot {
+
     /*!
      * This class provides a simple shell
      * to interpreter gnuplot shell
      */
     class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell
-      : public QTextEdit
-    {
-
+        : public QTextEdit {
       Q_OBJECT
 
-    public:
+     public:
+      GraphShell(Graph &, QWidget *const = nullptr);
 
-      GraphShell(Graph&,QWidget *const = nullptr);
+      virtual GnuplotInterpreter::ParsingResult treatNewCommand(
+          const QString &);
 
-      virtual GnuplotInterpreter::ParsingResult
-      treatNewCommand(const QString&);
+      ~GraphShell() override;
 
-      virtual ~GraphShell();
+     public slots:
 
-    public slots:
+      void displayOutputMsg(const QString &);
 
-      void displayOutputMsg(const QString&);
+      void displayErrorMsg(const QString &);
 
-      void displayErrorMsg(const QString&);
-      
       void saveBuffer();
 
-      void setPrompt(const QString&);
+      void setPrompt(const QString &);
 
-      void importGnuplotFile(const QString&);
+      void importGnuplotFile(const QString &);
 
-    signals:
-      
+     signals:
+
       void quitCommandTreated();
 
       void graphicalPlot();
 
-    protected slots:
+     protected slots:
 
       void forwardQuitCommand();
 
       void forwardGraphicalPlot();
-      
-    protected:
 
-      static QString
-      getModifier(const QKeyEvent&);
+     protected:
+      static QString getModifier(const QKeyEvent &);
 
-      virtual void
-      keyPressEvent(QKeyEvent *) override;
+      void keyPressEvent(QKeyEvent *) override;
 
-      virtual void
-      mousePressEvent(QMouseEvent *) override;
+      void mousePressEvent(QMouseEvent *) override;
 
-      virtual void
-      mouseMoveEvent(QMouseEvent *) override;
+      void mouseMoveEvent(QMouseEvent *) override;
 
-      virtual void
-      mouseReleaseEvent(QMouseEvent *) override;
+      void mouseReleaseEvent(QMouseEvent *) override;
 
-      virtual bool
-      canInsertFromMimeData (const QMimeData *) const override;
+      bool canInsertFromMimeData(const QMimeData *) const override;
 
-      virtual void
-      insertFromMimeData(const QMimeData *) override;
+      void insertFromMimeData(const QMimeData *) override;
 
-      const QString&
-      getPrompt() const;
+      const QString &getPrompt() const;
 
-      void
-      displayPrompt();
+      void displayPrompt();
 
-      void
-      setCurrentLine(const QString&);
+      void setCurrentLine(const QString &);
 
-      void
-      searchHistoryBackWard();
+      void searchHistoryBackWard();
 
-      void
-      searchHistoryUpWard();
+      void searchHistoryUpWard();
 
-      QColor
-      getUserInputTextColor();
+      QColor getUserInputTextColor();
 
-      void
-      addToKillRing(const QString&);
+      void addToKillRing(const QString &);
 
       GnuplotInterpreter gi;
 
@@ -118,17 +100,16 @@ namespace tfel{
 
       QTextCursor bscursor;
       QStringList ring;
-      int  pring;  //<! position if the ring
+      int pring;  //<! position if the ring
       bool s;
-      bool ctrlx; //<! true if previous key pressed was Ctrl-X
-      bool ctrlc; //<! true if previous key pressed was Ctrl-Y
-      bool yank;  //<! true if previous command was a yank
-      
-    }; // end of GraphShell
-    
-  } // end of namespace plot
+      bool ctrlx;  //<! true if previous key pressed was Ctrl-X
+      bool ctrlc;  //<! true if previous key pressed was Ctrl-Y
+      bool yank;   //<! true if previous command was a yank
 
-} // end of namespace tfel
+    };  // end of GraphShell
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GRAPHSHELL_H */
-

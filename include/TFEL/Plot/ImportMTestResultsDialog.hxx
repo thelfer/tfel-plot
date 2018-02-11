@@ -11,28 +11,20 @@
 #include<TFEL/Plot/Config.hxx>
 #include<TFEL/Plot/ImportLicosCurveDialog.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportMTestResultsDialog 
-      : public ImportLicosCurveDialog
-    {
+    struct TFELPLOT_VISIBILITY_EXPORT ImportMTestResultsDialog
+        : public ImportLicosCurveDialog {
+      ImportMTestResultsDialog(Graph&, QWidget* const = nullptr);
 
-      ImportMTestResultsDialog(Graph&,
-			       QWidget * const = nullptr);
+      ~ImportMTestResultsDialog() override;
 
-      virtual ~ImportMTestResultsDialog();
-      
-    protected:
+     protected:
+      QString getFileDescription() const override;
 
-      virtual QString
-      getFileDescription() const override;
-      
-      virtual QStringList
-      getFileExtensions() const override;
+      QStringList getFileExtensions() const override;
 
     }; // end of ImportMTestResultsDialog
 

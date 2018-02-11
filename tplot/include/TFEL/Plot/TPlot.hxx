@@ -1,39 +1,34 @@
-/*! 
+/*!
  * \file  TPlot.hxx
  * \brief
  * \author Helfer Thomas
  * \brief 27 mai 2012
  */
 
-#ifndef _LIB_TFEL_PLOT_TPLOT_H_
-#define _LIB_TFEL_PLOT_TPLOT_H_ 
+#ifndef LIB_TFEL_PLOT_TPLOT_HXX
+#define LIB_TFEL_PLOT_TPLOT_HXX
 
-#include<QtNetwork/QLocalServer>
-#include<QtNetwork/QLocalSocket>
-#include<QtWidgets/QMainWindow>
-#include"TFEL/Config/TFELConfig.hxx"
-#include"TFEL/Utilities/TextData.hxx"
-#include"TFEL/Utilities/ArgumentParserBase.hxx"
-#include"TFEL/Utilities/GenTypeBase.hxx"
-#include"TFEL/Plot/TextDataReader.hxx"
-#include"TFEL/Plot/Curve.hxx"
-#include"TFEL/Plot/Graph.hxx"
-#include"TFEL/Plot/GraphShell.hxx"
+#include <QtNetwork/QLocalServer>
+#include <QtNetwork/QLocalSocket>
+#include <QtWidgets/QMainWindow>
+#include "TFEL/Config/TFELConfig.hxx"
+#include "TFEL/Utilities/TextData.hxx"
+#include "TFEL/Utilities/ArgumentParserBase.hxx"
+#include "TFEL/Utilities/GenTypeBase.hxx"
+#include "TFEL/Plot/TextDataReader.hxx"
+#include "TFEL/Plot/Curve.hxx"
+#include "TFEL/Plot/Graph.hxx"
+#include "TFEL/Plot/GraphShell.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class TPlot
-      : public QMainWindow,
-	public tfel::utilities::ArgumentParserBase<TPlot>
-    {
-
+    class TPlot : public QMainWindow,
+                  public tfel::utilities::ArgumentParserBase<TPlot> {
       Q_OBJECT
 
-    public slots:
+     public slots:
 
       virtual void close();
 
@@ -52,14 +47,12 @@ namespace tfel
 #ifdef TPLOT_ENABLE_CLI
       virtual void readCLIInput();
 #endif /* TPLOT_ENABLE_CLI */
-      
-    public:
 
+     public:
       /*!
        * \param const bool, stand alone mode
        */
-      TPlot(const int,
-	    const char * const * const);
+      TPlot(const int, const char *const *const);
 
       bool graphicalOutput() const;
 
@@ -70,9 +63,9 @@ namespace tfel
        */
       bool isCLIModeEnabled() const;
 
-      virtual ~TPlot();
+      virtual ~TPlot() override;
 
-    protected slots:
+     protected slots:
 
       virtual void createCurvesMenu();
 
@@ -85,11 +78,11 @@ namespace tfel
       virtual void selectFontDialog();
 
       virtual void exportToTable();
-      
+
       virtual void exportToPDF();
-      
+
       virtual void exportToSVG();
-      
+
       virtual void exportToPNG();
 
       virtual void newWindow();
@@ -104,106 +97,87 @@ namespace tfel
 
       virtual void insertImageFromFile();
 
-    protected:
+     protected:
+      static bool isUnsignedShort(const QString &);
 
-      static bool
-      isUnsignedShort(const QString&);
+      static unsigned short convertToUnsignedShort(const QString &);
 
-      static unsigned short
-      convertToUnsignedShort(const QString&);
+      void closeEvent(QCloseEvent *) override;
 
-      
-      virtual void closeEvent(QCloseEvent *) override;
-      
-      virtual void
-      keyPressEvent(QKeyEvent *) override;
+      void keyPressEvent(QKeyEvent *) override;
 
-      virtual void
-      dragEnterEvent(QDragEnterEvent *) override;
-      
-      virtual void
-      dropEvent(QDropEvent *) override;
+      void dragEnterEvent(QDragEnterEvent *) override;
+
+      void dropEvent(QDropEvent *) override;
 
       virtual void initialize();
 
-      struct TFEL_VISIBILITY_LOCAL CurveOptions
-      {
-	CurveOptions();
-	
-	QString title;
-	bool hasTitle;
-	bool hasThemeLineStyle;
-	unsigned short themestyle;
-	bool hasStyle;
-	Curve::Style style;
-	bool hasColor;
-	QColor color;
-	Graph::GraphAxis axis;
+      struct TFEL_VISIBILITY_LOCAL CurveOptions {
+        CurveOptions();
+
+        QString title;
+        bool hasTitle;
+        bool hasThemeLineStyle;
+        unsigned short themestyle;
+        bool hasStyle;
+        Curve::Style style;
+        bool hasColor;
+        QColor color;
+        Graph::GraphAxis axis;
       };
 
-      struct TFEL_VISIBILITY_LOCAL Data
-	: public CurveOptions
-      {
-	QString fileName;
-	QString xvalues;
-	QString yvalues;
-      }; // end of struct Data
+      struct TFEL_VISIBILITY_LOCAL Data : public CurveOptions {
+        QString fileName;
+        QString xvalues;
+        QString yvalues;
+      };  // end of struct Data
 
-      struct TFEL_VISIBILITY_LOCAL DataInputBase
-      {
-	QString fileName;
+      struct TFEL_VISIBILITY_LOCAL DataInputBase {
+        QString fileName;
       };
-      
+
       struct TFEL_VISIBILITY_LOCAL TextDataInput
-	: public DataInputBase
-      {};
-      
-      struct TFEL_VISIBILITY_LOCAL LicosCurve
-	: public DataInputBase
-      {};
+          : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL MTestCurve
-	: public DataInputBase
-      {};
+      struct TFEL_VISIBILITY_LOCAL LicosCurve : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL AlcyoneCurve
-	: public DataInputBase
-      {};
-      
-      struct TFEL_VISIBILITY_LOCAL LicosResults
-	: public DataInputBase
-      {};
+      struct TFEL_VISIBILITY_LOCAL MTestCurve : public DataInputBase {};
+
+      struct TFEL_VISIBILITY_LOCAL AlcyoneCurve : public DataInputBase {
+      };
+
+      struct TFEL_VISIBILITY_LOCAL LicosResults : public DataInputBase {
+      };
 
       struct TFEL_VISIBILITY_LOCAL AlcyoneResults
-	: public DataInputBase
-      {};
-      
-      struct TFEL_VISIBILITY_LOCAL Function
-	: public CurveOptions
-      {
-	QString f;
-      }; // end of struct Function
+          : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL GnuplotScript
-      {
-	QString fileName;
+      struct TFEL_VISIBILITY_LOCAL Function : public CurveOptions {
+        QString f;
+      };  // end of struct Function
+
+      struct TFEL_VISIBILITY_LOCAL GnuplotScript {
+        QString fileName;
       };
 
-      typedef tfel::meta::GenerateTypeList<Data,TextDataInput,
-					   LicosCurve,LicosResults,
-					   MTestCurve,AlcyoneCurve,
-					   Function,GnuplotScript>::type InputTypes;
+      typedef tfel::meta::GenerateTypeList<Data,
+                                           TextDataInput,
+                                           LicosCurve,
+                                           LicosResults,
+                                           MTestCurve,
+                                           AlcyoneCurve,
+                                           Function,
+                                           GnuplotScript>::type
+          InputTypes;
 
       struct TFEL_VISIBILITY_LOCAL Input
-	: public tfel::utilities::GenTypeBase<InputTypes>
-      {
-	CurveOptions&
-	getCurveOptions();
-      }; // end of getCurveOptions
+          : public tfel::utilities::GenTypeBase<InputTypes> {
+        CurveOptions &getCurveOptions();
+      };  // end of getCurveOptions
 
-      static const std::vector<std::string>
-      tokenize(const std::string&,const char);
-	
+      static const std::vector<std::string> tokenize(
+          const std::string &, const char);
+
       void registerArgumentCallBacks();
 
       void treatUnknownArgument() override;
@@ -306,34 +280,29 @@ namespace tfel
 
       void setRanges();
 
-      void getStringFromArgs(QString&,
-			     const std::string&,
-			     const std::string&);
+      void getStringFromArgs(QString &,
+                             const std::string &,
+                             const std::string &);
 
       QString getStringOption(const bool = false);
 
       double getDoubleOption();
 
-      virtual std::string
-      getVersionDescription() const override;
-  
-      virtual std::string
-      getUsageDescription() const override;
+      std::string getVersionDescription() const override;
 
-      void
-      treatDataInput(const Data&);
+      std::string getUsageDescription() const override;
 
-      void
-      treatFunctionInput(const Function&);
+      void treatDataInput(const Data &);
 
-      friend struct
-      tfel::utilities::ArgumentParserBase<TPlot>;
+      void treatFunctionInput(const Function &);
+
+      friend struct tfel::utilities::ArgumentParserBase<TPlot>;
 
       void createActions();
 
       void createMainMenu();
 
-      Graph      *g;
+      Graph *g;
       GraphShell *shell;
 
       QAction *gca;
@@ -385,14 +354,14 @@ namespace tfel
 #ifdef TPLOT_ENABLE_CLI
       /* data members related to the command-line mode */
       //! the server, used to read data from the command line
-      QLocalServer *s   = nullptr;
+      QLocalServer *s = nullptr;
       //! the input socket
-      QLocalSocket *in  = nullptr;
+      QLocalSocket *in = nullptr;
       //! the output socket
       QLocalSocket *out = nullptr;
 #endif /* TPLOT_ENABLE_CLI */
       //! list of text data
-      std::map<QString,std::shared_ptr<TextDataReader> > dataSources;
+      std::map<QString, std::shared_ptr<TextDataReader>> dataSources;
       std::vector<Input> inputs;
       QString output;
       QString name;
@@ -414,21 +383,20 @@ namespace tfel
       double x2max;
       double y2min;
       double y2max;
-      bool hasGrid       = false;
-      bool hasXMinValue  = false;
-      bool hasYMinValue  = false;
-      bool hasXMaxValue  = false;
-      bool hasYMaxValue  = false;
+      bool hasGrid = false;
+      bool hasXMinValue = false;
+      bool hasYMinValue = false;
+      bool hasXMaxValue = false;
+      bool hasYMaxValue = false;
       bool hasX2MinValue = false;
       bool hasY2MinValue = false;
       bool hasX2MaxValue = false;
       bool hasY2MaxValue = false;
-      bool goutput       = false;
-    }; // end of struct TPlots
+      bool goutput = false;
+    };  // end of struct TPlots
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
-#endif /* _LIB_TFEL_PLOT_TPLOT_H */
-
+#endif /* LIB_TFEL_PLOT_TPLOT_HXX */
