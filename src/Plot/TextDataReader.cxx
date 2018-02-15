@@ -149,27 +149,25 @@ namespace tfel {
     void TextDataReader::getColumn(QVector<double>& tab,
                                    const unsigned short i) const {
       tab.reserve(this->lines.size());
-      int j;
-      // current line
-      QVector<Line>::const_iterator line;
       // sanity check
       tfel::raise_if(
           i == 0u,
           "TextDataReader::getColumn: "
           "column '0' requested (column numbers begins at '1').");
       // treatment
-      for (line = this->lines.begin(), j = 0; line != this->lines.end();
-           ++line, ++j) {
-        if(line->values.size() < i){
+      int j=0;
+      for (const auto& line : this->lines) {
+        if (line.values.size() < i) {
           tfel::raise(
               "TextDataReader::getColumn: "
               "line '" +
-              std::to_string(line->nbr) +
+              std::to_string(line.nbr) +
               "' "
               "does not have '" +
               std::to_string(i) + "' columns.");
-          tab.push_back(line->values[i - 1]);
         }
+        tab.push_back(line.values[i - 1]);
+        ++j;
       }
     }  // end of TextDataReader::getColumn
 
