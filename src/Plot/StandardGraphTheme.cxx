@@ -6,14 +6,12 @@
  * \date   13 jan 2008
  */
 
-#include <sstream>
 #include <cmath>
 #include <limits>
-
+#include <vector>
+#include <sstream>
 #include <QtCore/QtDebug>
-#include <QtCore/QVector>
 #include <QtWidgets/QGraphicsTextItem>
-
 #include "TFEL/Plot/GraphCurveItem.hxx"
 #include "TFEL/Plot/GraphTextItem.hxx"
 #include "TFEL/Plot/GraphKeyItem.hxx"

@@ -18,8 +18,8 @@ namespace tfel
       : ImportTextDataDialogBase(graph,p)
     {} // end of ImportAlcyoneCurveDialog
 
-    QVector<QString> ImportAlcyoneCurveDialog::getCurveKeys(){
-      return QVector<QString>::fromList(this->data->getLegends());
+    QStringList ImportAlcyoneCurveDialog::getCurveKeys(){
+      return this->data->getLegends();
     }
 
     QString ImportAlcyoneCurveDialog::getFileDescription() const{

@@ -16,8 +16,8 @@ namespace tfel {
         : ImportTextDataDialogBase(graph, p) {
     }  // end of ImportLicosCurveDialog
 
-    QVector<QString> ImportLicosCurveDialog::getCurveKeys() {
-      QVector<QString> k;
+    QStringList ImportLicosCurveDialog::getCurveKeys() {
+      QStringList k;
       const auto pr = this->data->getPreamble();
       auto p = pr.begin();
       const auto pe = pr.end();

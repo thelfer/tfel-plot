@@ -20,20 +20,14 @@ namespace tfel
     struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialog 
       : public ImportTextDataDialogBase
     {
+      ImportTextDataDialog(Graph&, QWidget* const = nullptr);
 
-      ImportTextDataDialog(Graph&,
-			   QWidget * const = nullptr);
+     protected:
+      virtual QStringList getCurveKeys() override;
 
-    protected:
+      virtual QString getFileDescription() const override;
 
-      virtual QVector<QString>
-      getCurveKeys() override;
-      
-      virtual QString
-      getFileDescription() const override;
-    
-      virtual QStringList
-      getFileExtensions() const override;
+      virtual QStringList getFileExtensions() const override;
 
     }; // end of ImportTextDataDialog
 

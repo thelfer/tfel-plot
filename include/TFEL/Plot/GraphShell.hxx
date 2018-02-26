@@ -8,12 +8,12 @@
 #ifndef LIB_TFEL_PLOT_GRAPHSHELL_H_
 #define LIB_TFEL_PLOT_GRAPHSHELL_H_
 
+#include <vector>
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtWidgets/QTextEdit>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QTextCursor>
-
 #include <TFEL/Math/Parser/ExternalFunctionManager.hxx>
 #include <TFEL/Plot/GnuplotInterpreter.hxx>
 #include <TFEL/Plot/Config.hxx>
@@ -95,8 +95,8 @@ namespace tfel {
 
       QString prompt;
 
-      QVector<QString> history;
-      QVector<QString>::size_type pHistory;
+      QStringList history;
+      QStringList::size_type pHistory;
 
       QTextCursor bscursor;
       QStringList ring;

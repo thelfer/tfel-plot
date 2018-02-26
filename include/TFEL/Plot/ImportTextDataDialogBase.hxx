@@ -8,10 +8,9 @@
 #ifndef LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H_
 #define LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H_ 
 
+#include<vector>
 #include<memory>
-
 #include<QtCore/QString>
-#include<QtCore/QVector>
 #include<QtWidgets/QDialog>
 #include<QtWidgets/QLineEdit>
 #include<QtWidgets/QComboBox>
@@ -19,13 +18,11 @@
 #include"TFEL/Plot/TextDataReader.hxx"
 #include"TFEL/Plot/CurveConfigurationDialogBase.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-	  class Graph;
+    class Graph;
 
     class TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase 
       : public CurveConfigurationDialogBase
@@ -34,15 +31,13 @@ namespace tfel
       Q_OBJECT
       
     public:
+     ImportTextDataDialogBase(Graph &, QWidget *const = nullptr);
 
-      ImportTextDataDialogBase(Graph&,
-			       QWidget * const = nullptr);
-   
-      int exec() override;
+     int exec() override;
 
-      bool exec(const QString&);
-   
-      operator bool () const;
+     bool exec(const QString &);
+
+     operator bool() const;
 
     protected slots:
 
@@ -60,40 +55,29 @@ namespace tfel
       
       void keyChanged(const QString&);
 
-    protected:
+     protected:
+      static bool isUnsignedShort(const QString &);
 
-      static bool
-      isUnsignedShort(const QString&);
+      static unsigned short convertToUnsignedShort(const QString &);
 
-      static unsigned short
-      convertToUnsignedShort(const QString&);
+      //! \return the curve keys (if available)
+      virtual QStringList getCurveKeys() = 0;
 
-      /*!
-       * \return the curve keys (if available) 
-       */
-      virtual QVector<QString>
-      getCurveKeys() = 0;
+      virtual QString getFileDescription() const = 0;
 
-      virtual QString
-      getFileDescription() const = 0;
-    
-      virtual QStringList
-      getFileExtensions() const = 0;
+      virtual QStringList getFileExtensions() const = 0;
 
-      void
-      createGUI();
+      void createGUI();
 
-      void
-      loadFile();
+      void loadFile();
 
-      void
-      fails(const QString&);
+      void fails(const QString &);
 
       std::shared_ptr<TextDataReader> data;
 
-      Graph& g;
+      Graph &g;
       QStringList legends;
-      QString     file;
+      QString file;
       QLineEdit *a;
       QLineEdit *o;
       QComboBox *la;

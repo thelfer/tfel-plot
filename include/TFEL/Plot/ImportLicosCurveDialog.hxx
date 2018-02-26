@@ -25,7 +25,7 @@ namespace tfel
       ~ImportLicosCurveDialog() override;
 
      protected:
-      QVector<QString> getCurveKeys() override;
+      QStringList getCurveKeys() override;
 
       QString getFileDescription() const override;
 

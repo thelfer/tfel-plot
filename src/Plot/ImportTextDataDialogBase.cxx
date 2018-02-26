@@ -119,9 +119,9 @@ namespace tfel {
       this->setWindowTitle(
           tr("Import %1").arg(this->getFileDescription()));
       if (!l.isEmpty()) {
-        QVector<QString>::const_iterator pl;
+        auto pl = l.begin();
         int i;
-        for (pl = l.begin(), i = 1; pl != l.end(); ++pl, ++i) {
+        for (i = 1; pl != l.end(); ++pl, ++i) {
           this->legends.append(*pl);
           this->la->addItem(QString::number(i) + ": " + *pl);
           this->lo->addItem(QString::number(i) + ": " + *pl);
