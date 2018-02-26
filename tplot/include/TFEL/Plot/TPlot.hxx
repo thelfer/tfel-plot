@@ -63,7 +63,7 @@ namespace tfel {
        */
       bool isCLIModeEnabled() const;
 
-      virtual ~TPlot() override;
+      ~TPlot() override;
 
      protected slots:
 

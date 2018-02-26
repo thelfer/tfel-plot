@@ -858,13 +858,10 @@ namespace tfel {
         write("0");
       }
       QMessageBox msgBox;
-      msgBox.setText("HERE");
       msgBox.exec();
       write(r.output);
-      msgBox.setText("HERE2");
       msgBox.exec();
       write(r.error);
-      msgBox.setText("HERE3");
       msgBox.exec();
       if (r.status == GnuplotInterpreter::ParsingResult::QUIT) {
         this->out->waitForReadyRead();
@@ -1599,12 +1596,11 @@ namespace tfel {
         const unsigned short c = dr.getNumberOfColumns();
         if (c >= 2) {
           try {
-            QVector<double> vx = dr.getColumn(1);
+            const auto& vx = dr.getColumn(1);
             for (unsigned short i = 1; i != c; ++i) {
-              QVector<double> vy = dr.getColumn(i + 1);
-              auto curve =
-                  std::shared_ptr<Curve>(new DataCurve(vx, vy));
-              curve->setKey(dr.getLegend(i));
+              const auto& vy = dr.getColumn(i + 1);
+              auto curve = std::make_shared<DataCurve>(vx, vy);
+              curve->setKey(dr.getLegend(i),true);
               this->g->addCurve(curve);
               this->g->replot();
             }

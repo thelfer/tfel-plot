@@ -8,7 +8,7 @@
 #ifndef LIB_TFEL_PLOT_TEXTDATAREADER_H_
 #define LIB_TFEL_PLOT_TEXTDATAREADER_H_ 
 
-#include<QtCore/QVector>
+#include<vector>
 #include<QtCore/QString>
 #include<QtCore/QTextStream>
 #include<QtCore/QStringList>
@@ -37,7 +37,7 @@ namespace tfel
 	//! line number
 	unsigned short nbr;
 	//! line tokens
-	QVector<double> values;
+	std::vector<double> values;
       }; // end of struct Line
       //! \brief constructor
       TextDataReader();
@@ -63,7 +63,7 @@ namespace tfel
        * specified column number or if a value can't be converted to
        * a double
        */
-      QVector<double> getColumn(const unsigned short) const;
+      std::vector<double> getColumn(const unsigned short) const;
       /*!
        * \brief extract the specified column, converting all values to
        * double
@@ -73,7 +73,7 @@ namespace tfel
        * specified column number or if a value can't be converted to
        * a double
        */
-      void getColumn(QVector<double>&,
+      void getColumn(std::vector<double>&,
 		     const unsigned short) const;
       /*!
        * \return if a column has the specified title
@@ -100,11 +100,11 @@ namespace tfel
       /*!
        * \return an iterator to the first line
        */
-      QVector<Line>::const_iterator begin() const;
+      std::vector<Line>::const_iterator begin() const;
       /*!
        * \return an iterator past the last line
        */
-      QVector<Line>::const_iterator end() const;
+      std::vector<Line>::const_iterator end() const;
       /*!
        * get the first commented lines
        */
@@ -125,7 +125,7 @@ namespace tfel
       //! \brief copy assignement (disabled)
       TextDataReader& operator=(const TextDataReader&) = delete;
       //! list of all tokens of the file, sorted by line
-      QVector<Line> lines;
+      std::vector<Line> lines;
       //! list of column titles
       QStringList legends;
       //! first commented lines

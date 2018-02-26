@@ -14,10 +14,7 @@ namespace tfel{
 
   namespace plot{
 
-    class TFELPLOT_VISIBILITY_EXPORT CurveBase
-      : public Curve
-    {
-
+    class TFELPLOT_VISIBILITY_EXPORT CurveBase : public Curve {
       Q_OBJECT
 
     public slots:

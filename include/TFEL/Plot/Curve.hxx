@@ -10,15 +10,13 @@
 #define LIB_TFEL_PLOT_CURVES_HXX_ 
 
 #include<cmath>
-#include<stdexcept>
+#include<vector>
 #include<limits>
-
+#include<stdexcept>
 #include<QtCore/QObject>
-#include<QtCore/QVector>
 #include<QtCore/QString>
 #include<QtGui/QColor>
 #include<QtWidgets/QComboBox>
-
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Plot/Point.hxx"
 
@@ -79,9 +77,10 @@ namespace tfel{
       virtual bool hasRange() const = 0;
       virtual qreal minRange() const = 0;
       virtual qreal maxRange() const = 0;
-      virtual void
-      getValues(QVector<Point>&,const qreal,
-		const qreal,const unsigned short) = 0;
+      virtual void getValues(std::vector<Point> &,
+                             const qreal,
+                             const qreal,
+                             const unsigned short) = 0;
       virtual bool hasSpecifiedColor()   const = 0;
       virtual bool hasSpecifiedNumberOfSamples()   const = 0;
       virtual bool isFilled() const  = 0;

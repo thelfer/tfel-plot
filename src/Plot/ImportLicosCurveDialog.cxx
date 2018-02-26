@@ -17,7 +17,6 @@ namespace tfel {
     }  // end of ImportLicosCurveDialog
 
     QVector<QString> ImportLicosCurveDialog::getCurveKeys() {
-      using namespace std;
       QVector<QString> k;
       const auto pr = this->data->getPreamble();
       auto p = pr.begin();

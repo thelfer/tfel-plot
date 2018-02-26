@@ -92,8 +92,8 @@ namespace tfel {
       emit updated(this);
     }  // end of DataCurve::DataCurve
 
-    DataCurve::DataCurve(const QVector<qreal>& x,
-                         const QVector<qreal>& y)
+    DataCurve::DataCurve(const std::vector<qreal>& x,
+                         const std::vector<qreal>& y)
         : file(""), ucx(0), ucy(0), xvalues(x), yvalues(y) {
       tfel::raise_if(this->xvalues.size() != this->yvalues.size(),
                      "DataCurve::DataCurve: "
@@ -114,12 +114,12 @@ namespace tfel {
           std::max_element(this->xvalues.begin(), this->xvalues.end()));
     }  // end of DataCurve::maxRange
 
-    void DataCurve::getValues(QVector<Point>& points,
+    void DataCurve::getValues(std::vector<Point>& points,
                               const qreal x0,
                               const qreal x1,
                               const unsigned short) {
       using namespace std;
-      QVector<qreal>::size_type nbr;
+      std::vector<qreal>::size_type nbr;
       qreal rx0 = qMin(x0, x1);
       qreal rx1 = qMax(x0, x1);
       points.clear();
@@ -177,11 +177,11 @@ namespace tfel {
       return 0u;
     }  // end of DataCurve::getNumberOfSamples
 
-    const QVector<qreal>& DataCurve::getAbscissa() const {
+    const std::vector<qreal>& DataCurve::getAbscissa() const {
       return this->xvalues;
     }  // end of DataCurve::getAbscissa
 
-    const QVector<qreal>& DataCurve::getValues() const {
+    const std::vector<qreal>& DataCurve::getValues() const {
       return this->yvalues;
     }  // end of DataCurve::getValues
 
@@ -197,7 +197,7 @@ namespace tfel {
       }
     }  // end of DataCurve::updatedDataFile
 
-    void DataCurve::getValues(QVector<double>& v,
+    void DataCurve::getValues(std::vector<double>& v,
                               const TextDataReader& d,
                               const QString& c) {
       using namespace std;
@@ -271,7 +271,6 @@ namespace tfel {
         TextDataReader data(this->separator);
         data.extractData(this->file);
         if (this->cy.isEmpty()) {
-          qDebug() << "HERE" << this->ucy;
           this->yvalues = data.getColumn(this->ucy);
         } else {
           this->getValues(this->yvalues, data, this->cy);
@@ -281,7 +280,7 @@ namespace tfel {
         } else {
           if (this->cx == "__DataCurve__::line_number") {
             this->xvalues.resize(this->yvalues.size());
-            for (QVector<qreal>::size_type i = 0;
+            for (std::vector<qreal>::size_type i = 0;
                  i != this->xvalues.size(); ++i) {
               this->xvalues[i] = i;
             }

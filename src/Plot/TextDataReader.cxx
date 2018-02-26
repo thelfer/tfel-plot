@@ -139,14 +139,14 @@ namespace tfel {
       return static_cast<unsigned short>(this->legends.indexOf(n) + 1);
     }  // end of TextDataReader::findColumn
 
-    QVector<double> TextDataReader::getColumn(
+    std::vector<double> TextDataReader::getColumn(
         const unsigned short i) const {
-      QVector<double> tab;
+      std::vector<double> tab;
       this->getColumn(tab, i);
       return tab;
     }  // end of TextDataReader::getColumn
 
-    void TextDataReader::getColumn(QVector<double>& tab,
+    void TextDataReader::getColumn(std::vector<double>& tab,
                                    const unsigned short i) const {
       tab.reserve(this->lines.size());
       // sanity check
@@ -171,18 +171,18 @@ namespace tfel {
       }
     }  // end of TextDataReader::getColumn
 
-    QVector<TextDataReader::Line>::const_iterator
+    std::vector<TextDataReader::Line>::const_iterator
     TextDataReader::begin() const {
       return this->lines.begin();
     }  // end of TextDataReader::begin
 
-    QVector<TextDataReader::Line>::const_iterator TextDataReader::end()
+    std::vector<TextDataReader::Line>::const_iterator TextDataReader::end()
         const {
       return this->lines.end();
     }  // end of TextDataReader::end
 
     unsigned short TextDataReader::getNumberOfColumns() const {
-      if (this->lines.isEmpty()) {
+      if (this->lines.empty()) {
         return 0u;
       }
       return static_cast<unsigned short>(this->lines[0].values.size());

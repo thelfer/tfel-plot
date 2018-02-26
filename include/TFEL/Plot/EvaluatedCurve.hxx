@@ -35,7 +35,7 @@ namespace tfel
      bool hasRange() const override;
      qreal minRange() const override;
      qreal maxRange() const override;
-     void getValues(QVector<Point>&,
+     void getValues(std::vector<Point>&,
                     const qreal,
                     const qreal,
                     const unsigned short) override;

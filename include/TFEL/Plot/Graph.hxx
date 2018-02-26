@@ -9,15 +9,13 @@
 #ifndef LIB_TFEL_PLOT_GRAPH_HXX_
 #define LIB_TFEL_PLOT_GRAPH_HXX_
 
-#include <QtCore/QVector>
+#include <vector>
 #include <QtCore/QMap>
-
 #include <QtGui/QFont>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGraphicsScene>
 #include <QtPrintSupport/QPrinter>
-
 #include "TFEL/Plot/Config.hxx"
 #include "TFEL/Plot/ArrowStyle.hxx"
 #include "TFEL/Plot/Point.hxx"
@@ -400,7 +398,7 @@ namespace tfel {
       };  // end of struct Axis
       struct CurveHandler {
         std::shared_ptr<Curve> curve;
-        QVector<Point> points;
+        std::vector<Point> points;
         GraphAxis axis;
       };
 
@@ -424,11 +422,11 @@ namespace tfel {
       /*!
        * retrieve curve title
        */
-      void getCurvesTitles(QVector<QString>&) const;
+      void getCurvesTitles(std::vector<QString>&) const;
       /*!
        * retrieve curves
        */
-      QVector<std::shared_ptr<Curve>> getCurves() const;
+      std::vector<std::shared_ptr<Curve>> getCurves() const;
 
       void getRange(qreal&, qreal&, const unsigned short) const;
 
@@ -489,11 +487,11 @@ namespace tfel {
       virtual void mouseReleaseEvent(QMouseEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
       // internal methods
-      QVector<std::shared_ptr<Graph::Label>>::iterator findLabel(
+      std::vector<std::shared_ptr<Graph::Label>>::iterator findLabel(
           const QString&);
-      QVector<std::shared_ptr<Graph::Arrow>>::iterator findArrow(
+      std::vector<std::shared_ptr<Graph::Arrow>>::iterator findArrow(
           const QString&);
-      QVector<CurveHandler>::iterator findCurveHandler(Curve* const);
+      std::vector<CurveHandler>::iterator findCurveHandler(Curve* const);
       void exportToFile(const QString&, const char* const);
       void setTics(Graph::Axis&, const QMap<qreal, QString>&);
       void unsetTics(Graph::Axis&);
@@ -544,10 +542,10 @@ namespace tfel {
 
       mutable QGraphicsTextItem* cursorPosition;
 
-      QVector<CurveHandler> curves;
+      std::vector<CurveHandler> curves;
       std::shared_ptr<GraphTheme> theme;
-      QVector<std::shared_ptr<Label>> labels;
-      QVector<std::shared_ptr<Arrow>> arrows;
+      std::vector<std::shared_ptr<Label>> labels;
+      std::vector<std::shared_ptr<Arrow>> arrows;
       Graph::Axis xAxis;
       Graph::Axis yAxis;
       Graph::Axis x2Axis;
