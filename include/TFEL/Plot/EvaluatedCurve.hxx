@@ -13,17 +13,11 @@
 #include"TFEL/Math/Evaluator.hxx"
 #include"TFEL/Plot/CurveBase.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
-    
-    class TFELPLOT_VISIBILITY_EXPORT EvaluatedCurve
-      : public CurveBase
-    {
+  namespace plot {
 
-      Q_OBJECT
+    struct TFELPLOT_VISIBILITY_EXPORT EvaluatedCurve : CurveBase {
 
     public slots:
 
@@ -48,6 +42,7 @@ namespace tfel
      unsigned short samples;
      bool hasSamples;
      bool isConstant;
+     Q_OBJECT
     }; // end of struct EvaluatedCurve
 
   } // end of namespace plot

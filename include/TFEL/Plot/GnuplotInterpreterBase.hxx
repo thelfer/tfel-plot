@@ -20,8 +20,7 @@ namespace tfel {
   namespace plot {
 
     // forward declaration
-    class Graph;
-
+    struct Graph;
     // forward declaration
     struct TextDataReader;
 
@@ -29,9 +28,8 @@ namespace tfel {
      * base class for classes in charge of interpreting gnuplot
      * commands
      */
-    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT
-        GnuplotInterpreterBase : public QObject {
-      Q_OBJECT
+    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT
+        GnuplotInterpreterBase : QObject {
 
      protected:
       //! a simple alias
@@ -109,6 +107,8 @@ namespace tfel {
       //! graph that will be affected by the interpreter
       Graph& g;
 
+     private:
+      Q_OBJECT
     };  // end of struct GnuplotInterpreterBase
 
   }  // end of namespace plot

@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  CurveConfigurationDialogBase.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,58 +6,51 @@
  */
 
 #ifndef LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H_
-#define LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H_ 
+#define LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H_
 
-#include<QtWidgets/QDialog>
-#include<QtWidgets/QLineEdit>
-#include<QtWidgets/QComboBox>
-#include<QtWidgets/QGridLayout>
-#include<QtWidgets/QColorDialog>
-#include"TFEL/Plot/Config.hxx"
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QColorDialog>
+#include "TFEL/Plot/Config.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
     /*!
      * base class used to choose :
-     * 
+     *
      */
-    class TFELPLOT_VISIBILITY_EXPORT CurveConfigurationDialogBase
-      : public QDialog
-    {
-      
-      Q_OBJECT
+    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationDialogBase
+        : QDialog {
 
-    protected slots:
+     protected slots:
 
-      virtual void
-      chooseCurveColor();
+      virtual void chooseCurveColor();
 
-    public:
+     public:
+      static QIcon createColorToolButtonIcon(const QColor &);
 
-      static QIcon
-      createColorToolButtonIcon(const QColor&);
-	      
-    protected:
-      
+     protected:
       CurveConfigurationDialogBase(QWidget *const);
 
-      virtual void
-      createColorButton(const QColor& = Qt::white);
-      
-      QComboBox    *scb;
-      QSlider      *ws;
-      QColorDialog *cd;
-      QLineEdit    *ke;
-      QGridLayout  *cl;
+      virtual void createColorButton(const QColor & = Qt::white);
 
-    }; // end of CurveConfigurationDialogBase
-    
-  } // end of namespace plot
-  
-} // end of namespace tfel
+      QComboBox *scb;
+      QSlider *ws;
+      QColorDialog *cd;
+      QLineEdit *ke;
+      QGridLayout *cl;
+
+     private:
+      Q_OBJECT
+
+    };  // end of CurveConfigurationDialogBase
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_CURVECONFIGURATIONDIALOGBASE_H */

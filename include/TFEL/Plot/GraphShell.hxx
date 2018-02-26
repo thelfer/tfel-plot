@@ -26,11 +26,9 @@ namespace tfel {
      * This class provides a simple shell
      * to interpreter gnuplot shell
      */
-    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell
-        : public QTextEdit {
-      Q_OBJECT
-
-     public:
+    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell
+        : QTextEdit {
+      
       GraphShell(Graph &, QWidget *const = nullptr);
 
       virtual GnuplotInterpreter::ParsingResult treatNewCommand(
@@ -105,6 +103,9 @@ namespace tfel {
       bool ctrlx;  //<! true if previous key pressed was Ctrl-X
       bool ctrlc;  //<! true if previous key pressed was Ctrl-Y
       bool yank;   //<! true if previous command was a yank
+
+     private:
+      Q_OBJECT
 
     };  // end of GraphShell
 

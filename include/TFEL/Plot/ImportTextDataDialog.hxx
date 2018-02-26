@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ImportTextDataDialog.cxx
  * \brief
  * \author Helfer Thomas
@@ -6,20 +6,17 @@
  */
 
 #ifndef LIB_TFEL_PLOT_IMPORTTEXTDATADIALOG_H_
-#define LIB_TFEL_PLOT_IMPORTTEXTDATADIALOG_H_ 
+#define LIB_TFEL_PLOT_IMPORTTEXTDATADIALOG_H_
 
-#include<TFEL/Plot/Config.hxx>
-#include<TFEL/Plot/ImportTextDataDialogBase.hxx>
+#include <TFEL/Plot/Config.hxx>
+#include <TFEL/Plot/ImportTextDataDialogBase.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialog 
-      : public ImportTextDataDialogBase
-    {
+    struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialog
+        : public ImportTextDataDialogBase {
       ImportTextDataDialog(Graph&, QWidget* const = nullptr);
 
      protected:
@@ -29,11 +26,12 @@ namespace tfel
 
       virtual QStringList getFileExtensions() const override;
 
-    }; // end of ImportTextDataDialog
+     private:
+      Q_OBJECT
+    };  // end of ImportTextDataDialog
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_IMPORTTEXTDATADIALOG_H */
-

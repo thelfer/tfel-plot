@@ -22,13 +22,8 @@ namespace tfel{
 
     struct TextDataReader;
 
-    class TFELPLOT_VISIBILITY_EXPORT DataCurve
-      : public CurveBase
-    {
-
-      Q_OBJECT
-
-    public slots:
+    struct TFELPLOT_VISIBILITY_EXPORT DataCurve : CurveBase {
+     public slots:
 
       void setNumberOfSamples(const unsigned short,const bool) override;
 
@@ -120,6 +115,9 @@ namespace tfel{
       const unsigned short ucy;
       std::vector<qreal> xvalues;
       std::vector<qreal> yvalues;
+
+     private:
+      Q_OBJECT
 
     }; // end of DataCurve
     

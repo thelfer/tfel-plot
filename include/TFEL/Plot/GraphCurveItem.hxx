@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GraphCurveItem.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,63 +6,52 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GRAPHCURVEITEM_H_
-#define LIB_TFEL_PLOT_GRAPHCURVEITEM_H_ 
+#define LIB_TFEL_PLOT_GRAPHCURVEITEM_H_
 
-#include<QtWidgets/QGraphicsPathItem>
+#include <QtWidgets/QGraphicsPathItem>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class Curve;
+    struct Curve;
 
-    class Graph;
-    
-    class GraphCurveItem
-      : public QObject,
-	public QGraphicsPathItem
-    {
-      
-      Q_OBJECT
+    struct Graph;
 
-    public:
+    struct GraphCurveItem : QObject, QGraphicsPathItem {
+      GraphCurveItem(Graph *const, QGraphicsItem *const, Curve *const);
 
-      GraphCurveItem(Graph         *const,
-		     QGraphicsItem *const,
-		     Curve         *const);
-      
       GraphCurveItem(const QPainterPath &,
-		     Graph         *const,
-		     QGraphicsItem *const,
-		     Curve         *const);
-      
-      virtual QPainterPath
-      shape() const override;
+                     Graph *const,
+                     QGraphicsItem *const,
+                     Curve *const);
 
-    protected slots:
+      virtual QPainterPath shape() const override;
+
+     protected slots:
 
       void configure();
 
       void remove();
 
-    protected:
+     protected:
+      virtual void mouseDoubleClickEvent(
+          QGraphicsSceneMouseEvent *) override;
 
-      virtual void
-      mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
-
-      virtual void
-      contextMenuEvent(QGraphicsSceneContextMenuEvent *) override;
+      virtual void contextMenuEvent(
+          QGraphicsSceneContextMenuEvent *) override;
 
       Graph *const graph;
 
       Curve *const curve;
 
-    }; // end of class GraphCurveItem
+     private:
+      Q_OBJECT
 
-  } // end of namespace plot
+    };  // end of struct GraphCurveItem
 
-} // end of namespace tfel
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GRAPHCURVEITEM_H */

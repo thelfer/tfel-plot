@@ -30,17 +30,17 @@ namespace tfel {
       void getDefaultColor(QColor &,
                            const unsigned short) const override;
 
-      qreal getYTicsWidth(Graph &,
-                          const QMap<qreal, QString> &) const override;
+      qreal getYTicsWidth(
+          Graph &, const std::map<qreal, QString> &) const override;
 
-      qreal getY2TicsWidth(Graph &,
-                           const QMap<qreal, QString> &) const override;
+      qreal getY2TicsWidth(
+          Graph &, const std::map<qreal, QString> &) const override;
 
-      qreal getXTicsHeight(Graph &,
-                           const QMap<qreal, QString> &) const override;
+      qreal getXTicsHeight(
+          Graph &, const std::map<qreal, QString> &) const override;
 
       qreal getX2TicsHeight(
-          Graph &, const QMap<qreal, QString> &) const override;
+          Graph &, const std::map<qreal, QString> &) const override;
 
       qreal getLeftMargin() const override;
 
@@ -93,22 +93,22 @@ namespace tfel {
       void printXTics(Graph &,
                       const GraphLayout &,
                       const GraphSize &,
-                      const QMap<qreal, QString> &) const override;
+                      const std::map<qreal, QString> &) const override;
 
       void printYTics(Graph &,
                       const GraphLayout &,
                       const GraphSize &,
-                      const QMap<qreal, QString> &) const override;
+                      const std::map<qreal, QString> &) const override;
 
       void printX2Tics(Graph &,
                        const GraphLayout &,
                        const GraphSize &,
-                       const QMap<qreal, QString> &) const override;
+                       const std::map<qreal, QString> &) const override;
 
       void printY2Tics(Graph &,
                        const GraphLayout &,
                        const GraphSize &,
-                       const QMap<qreal, QString> &) const override;
+                       const std::map<qreal, QString> &) const override;
 
       void getGraphBorders(
           Graph &, qreal &, qreal &, qreal &, qreal &) const override;
@@ -122,10 +122,10 @@ namespace tfel {
                     const GraphSize &,
                     const bool,
                     const unsigned short,
-                    const QMap<qreal, QString> &,
-                    const QMap<qreal, QString> &,
-                    const QMap<qreal, QString> &,
-                    const QMap<qreal, QString> &,
+                    const std::map<qreal, QString> &,
+                    const std::map<qreal, QString> &,
+                    const std::map<qreal, QString> &,
+                    const std::map<qreal, QString> &,
                     const qreal,
                     const qreal,
                     const qreal,
@@ -246,27 +246,29 @@ namespace tfel {
                              const qreal,
                              const qreal) const;
 
-      virtual void drawHorizontalGridMark(Graph &,
-                                          const QPen &,
-                                          const GraphLayout &,
-                                          const GraphSize &,
-                                          const QMap<qreal, QString> &,
-                                          const qreal,
-                                          const qreal) const;
+      virtual void drawHorizontalGridMark(
+          Graph &,
+          const QPen &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &,
+          const qreal,
+          const qreal) const;
 
-      virtual void drawVerticalGridMark(Graph &,
-                                        const QPen &,
-                                        const GraphLayout &,
-                                        const GraphSize &,
-                                        const QMap<qreal, QString> &,
-                                        const qreal,
-                                        const qreal) const;
+      virtual void drawVerticalGridMark(
+          Graph &,
+          const QPen &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &,
+          const qreal,
+          const qreal) const;
 
       virtual void drawHorizontalGrid(Graph &,
                                       const QPen &,
                                       const GraphLayout &,
                                       const GraphSize &,
-                                      const QMap<qreal, QString> &,
+                                      const std::map<qreal, QString> &,
                                       const qreal,
                                       const qreal) const;
 
@@ -274,7 +276,7 @@ namespace tfel {
                                     const QPen &,
                                     const GraphLayout &,
                                     const GraphSize &,
-                                    const QMap<qreal, QString> &,
+                                    const std::map<qreal, QString> &,
                                     const qreal,
                                     const qreal) const;
 

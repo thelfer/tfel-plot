@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  CurveConfigurationAction.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,53 +6,43 @@
  */
 
 #ifndef LIB_TFEL_PLOT_CURVECONFIGURATIONACTION_H_
-#define LIB_TFEL_PLOT_CURVECONFIGURATIONACTION_H_ 
+#define LIB_TFEL_PLOT_CURVECONFIGURATIONACTION_H_
 
-#include<QtWidgets/QAction>
-#include<TFEL/Plot/Config.hxx>
+#include <QtWidgets/QAction>
+#include <TFEL/Plot/Config.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
     //! forward declaration
-    class Curve;
+    struct Curve;
 
     /*!
      * class handling curve configuration
      */
-    class TFELPLOT_VISIBILITY_EXPORT CurveConfigurationAction
-      : public QAction
-    {
-      Q_OBJECT
-
-    public:
+    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationAction
+        : QAction {
 
       CurveConfigurationAction(Curve *const,
-			       const QString&,
-			       QWidget *const);
-      
-    public slots:
+                               const QString &,
+                               QWidget *const);
 
-      virtual void
-      showCurveConfigurationDialog();
+     public slots:
 
-    protected slots:
+      virtual void showCurveConfigurationDialog();
 
-      virtual void
-      updateIcon(const QColor&);
+     protected slots:
 
-    private:
+      virtual void updateIcon(const QColor &);
 
+     private:
       Curve *const curve;
+      Q_OBJECT
+    };  // end of CurveConfigurationAction
 
-    }; // end of CurveConfigurationAction
+  }  // end of namespace plot
 
-  } // end of namespace plot
-  
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_CURVECONFIGURATIONACTION_H */
-

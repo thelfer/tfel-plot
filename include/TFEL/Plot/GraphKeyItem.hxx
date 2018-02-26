@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GraphKeyItem.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,48 +6,38 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GRAPHKEYITEM_H_
-#define LIB_TFEL_PLOT_GRAPHKEYITEM_H_ 
+#define LIB_TFEL_PLOT_GRAPHKEYITEM_H_
 
-#include<QtWidgets/QGraphicsTextItem>
+#include <QtWidgets/QGraphicsTextItem>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class Curve;
+    struct Curve;
 
-    class Graph;
-    
-    class GraphKeyItem
-      : public QGraphicsTextItem
-    {
-      
-      Q_OBJECT
+    struct Graph;
 
-    public:
+    struct GraphKeyItem : public QGraphicsTextItem {
 
-      GraphKeyItem(const QString&,
-		   Curve *const,
-		   Graph *const,
-		   QGraphicsItem * = nullptr);
-						     
-    public slots:
+      GraphKeyItem(const QString &,
+                   Curve *const,
+                   Graph *const,
+                   QGraphicsItem * = nullptr);
+
+     public slots:
 
       void textChanged();
 
-      void graphFontChanged(const QFont&);
+      void graphFontChanged(const QFont &);
 
-    private:
-
+     private:
       Curve *const curve;
-      
-    }; // end of class GraphKeyItem
+      Q_OBJECT
+    };  // end of struct GraphKeyItem
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GRAPHKEYITEM_H */
-

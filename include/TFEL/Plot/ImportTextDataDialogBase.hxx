@@ -22,15 +22,12 @@ namespace tfel {
 
   namespace plot {
 
-    class Graph;
+    struct Graph;
 
-    class TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase 
-      : public CurveConfigurationDialogBase
+    struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase 
+      : CurveConfigurationDialogBase
     {
-      
-      Q_OBJECT
-      
-    public:
+
      ImportTextDataDialogBase(Graph &, QWidget *const = nullptr);
 
      int exec() override;
@@ -87,6 +84,9 @@ namespace tfel {
       bool ofirst;
 
       bool ok;
+
+     private:
+      Q_OBJECT
 
     }; // end of ImportTextDataDialogBase
 

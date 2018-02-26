@@ -9,9 +9,8 @@
 #ifndef LIB_TFEL_PLOT_THEMEMANAGER_HXX_
 #define LIB_TFEL_PLOT_THEMEMANAGER_HXX_
 
-#include <QtCore/QMap>
+#include <map>
 #include <QtCore/QString>
-
 #include "TFEL/Plot/Config.hxx"
 #include "TFEL/Plot/GraphTheme.hxx"
 
@@ -49,7 +48,7 @@ namespace tfel {
 
       void addTheme(const ThemeProxy* const);
 
-      QList<QString> getAvailableThemesNames() const;
+      QStringList getAvailableThemesNames() const;
 
      private:
       TFEL_VISIBILITY_LOCAL ThemeManager();
@@ -60,7 +59,7 @@ namespace tfel {
       ThemeManager& operator=(ThemeManager&&) = delete;
       ThemeManager& operator=(const ThemeManager&) = delete;
 
-      QMap<QString, std::shared_ptr<const ThemeProxy>> proxies;
+      std::map<QString, std::shared_ptr<const ThemeProxy>> proxies;
 
     };  // end of struct ThemeManager
 

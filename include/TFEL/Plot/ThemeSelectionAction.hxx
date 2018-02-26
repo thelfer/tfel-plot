@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ThemeSelectionAction.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,48 +6,37 @@
  */
 
 #ifndef LIB_TFEL_PLOT_THEMESELECTIONACTION_H_
-#define LIB_TFEL_PLOT_THEMESELECTIONACTION_H_ 
+#define LIB_TFEL_PLOT_THEMESELECTIONACTION_H_
 
-#include<QtWidgets/QAction>
-#include<TFEL/Plot/Config.hxx>
+#include <QtWidgets/QAction>
+#include <TFEL/Plot/Config.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class Graph;
+    struct Graph;
 
     /*!
      * class handling curve configuration
      */
-    class TFELPLOT_VISIBILITY_EXPORT ThemeSelectionAction
-      : public QAction
-    {
-      Q_OBJECT
+    struct TFELPLOT_VISIBILITY_EXPORT ThemeSelectionAction : QAction {
+      ThemeSelectionAction(const QString&, Graph&, QWidget* const);
 
-    public:
+     public slots:
 
-      ThemeSelectionAction(const QString&,
-			   Graph&,
-			   QWidget *const);
-      
-    public slots:
+      virtual void setTheme();
 
-      virtual void
-      setTheme();
-
-    private:
-
+     private:
       Graph& g;
 
       const QString name;
 
-    }; // end of CurveConfigurationAction
+      Q_OBJECT
+    };  // end of CurveConfigurationAction
 
-  } // end of namespace plot
-  
-} // end of namespace tfel
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_THEMESELECTIONACTION_H */

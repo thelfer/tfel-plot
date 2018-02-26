@@ -8,9 +8,9 @@
 
 #include <cmath>
 #include <limits>
-#include <vector>
 #include <sstream>
 #include <QtCore/QtDebug>
+#include <QtCore/QVector>
 #include <QtWidgets/QGraphicsTextItem>
 #include "TFEL/Plot/GraphCurveItem.hxx"
 #include "TFEL/Plot/GraphTextItem.hxx"
@@ -60,14 +60,14 @@ namespace tfel {
     }  // end of StandardGraphTheme::getDownMargin
 
     qreal StandardGraphTheme::getYTicsWidth(
-        Graph&, const QMap<qreal, QString>& tics) const {
+        Graph&, const std::map<qreal, QString>& tics) const {
       if (tics.empty()) {
         return 0;
       }
       qreal res = 0.;
       for (const auto& tic : tics) {
         QGraphicsTextItem t;
-        t.setHtml(tic);
+        t.setHtml(tic.second);
         auto s = t.boundingRect();
         res = std::max(res, s.width());
       }
@@ -75,19 +75,19 @@ namespace tfel {
     }  // end of StandardGraphTheme::getYTicsWidth
 
     qreal StandardGraphTheme::getY2TicsWidth(
-        Graph& g, const QMap<qreal, QString>& tics) const {
+        Graph& g, const std::map<qreal, QString>& tics) const {
       return this->getYTicsWidth(g, tics);
     }  // end of StandardGraphTheme::getY2TicsWidth
 
     qreal StandardGraphTheme::getXTicsHeight(
-        Graph&, const QMap<qreal, QString>& tics) const {
+        Graph&, const std::map<qreal, QString>& tics) const {
       if (tics.empty()) {
         return 0;
       }
       qreal res = 0.;
       for (const auto& tic : tics) {
         QGraphicsTextItem t;
-        t.setHtml(tic);
+        t.setHtml(tic.second);
         auto s = t.boundingRect();
         res = std::max(res, s.height());
       }
@@ -95,7 +95,7 @@ namespace tfel {
     }  // end of StandardGraphTheme::getXTicsHeight
 
     qreal StandardGraphTheme::getX2TicsHeight(
-        Graph& g, const QMap<qreal, QString>& tics) const {
+        Graph& g, const std::map<qreal, QString>& tics) const {
       return this->getXTicsHeight(g, tics);
     }  // end of StandardGraphTheme::getX2TicsHeight
 
@@ -164,18 +164,18 @@ namespace tfel {
         Graph& g,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& xtics) const {
+        const std::map<qreal, QString>& xtics) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(xtics);
-      while (p.hasNext()) {
-        p.next();
+      auto p = xtics.begin();
+      while (p!=xtics.end()) {
         auto* t = cr.addText("");
-        t->setHtml(p.value());
+        t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
-        t->setPos((p.key() - l.bx) / l.ax - 0.5 * b.width(),
+        t->setPos((p->first - l.bx) / l.ax - 0.5 * b.width(),
                   s.height - l.md - l.ttd - l.ld - 0.5 * (l.td) -
                       0.5 * b.height());
+        ++p;
       }
     }  // end of StandardGraphTheme::printXTics
 
@@ -183,17 +183,17 @@ namespace tfel {
         Graph& g,
         const GraphLayout& l,
         const GraphSize&,
-        const QMap<qreal, QString>& ytics) const {
+        const std::map<qreal, QString>& ytics) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(ytics);
-      while (p.hasNext()) {
-        p.next();
+      auto p = ytics.begin();
+      while (p!=ytics.end()) {
         auto* t = cr.addText("");
-        t->setHtml(p.value());
+        t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
         t->setPos(l.ml + l.ttl + l.ll + 0.5 * (l.tl) - 0.5 * b.width(),
-                  l.ay * p.key() + l.by - 0.5 * b.height());
+                  l.ay * p->first + l.by - 0.5 * b.height());
+        ++p;
       }
     }  // end of StandardGraphTheme::printYTics
 
@@ -201,18 +201,18 @@ namespace tfel {
         Graph& g,
         const GraphLayout& l,
         const GraphSize&,
-        const QMap<qreal, QString>& x2tics) const {
+        const std::map<qreal, QString>& x2tics) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(x2tics);
-      while (p.hasNext()) {
-        p.next();
+      auto p = x2tics.begin();
+      while (p != x2tics.end()) {
         auto* t = cr.addText("");
-        t->setHtml(p.value());
+        t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
         t->setPos(
-            (p.key() - l.bx2) / l.ax2 - 0.5 * b.width(),
+            (p->first - l.bx2) / l.ax2 - 0.5 * b.width(),
             l.mu + l.ttu + l.lu + 0.5 * (l.tu) - 0.5 * b.height());
+        ++p;
       }
     }  // end of StandardGraphTheme::printX2Tics
 
@@ -220,18 +220,18 @@ namespace tfel {
         Graph& g,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& y2tics) const {
+        const std::map<qreal, QString>& y2tics) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(y2tics);
-      while (p.hasNext()) {
-        p.next();
+      auto p = y2tics.begin();
+      while (p != y2tics.end()) {
         auto* t = cr.addText("");
-        t->setHtml(p.value());
+        t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
         t->setPos(
             s.width - l.mr - l.ttr - l.lr - 0.5 * (l.tr + b.width()),
-            l.ay2 * (p.key()) + l.by2 - 0.5 * b.height());
+            l.ay2 * (p->first) + l.by2 - 0.5 * b.height());
+        ++p;
       }
     }  // end of StandardGraphTheme::printY2Tics
 
@@ -376,17 +376,15 @@ namespace tfel {
         const QPen& pen,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& tics,
+        const std::map<qreal, QString>& tics,
         const qreal tmin,
         const qreal tmax) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(tics);
       QPainterPath path;
-      while (p.hasNext()) {
-        p.next();
-        if ((p.key() >= tmin) && (p.key() <= tmax)) {
-          path.moveTo((p.key() - l.bx) / l.ax, s.yh0);
-          path.lineTo((p.key() - l.bx) / l.ax, s.yh1);
+      for(const auto& t : tics){
+        if ((t.first >= tmin) && (t.first <= tmax)) {
+          path.moveTo((t.first - l.bx) / l.ax, s.yh0);
+          path.lineTo((t.first - l.bx) / l.ax, s.yh1);
         }
       }
       cr.addPath(path, pen);
@@ -397,17 +395,15 @@ namespace tfel {
         const QPen& pen,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& tics,
+        const std::map<qreal, QString>& tics,
         const qreal tmin,
         const qreal tmax) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(tics);
       QPainterPath path;
-      while (p.hasNext()) {
-        p.next();
-        if ((p.key() >= tmin) && (p.key() <= tmax)) {
-          path.moveTo(s.xh0, l.ay * (p.key()) + l.by);
-          path.lineTo(s.xh1, l.ay * (p.key()) + l.by);
+      for (const auto& t : tics) {
+        if ((t.first >= tmin) && (t.first <= tmax)) {
+          path.moveTo(s.xh0, l.ay * (t.first) + l.by);
+          path.lineTo(s.xh1, l.ay * (t.first) + l.by);
         }
       }
       cr.addPath(path, pen);
@@ -418,19 +414,17 @@ namespace tfel {
         const QPen& pen,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& tics,
+        const std::map<qreal, QString>& tics,
         const qreal tmin,
         const qreal tmax) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(tics);
       QPainterPath path;
-      while (p.hasNext()) {
-        p.next();
-        if ((p.key() >= tmin) && (p.key() <= tmax)) {
-          path.moveTo((p.key() - l.bx) / l.ax, s.yh0);
-          path.lineTo((p.key() - l.bx) / l.ax, s.yh0 + 10.);
-          path.moveTo((p.key() - l.bx) / l.ax, s.yh1);
-          path.lineTo((p.key() - l.bx) / l.ax, s.yh1 - 10.);
+      for(const auto& t: tics){
+        if ((t.first >= tmin) && (t.first <= tmax)) {
+          path.moveTo((t.first - l.bx) / l.ax, s.yh0);
+          path.lineTo((t.first - l.bx) / l.ax, s.yh0 + 10.);
+          path.moveTo((t.first - l.bx) / l.ax, s.yh1);
+          path.lineTo((t.first - l.bx) / l.ax, s.yh1 - 10.);
         }
       }
       cr.addPath(path, pen);
@@ -441,19 +435,17 @@ namespace tfel {
         const QPen& pen,
         const GraphLayout& l,
         const GraphSize& s,
-        const QMap<qreal, QString>& tics,
+        const std::map<qreal, QString>& tics,
         const qreal tmin,
         const qreal tmax) const {
       auto& cr = g.getScene();
-      QMapIterator<qreal, QString> p(tics);
       QPainterPath path;
-      while (p.hasNext()) {
-        p.next();
-        if ((p.key() >= tmin) && (p.key() <= tmax)) {
-          path.moveTo(s.xh0, l.ay * (p.key()) + l.by);
-          path.lineTo(s.xh0 + 10, l.ay * (p.key()) + l.by);
-          path.moveTo(s.xh1, l.ay * (p.key()) + l.by);
-          path.lineTo(s.xh1 - 10, l.ay * (p.key()) + l.by);
+      for(const auto& t : tics){
+        if ((t.first >= tmin) && (t.first <= tmax)) {
+          path.moveTo(s.xh0, l.ay * (t.first) + l.by);
+          path.lineTo(s.xh0 + 10, l.ay * (t.first) + l.by);
+          path.moveTo(s.xh1, l.ay * (t.first) + l.by);
+          path.lineTo(s.xh1 - 10, l.ay * (t.first) + l.by);
         }
       }
       cr.addPath(path, pen);
@@ -465,10 +457,10 @@ namespace tfel {
         const GraphSize& s,
         const bool showGrid,
         const unsigned short grid,
-        const QMap<qreal, QString>& xtics,
-        const QMap<qreal, QString>& ytics,
-        const QMap<qreal, QString>& x2tics,
-        const QMap<qreal, QString>& y2tics,
+        const std::map<qreal, QString>& xtics,
+        const std::map<qreal, QString>& ytics,
+        const std::map<qreal, QString>& x2tics,
+        const std::map<qreal, QString>& y2tics,
         const qreal xmin,
         const qreal xmax,
         const qreal ymin,
@@ -1266,4 +1258,3 @@ namespace tfel {
   }  // end of namespace plot
 
 }  // end of namespace tfel
-

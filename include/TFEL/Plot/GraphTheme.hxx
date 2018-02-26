@@ -9,8 +9,8 @@
 #ifndef LIB_TFEL_PLOT_GRAPHTHEME_HXX_
 #define LIB_TFEL_PLOT_GRAPHTHEME_HXX_
 
+#include <map>
 #include <vector>
-#include <QtCore/QMap>
 #include <QtCore/QString>
 #include "TFEL/Plot/Grid.hxx"
 #include "TFEL/Plot/Point.hxx"
@@ -31,13 +31,13 @@ namespace tfel {
       virtual void getDefaultColor(QColor &,
                                    const unsigned short) const = 0;
       virtual qreal getYTicsWidth(
-          Graph &, const QMap<qreal, QString> &) const = 0;
+          Graph &, const std::map<qreal, QString> &) const = 0;
       virtual qreal getY2TicsWidth(
-          Graph &, const QMap<qreal, QString> &) const = 0;
+          Graph &, const std::map<qreal, QString> &) const = 0;
       virtual qreal getXTicsHeight(
-          Graph &, const QMap<qreal, QString> &) const = 0;
+          Graph &, const std::map<qreal, QString> &) const = 0;
       virtual qreal getX2TicsHeight(
-          Graph &, const QMap<qreal, QString> &) const = 0;
+          Graph &, const std::map<qreal, QString> &) const = 0;
       virtual qreal getLeftMargin() const = 0;
       virtual qreal getRightMargin() const = 0;
       virtual qreal getUpperMargin() const = 0;
@@ -74,22 +74,26 @@ namespace tfel {
                                 const GraphLayout &,
                                 const GraphSize &,
                                 const QString &) const = 0;
-      virtual void printXTics(Graph &,
-                              const GraphLayout &,
-                              const GraphSize &,
-                              const QMap<qreal, QString> &) const = 0;
-      virtual void printYTics(Graph &,
-                              const GraphLayout &,
-                              const GraphSize &,
-                              const QMap<qreal, QString> &) const = 0;
-      virtual void printX2Tics(Graph &,
-                               const GraphLayout &,
-                               const GraphSize &,
-                               const QMap<qreal, QString> &) const = 0;
-      virtual void printY2Tics(Graph &,
-                               const GraphLayout &,
-                               const GraphSize &,
-                               const QMap<qreal, QString> &) const = 0;
+      virtual void printXTics(
+          Graph &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &) const = 0;
+      virtual void printYTics(
+          Graph &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &) const = 0;
+      virtual void printX2Tics(
+          Graph &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &) const = 0;
+      virtual void printY2Tics(
+          Graph &,
+          const GraphLayout &,
+          const GraphSize &,
+          const std::map<qreal, QString> &) const = 0;
 
       virtual void getGraphBorders(
           Graph &, qreal &, qreal &, qreal &, qreal &) const = 0;
@@ -98,10 +102,10 @@ namespace tfel {
                             const GraphSize &,
                             const bool,
                             const unsigned short,
-                            const QMap<qreal, QString> &,
-                            const QMap<qreal, QString> &,
-                            const QMap<qreal, QString> &,
-                            const QMap<qreal, QString> &,
+                            const std::map<qreal, QString> &,
+                            const std::map<qreal, QString> &,
+                            const std::map<qreal, QString> &,
+                            const std::map<qreal, QString> &,
                             const qreal,
                             const qreal,
                             const qreal,

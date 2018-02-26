@@ -14,8 +14,7 @@ namespace tfel{
 
   namespace plot{
 
-    class TFELPLOT_VISIBILITY_EXPORT CurveBase : public Curve {
-      Q_OBJECT
+    struct TFELPLOT_VISIBILITY_EXPORT CurveBase : Curve {
 
     public slots:
 
@@ -58,6 +57,9 @@ namespace tfel{
       bool hasLegend = true;
       bool hasColor = false;
       bool filled = false;
+
+     private:
+      Q_OBJECT
 
     }; // end of struct Curve
 

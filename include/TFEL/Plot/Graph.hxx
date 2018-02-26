@@ -9,8 +9,8 @@
 #ifndef LIB_TFEL_PLOT_GRAPH_HXX_
 #define LIB_TFEL_PLOT_GRAPH_HXX_
 
+#include <map>
 #include <vector>
-#include <QtCore/QMap>
 #include <QtGui/QFont>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGraphicsView>
@@ -29,12 +29,10 @@ namespace tfel {
 
     struct GraphTheme;
     struct GraphLayout;
-    class GraphConfigurationDialog;
+    struct GraphConfigurationDialog;
 
-    class TFELPLOT_VISIBILITY_EXPORT Graph : public QGraphicsView {
-      Q_OBJECT
+    struct TFELPLOT_VISIBILITY_EXPORT Graph : QGraphicsView {
 
-     public:
       enum GraphBorder {
         X,   // lower border
         X2,  // upper border
@@ -125,16 +123,16 @@ namespace tfel {
 
       virtual void setGrid(const unsigned short, const bool = true);
 
-      virtual void setXTics(const QMap<qreal, QString>&,
+      virtual void setXTics(const std::map<qreal, QString>&,
                             const bool = true);
 
-      virtual void setX2Tics(const QMap<qreal, QString>&,
+      virtual void setX2Tics(const std::map<qreal, QString>&,
                              const bool = true);
 
-      virtual void setYTics(const QMap<qreal, QString>&,
+      virtual void setYTics(const std::map<qreal, QString>&,
                             const bool = true);
 
-      virtual void setY2Tics(const QMap<qreal, QString>&,
+      virtual void setY2Tics(const std::map<qreal, QString>&,
                              const bool = true);
 
       virtual void unsetXTics(const bool = true);
@@ -388,7 +386,7 @@ namespace tfel {
         explicit Axis(const unsigned short);
         void reset();
         const unsigned short id;
-        QMap<qreal, QString> tics;
+        std::map<qreal, QString> tics;
         QString label;
         qreal min;
         qreal max;
@@ -491,9 +489,10 @@ namespace tfel {
           const QString&);
       std::vector<std::shared_ptr<Graph::Arrow>>::iterator findArrow(
           const QString&);
-      std::vector<CurveHandler>::iterator findCurveHandler(Curve* const);
+      std::vector<CurveHandler>::iterator findCurveHandler(
+          Curve* const);
       void exportToFile(const QString&, const char* const);
-      void setTics(Graph::Axis&, const QMap<qreal, QString>&);
+      void setTics(Graph::Axis&, const std::map<qreal, QString>&);
       void unsetTics(Graph::Axis&);
       void addCurve(CurveHandler&);
       void addCurve(CurveHandler&, Graph::Axis&);
@@ -529,11 +528,13 @@ namespace tfel {
       void computeRange(qreal&, qreal&, const unsigned short);
       void computeRange2(qreal&, qreal&, const unsigned short);
       qreal computeTicsIncrements(const qreal, const qreal) const;
-      void insertIntoTics(QMap<qreal, QString>&,
+      void insertIntoTics(std::map<qreal, QString>&,
                           const qreal,
                           const qreal);
       void computeLinearScaleTics(Graph::Axis&);
-      void computeLogScaleTics(QMap<qreal, QString>&, qreal&, qreal&);
+      void computeLogScaleTics(std::map<qreal, QString>&,
+                               qreal&,
+                               qreal&);
       void computeTics(Graph::Axis&);
       void computeGraphLayout(const qreal, const qreal, GraphLayout&);
 
@@ -581,7 +582,10 @@ namespace tfel {
       bool hasY2AxisCurve = false;
       bool showRubberBand = false;
       bool drawZoomRectangle = false;
-    };  // end of struct graph
+
+     private:
+      Q_OBJECT
+    };  // end of struct Graph
 
   }  // end of namespace plot
 

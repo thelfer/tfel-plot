@@ -6,17 +6,15 @@
  * \date   04 jan 2008
  */
 
-#include <algorithm>
-#include <iterator>
+#include <cmath>
+#include <limits>
 #include <sstream>
 #include <fstream>
-#include <limits>
-#include <cmath>
-
+#include <iterator>
+#include <algorithm>
 #include <QtCore/QtDebug>
 #include <QtCore/QBuffer>
 #include <QtCore/QTextStream>
-
 #include <QtCore/QtAlgorithms>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QAction>
@@ -27,7 +25,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QResizeEvent>
 #include <QtSvg/QSvgGenerator>
-
+#include "TFEL/Raise.hxx"
 #include "TFEL/Plot/Grid.hxx"
 #include "TFEL/Plot/Graph.hxx"
 #include "TFEL/Plot/GraphSize.hxx"
@@ -470,11 +468,10 @@ namespace tfel {
           yp = l.ay * cy + l.by;
           break;
         default:
-          throw(std::runtime_error(
+          tfel::raise(
               "Graph::"
               "convertVerticalGraphCoordinatesToAbsolutePosition: "
-              "unsupported coordinate type"));
-          break;
+              "unsupported coordinate type");
       }
       return yp;
     }  // end of
@@ -572,31 +569,31 @@ namespace tfel {
               ((t > axis.max) && (!(qAbs(t - axis.max) < prec))))) {
           if (abs(ceil(t) - t) < prec) {
             if (abs(t) < prec) {
-              axis.tics.insert(0., convertToString(0.));
+              axis.tics.insert({0., convertToString(0.)});
             } else {
-              axis.tics.insert(ceil(t), convertToString(ceil(t)));
+              axis.tics.insert({ceil(t), convertToString(ceil(t))});
             }
           } else if (abs(floor(t) - t) < prec) {
             if (abs(t) < prec) {
-              axis.tics.insert(0., convertToString(0.));
+              axis.tics.insert({0., convertToString(0.)});
             } else {
-              axis.tics.insert(floor(t), convertToString(floor(t)));
+              axis.tics.insert({floor(t), convertToString(floor(t))});
             }
           } else {
-            axis.tics.insert(t, convertToString(t));
+            axis.tics.insert({t, convertToString(t)});
           }
         }
         t += d;
       }
     }  // end of Graph::computeLinearScaleTics
 
-    void Graph::insertIntoTics(QMap<qreal, QString>& tics,
+    void Graph::insertIntoTics(std::map<qreal,QString>& tics,
                                const qreal d,
                                const qreal d2) {
-      tics.insert(d, Graph::convertToString(d2));
+      tics.insert({d, Graph::convertToString(d2)});
     }  // end of Graph::insertIntoTics
 
-    void Graph::computeLogScaleTics(QMap<qreal, QString>& tics,
+    void Graph::computeLogScaleTics(std::map<qreal,QString>& tics,
                                     qreal& logmin,
                                     qreal& logmax) {
       using namespace std;
@@ -650,34 +647,34 @@ namespace tfel {
                              pow(10, logmin + ceil(nb) * 4));
       } else if (nb >= 0.5) {
         this->insertIntoTics(tics, logmin, min);
-        tics.insert(log10_2 + logmin, "");
-        tics.insert(log10_3 + logmin, "");
-        tics.insert(log10_4 + logmin, "");
-        tics.insert(log10_5 + logmin, "");
-        tics.insert(log10_6 + logmin, "");
-        tics.insert(log10_7 + logmin, "");
-        tics.insert(log10_8 + logmin, "");
-        tics.insert(log10_9 + logmin, "");
+        tics.insert({log10_2 + logmin, ""});
+        tics.insert({log10_3 + logmin, ""});
+        tics.insert({log10_4 + logmin, ""});
+        tics.insert({log10_5 + logmin, ""});
+        tics.insert({log10_6 + logmin, ""});
+        tics.insert({log10_7 + logmin, ""});
+        tics.insert({log10_8 + logmin, ""});
+        tics.insert({log10_9 + logmin, ""});
         this->insertIntoTics(tics, logmin + 1, min * 10);
-        tics.insert(log10_2 + logmin + 1., "");
-        tics.insert(log10_3 + logmin + 1., "");
-        tics.insert(log10_4 + logmin + 1., "");
-        tics.insert(log10_5 + logmin + 1., "");
-        tics.insert(log10_6 + logmin + 1., "");
-        tics.insert(log10_7 + logmin + 1., "");
-        tics.insert(log10_8 + logmin + 1., "");
-        tics.insert(log10_9 + logmin + 1., "");
+        tics.insert({log10_2 + logmin + 1., ""});
+        tics.insert({log10_3 + logmin + 1., ""});
+        tics.insert({log10_4 + logmin + 1., ""});
+        tics.insert({log10_5 + logmin + 1., ""});
+        tics.insert({log10_6 + logmin + 1., ""});
+        tics.insert({log10_7 + logmin + 1., ""});
+        tics.insert({log10_8 + logmin + 1., ""});
+        tics.insert({log10_9 + logmin + 1., ""});
         this->insertIntoTics(tics, logmin + 2, min * 100);
       } else {
         this->insertIntoTics(tics, logmin, min);
-        tics.insert(log10_2 + logmin, "");
-        tics.insert(log10_3 + logmin, "");
-        tics.insert(log10_4 + logmin, "");
-        tics.insert(log10_5 + logmin, "");
-        tics.insert(log10_6 + logmin, "");
-        tics.insert(log10_7 + logmin, "");
-        tics.insert(log10_8 + logmin, "");
-        tics.insert(log10_9 + logmin, "");
+        tics.insert({log10_2 + logmin, ""});
+        tics.insert({log10_3 + logmin, ""});
+        tics.insert({log10_4 + logmin, ""});
+        tics.insert({log10_5 + logmin, ""});
+        tics.insert({log10_6 + logmin, ""});
+        tics.insert({log10_7 + logmin, ""});
+        tics.insert({log10_8 + logmin, ""});
+        tics.insert({log10_9 + logmin, ""});
         this->insertIntoTics(tics, logmin + 1, min * 10);
       }
     }  // end of Graph::computeLogScaleTics
@@ -1438,13 +1435,13 @@ namespace tfel {
     }  // end of Graph::setX2Range
 
     void Graph::setTics(Graph::Axis& axis,
-                        const QMap<qreal, QString>& tics) {
+                        const std::map<qreal,QString>& tics) {
       axis.userDefinedTics = true;
       axis.tics.clear();
       axis.tics = tics;
     }  // end of Graph::setXTics
 
-    void Graph::setXTics(const QMap<qreal, QString>& tics,
+    void Graph::setXTics(const std::map<qreal,QString>& tics,
                          const bool b) {
       this->setTics(this->xAxis, tics);
       if (b) {
@@ -1453,7 +1450,7 @@ namespace tfel {
       emit xTicsChanged();
     }  // end of Graph::setXTics
 
-    void Graph::setX2Tics(const QMap<qreal, QString>& tics,
+    void Graph::setX2Tics(const std::map<qreal,QString>& tics,
                           const bool b) {
       this->setTics(this->x2Axis, tics);
       if (b) {
@@ -1462,7 +1459,7 @@ namespace tfel {
       emit x2TicsChanged();
     }  // end of Graph::setX2Tics
 
-    void Graph::setYTics(const QMap<qreal, QString>& tics,
+    void Graph::setYTics(const std::map<qreal,QString>& tics,
                          const bool b) {
       this->setTics(this->yAxis, tics);
       if (b) {
@@ -1471,7 +1468,7 @@ namespace tfel {
       emit yTicsChanged();
     }  // end of Graph::setYTics
 
-    void Graph::setY2Tics(const QMap<qreal, QString>& tics,
+    void Graph::setY2Tics(const std::map<qreal,QString>& tics,
                           const bool b) {
       this->setTics(this->y2Axis, tics);
       if (b) {

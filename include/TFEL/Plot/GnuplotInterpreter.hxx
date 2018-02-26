@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file   GnuplotInterpreter.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,35 +6,33 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_
-#define LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_ 
+#define LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H_
 
 // we use STL's containers instead of Qt's since we rely on
 // CxxTokenizer which works with string's (of course, it results from
 // this a lot of QString::fromStdString calls...)
-#include<set>
-#include<map>
-#include<list>
-#include<vector>
-#include<string>
+#include <set>
+#include <map>
+#include <list>
+#include <vector>
+#include <string>
 
-#include<QtCore/QObject>
-#include<QtCore/QString>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
-#include"TFEL/Plot/Config.hxx"
-#include"TFEL/Plot/GnuplotInterpreterBase.hxx"
+#include "TFEL/Plot/Config.hxx"
+#include "TFEL/Plot/GnuplotInterpreterBase.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace math{
+  namespace math {
     struct Evaluator;
-    namespace parser{
+    namespace parser {
       struct ExternalFunction;
     }
-  }
+  }  // namespace math
 
-  namespace plot
-  {
+  namespace plot {
 
     // forward declaration
     struct GraphCoordinates;
@@ -42,43 +40,32 @@ namespace tfel
     /*!
      * class in charge of interpreting gnuplot main commands.
      */
-    class TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GnuplotInterpreter
-      : public GnuplotInterpreterBase
-    {
-
-      Q_OBJECT
-
-    public:
-
+    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GnuplotInterpreter
+        : GnuplotInterpreterBase {
       /*!
        * \brief A structure describing the result of the parsing of a
        * file or a string.
        */
-      struct ParsingResult{
-	enum Status{
-	  SUCCESS,
-	  FAILURE,
-	  QUIT
-	};
-	//! default constructor
-	ParsingResult();
-	//! move constructor
-	ParsingResult(ParsingResult&&);
-	//! copy constructor
-	ParsingResult(const ParsingResult&);
-	//! move assignement
-	ParsingResult& operator=(ParsingResult&&);
-	//! standard assignement
-	ParsingResult& operator=(const ParsingResult&);
-	Status status = SUCCESS;
-	//! output message
-	QString output;
-	//! error message
-	QString error;
-      }; // end of struct ParsingResult
-      
-      GnuplotInterpreter(Graph&,
-			 QObject * const = nullptr);
+      struct ParsingResult {
+        enum Status { SUCCESS, FAILURE, QUIT };
+        //! default constructor
+        ParsingResult();
+        //! move constructor
+        ParsingResult(ParsingResult&&);
+        //! copy constructor
+        ParsingResult(const ParsingResult&);
+        //! move assignement
+        ParsingResult& operator=(ParsingResult&&);
+        //! standard assignement
+        ParsingResult& operator=(const ParsingResult&);
+        Status status = SUCCESS;
+        //! output message
+        QString output;
+        //! error message
+        QString error;
+      };  // end of struct ParsingResult
+
+      GnuplotInterpreter(Graph&, QObject* const = nullptr);
 
       ParsingResult parseFile(const QString&);
       /*!
@@ -89,16 +76,15 @@ namespace tfel
        * \param[in]  l:    string to be evaluated
        * \param[in]  b:    if true, emit the errorMsg signal
        */
-      ParsingResult parseString(const QString&,
-				const bool = true);
+      ParsingResult parseString(const QString&, const bool = true);
       /*!
        * \brief evaluate a string
        * \return the result of the evaluation.
        * \param[in] l: string to be evaluated
        */
       double eval(const QString&);
-      
-    signals:
+
+     signals:
 
       void outputMsg(const QString&);
 
@@ -107,9 +93,8 @@ namespace tfel
       void quitCommandTreated();
 
       void graphicalPlot();
-      
-    protected:
 
+     protected:
       struct PlotInterpreter;
       struct SetInterpreter;
       struct UnSetInterpreter;
@@ -117,45 +102,42 @@ namespace tfel
       struct KrigingInterpreter;
       struct FitInterpreter;
 
-      typedef ParsingResult (GnuplotInterpreter::* MemFuncPtr)(const_iterator&,
-							       const const_iterator);
+      typedef ParsingResult (GnuplotInterpreter::*MemFuncPtr)(
+          const_iterator&, const const_iterator);
       /*!
-       * \brief evaluate the next group 
+       * \brief evaluate the next group
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      double eval(const_iterator&,
-		  const const_iterator);
+      double eval(const_iterator&, const const_iterator);
       /*!
        * \param[in] t : terminal type
        * \param[in] o : options
        */
       void setTerminal(const std::string&,
-		       const std::vector<std::string>&);
+                       const std::vector<std::string>&);
 
       void setOutput(const std::string&);
 
       void registerCallBacks();
 
-      std::shared_ptr<tfel::math::Evaluator>
-	readFunction(const_iterator&, 
-		     const const_iterator,
-		     const std::string&);
+      std::shared_ptr<tfel::math::Evaluator> readFunction(
+          const_iterator&, const const_iterator, const std::string&);
 
-      std::shared_ptr<tfel::math::Evaluator>
-	readFunction(const_iterator&, 
-		     const const_iterator,
-		     const std::vector<std::string>&);
-	
-      void readCoordinates(GraphCoordinates&,
-			   const_iterator&, 
-			   const const_iterator,
-			   const std::string&);
+      std::shared_ptr<tfel::math::Evaluator> readFunction(
+          const_iterator&,
+          const const_iterator,
+          const std::vector<std::string>&);
 
       void readCoordinates(GraphCoordinates&,
-			   const_iterator&, 
-			   const const_iterator,
-			   const std::vector<std::string>&);
+                           const_iterator&,
+                           const const_iterator,
+                           const std::string&);
+
+      void readCoordinates(GraphCoordinates&,
+                           const_iterator&,
+                           const const_iterator,
+                           const std::vector<std::string>&);
       /*!
        * \brief analyse a new function or variable definition
        * \param[in,out] p:  iterator to the current position
@@ -176,8 +158,9 @@ namespace tfel
        * A function defined as `const` is both "locked" and "nodeps".
        */
       void analyseFunctionDefinition(const_iterator&,
-				     const const_iterator,
-				     const bool,const bool);
+                                     const const_iterator,
+                                     const bool,
+                                     const bool);
       /*!
        * \brief analyse a new function or variable definition
        * \param[in,out] p:  iterator to the current position
@@ -185,156 +168,140 @@ namespace tfel
        * \param[in]     b1: if true, lock the function definition
        * \param[in]     b2: if true, the dependencies are removed
        */
-      void addFunction(const std::string&,
-		       std::shared_ptr<tfel::math::parser::ExternalFunction>,
-		       const bool,const bool);
+      void addFunction(
+          const std::string&,
+          std::shared_ptr<tfel::math::parser::ExternalFunction>,
+          const bool,
+          const bool);
 
       void readDataFunctionInUsingDeclaration(std::string&,
-					      const_iterator&,
-					      const const_iterator);
+                                              const_iterator&,
+                                              const const_iterator);
       /*!
        * \brief treat the `help` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatHelp(const_iterator&, 
-			      const const_iterator);
+      ParsingResult treatHelp(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `include` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatInclude(const_iterator&, 
-				 const const_iterator);
+      ParsingResult treatInclude(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `import` keyword. The treatment of this
        * keyword is in fact handled by the `ImportInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatImport(const_iterator&, 
-				const const_iterator);
+      ParsingResult treatImport(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `replot` keyword
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatRePlot(const_iterator&, 
-				const const_iterator);
+      ParsingResult treatRePlot(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `plot` keyword. The treatment of this
        * keyword is in fact handled by the `PlotInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatPlot(const_iterator&, 
-			      const const_iterator);
+      ParsingResult treatPlot(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `set` keyword. The treatment of this
        * keyword is in fact handled by the `SetInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatSet(const_iterator&, 
-			     const const_iterator);
+      ParsingResult treatSet(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `unset` keyword. The treatment of this
        * keyword is in fact handled by the `UnSetInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatUnSet(const_iterator&, 
-			       const const_iterator);
+      ParsingResult treatUnSet(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `print` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatPrint(const_iterator&, 
-			       const const_iterator);
+      ParsingResult treatPrint(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `quit` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatQuit(const_iterator&, 
-			      const const_iterator);
+      ParsingResult treatQuit(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `reset` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatReset(const_iterator&, 
-			       const const_iterator);
+      ParsingResult treatReset(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `const` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatConst(const_iterator&, 
-			       const const_iterator);
+      ParsingResult treatConst(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `lock` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatLock(const_iterator&, 
-			      const const_iterator);
+      ParsingResult treatLock(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `nodeps` keyword.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatNoDeps(const_iterator&, 
-				const const_iterator);
+      ParsingResult treatNoDeps(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `kriging` keyword. The treatment of this
        * keyword is in fact handled by the `KrigingInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatKriging(const_iterator&, 
-				 const const_iterator);
+      ParsingResult treatKriging(const_iterator&, const const_iterator);
       /*!
        * \brief treat the `fit` keyword. The treatment of this
        * keyword is in fact handled by the `FitInterpreter` class.
        * \param[in,out] p:  iterator to the current position
        * \param[in]     pe: iterator past the end of line
        */
-      ParsingResult treatFit(const_iterator&, 
-			     const const_iterator);
+      ParsingResult treatFit(const_iterator&, const const_iterator);
 
-      std::string
-	gatherTokenGroup(const_iterator&, 
-			 const const_iterator);
+      std::string gatherTokenGroup(const_iterator&,
+                                   const const_iterator);
 
       void setDummyVariable(const std::string&);
 
-      const std::string&
-	getDummyVariable() const;
+      const std::string& getDummyVariable() const;
 
       tfel::math::parser::ExternalFunctionManagerPtr
-	getExternalFunctionManager();
+      getExternalFunctionManager();
 
       QString currentLine;
       QString previousPlot;
-      
+
       std::string dummyVariable;
       //! output file
       std::string output;
       //! output terminal
       std::string terminal;
       std::set<std::string> locks;
-      std::map<std::string,MemFuncPtr>  callBacks;
+      std::map<std::string, MemFuncPtr> callBacks;
       tfel::math::parser::ExternalFunctionManagerPtr functions;
 
-      // std::map<std::string,MemFuncPtr2> plotCallBacks;
-      
-    }; // end of struct GnuplotInterpreter
+     private:
+      Q_OBJECT
+    };  // end of struct GnuplotInterpreter
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GNUPLOTINTERPRETER_H */
-

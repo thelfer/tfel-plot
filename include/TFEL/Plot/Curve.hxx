@@ -29,13 +29,7 @@ namespace tfel{
      * \see the `DataCurve` and the `EvaluatedCurve` classes for
      * details.
      */
-    class TFELPLOT_VISIBILITY_EXPORT Curve
-      : public QObject
-    {
-
-      Q_OBJECT
-
-    public:
+    struct TFELPLOT_VISIBILITY_EXPORT Curve : QObject {
 
       /*!
        * \brief list of all available styles for drawing a curve
@@ -116,6 +110,9 @@ namespace tfel{
       void styleChanged(int);
 
       void widthChanged(int);
+
+     private:
+      Q_OBJECT
 
     }; // end of struct Curve
 
