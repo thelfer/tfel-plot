@@ -78,6 +78,8 @@ namespace tfel{
       ~DataCurve() override;
 
     public slots:
+
+      void updateDataFile();
       
       void updatedDataFile(const QString&);
 

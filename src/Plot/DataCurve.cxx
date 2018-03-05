@@ -185,12 +185,19 @@ namespace tfel {
       return this->yvalues;
     }  // end of DataCurve::getValues
 
+    void DataCurve::updateDataFile() {
+      this->updatedDataFile(this->file);
+    } // end of DataCurve::updateDataFile
+    
     void DataCurve::updatedDataFile(const QString&) {
       this->watcher->removePath(this->file);
       if (!QFile(this->file).exists()) {
         // method was called to say that the file has disapeared
-        QTimer::singleShot(
-            1000, this, [this] { this->updatedDataFile(this->file); });
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
+        QTimer::singleShot(1000, this, SIGNAL(updateDataFile));
+#else
+        QTimer::singleShot(1000, this, &DataCurve::updateDataFile);
+#endif
       } else {
         this->watcher->addPath(this->file);
         this->loadDataFromFile(false);
@@ -307,8 +314,13 @@ namespace tfel {
         this->executeDelayedDataLoading();
       } else {
         // wait 100 micro-seconds for the data to be effectively ready
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
+        QTimer::singleShot(100, this,
+                           SIGNAL(executeDelayedDataLoading));
+#else
         QTimer::singleShot(100, this,
                            &DataCurve::executeDelayedDataLoading);
+#endif
         QObject::disconnect(this->watcher,
                             &QFileSystemWatcher::fileChanged, this,
                             &DataCurve::updatedDataFile);
