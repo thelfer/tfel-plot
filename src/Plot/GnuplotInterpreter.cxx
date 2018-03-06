@@ -416,7 +416,7 @@ namespace tfel {
     GnuplotInterpreter::readFunction(const_iterator& p,
                                      const const_iterator pe,
                                      const std::string& delim) {
-      return this->readFunction(p, pe, {delim});
+      return this->readFunction(p, pe, std::vector<std::string>{delim});
     }
 
     std::shared_ptr<tfel::math::Evaluator>
