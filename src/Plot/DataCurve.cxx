@@ -194,7 +194,7 @@ namespace tfel {
       if (!QFile(this->file).exists()) {
         // method was called to say that the file has disapeared
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-        QTimer::singleShot(1000, this, SIGNAL(updateDataFile));
+        QTimer::singleShot(1000, this, SLOT(updateDataFile()));
 #else
         QTimer::singleShot(1000, this, &DataCurve::updateDataFile);
 #endif
@@ -315,8 +315,7 @@ namespace tfel {
       } else {
         // wait 100 micro-seconds for the data to be effectively ready
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-        QTimer::singleShot(100, this,
-                           SIGNAL(executeDelayedDataLoading));
+        QTimer::singleShot(100, this,SLOT(executeDelayedDataLoading()));
 #else
         QTimer::singleShot(100, this,
                            &DataCurve::executeDelayedDataLoading);
