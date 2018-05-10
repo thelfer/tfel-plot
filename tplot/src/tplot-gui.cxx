@@ -8,6 +8,7 @@
 #include<QtCore/QtDebug>
 #include<QtWidgets/QMessageBox>
 #include<QtWidgets/QApplication>
+#include"TFEL/Plot/InitRessources.hxx"
 #include"TFEL/Plot/TPlot.hxx"
 
 namespace tfel
@@ -45,7 +46,7 @@ namespace tfel
 
 int main(int argc,char** argv)
 {
-  Q_INIT_RESOURCE(TFELPlotResources);
+  tfel::plot::initRessources();
   tfel::plot::TPlotApplication a(argc, argv);
   try{
     tfel::plot::TPlot tplot(argc,argv);
