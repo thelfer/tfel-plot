@@ -25,7 +25,7 @@ namespace tfel
       this->sout->listen(fout);
       this->sout->waitForNewConnection(-1);
       this->out = this->sout->nextPendingConnection();
-      QObject::connect(this->out,&QLocalSocketdisconnected,
+      QObject::connect(this->out,&QLocalSocket::disconnected,
 		       this,&CLIHandler::socketDisconnected);
     } // end of CLIHandler::CLIHandler
 

@@ -3,7 +3,7 @@
  * \brief  
  * 
  * \author Helfer Thomas
- * \date   14 fév 2008
+ * \date   14 fÃ©v 2008
  */
 
 #include<cmath>
@@ -68,10 +68,10 @@ namespace tfel{
 
     EvaluatedCurve::~EvaluatedCurve() = default;
 
-    void
-    EvaluatedCurve::getValues(QVector<Point>& points,const qreal xmin,
-				const qreal xmax,const unsigned short s)
-    {
+    void EvaluatedCurve::getValues(std::vector<Point>& points,
+                                   const qreal xmin,
+                                   const qreal xmax,
+                                   const unsigned short s) {
       using namespace std;
       const qreal dx = (xmax-xmin)/s;
       points.clear();

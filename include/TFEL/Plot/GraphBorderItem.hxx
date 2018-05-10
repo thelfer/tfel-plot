@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GraphBorderItem.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,45 +6,34 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GRAPHBORDERITEM_H_
-#define LIB_TFEL_PLOT_GRAPHBORDERITEM_H_ 
+#define LIB_TFEL_PLOT_GRAPHBORDERITEM_H_
 
-#include<QtWidgets/QGraphicsPathItem>
-#include"TFEL/Plot/Graph.hxx"
+#include <QtWidgets/QGraphicsPathItem>
+#include "TFEL/Plot/Graph.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class GraphBorderItem
-      : public QObject,
-	public QGraphicsPathItem
-    {
-      
-      Q_OBJECT
+    struct GraphBorderItem : QObject, QGraphicsPathItem {
 
-    public:
+      GraphBorderItem(const QPainterPath &,
+                      Graph *const,
+                      const Graph::GraphBorder,
+                      const qreal);
 
-      GraphBorderItem(const QPainterPath&,
-		      Graph *const,
-		      const Graph::GraphBorder,
-		      const qreal);
+      virtual QPainterPath shape() const override;
 
-      virtual QPainterPath
-      shape() const override;
-
-    protected slots:
+     protected slots:
 
       void configure();
 
-    protected:
+     protected:
+      virtual void contextMenuEvent(
+          QGraphicsSceneContextMenuEvent *) override;
 
-      virtual void
-      contextMenuEvent(QGraphicsSceneContextMenuEvent *) override;
-
-      virtual void
-      mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
+      virtual void mouseDoubleClickEvent(
+          QGraphicsSceneMouseEvent *) override;
 
       Graph *const graph;
 
@@ -52,12 +41,12 @@ namespace tfel
 
       const qreal width;
 
-    }; // end of class GraphBorderItem
+     private:
+      Q_OBJECT
+    };  // end of struct GraphBorderItem
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
-
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GRAPHBORDERITEM_H */
-

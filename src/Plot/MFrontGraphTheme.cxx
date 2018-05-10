@@ -110,7 +110,7 @@ namespace tfel
 	// }	
       } // end of StandardGraphTheme::drawBackGround
 
-      ~MFrontGraphTheme() = default;
+      ~MFrontGraphTheme() override = default;
 
     };
 

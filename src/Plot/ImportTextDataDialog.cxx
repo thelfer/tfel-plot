@@ -1,56 +1,40 @@
-/*! 
+/*!
  * \file  ImportTextDataDialog.cxx
  * \brief
  * \author Helfer Thomas
  * \brief 02 juin 2012
  */
 
-#include<QtCore/QtDebug>
+#include "TFEL/Plot/ImportTextDataDialog.hxx"
 
-#include"TFEL/Plot/ImportTextDataDialog.hxx"
+namespace tfel {
 
-namespace tfel
-{
-
-  namespace plot
-  {
-
+  namespace plot {
 
     ImportTextDataDialog::ImportTextDataDialog(Graph& graph,
-					       QWidget * const p)
-      : ImportTextDataDialogBase(graph,p)
-    {} // end of TextDataTreeWidget
-    
-    QVector<QString>
-    ImportTextDataDialog::getCurveKeys()
-    {
-      using namespace std;
-      QVector<QString> k;
-      QStringList l = this->data->getLegends();
-      if(!l.isEmpty()){
-	k.resize(l.size());
-	QVector<QString>::iterator pk;
-	QStringList::const_iterator pl;
-	for(pk=k.begin(),pl=l.begin();pl!=l.end();++pl,++pk){
-	  *pk = *pl;
-	}
+                                               QWidget* const p)
+        : ImportTextDataDialogBase(graph, p) {
+    }  // end of TextDataTreeWidget
+
+    QStringList ImportTextDataDialog::getCurveKeys() {
+      QStringList keys;
+      for (const auto& l : this->data->getLegends()) {
+        keys.append(l);
       }
-      return k;
+      return keys;
     }
 
-    QString
-    ImportTextDataDialog::getFileDescription() const
-    {
+    QString ImportTextDataDialog::getFileDescription() const {
       return "Text Data";
     }
-    
-    QStringList
-    ImportTextDataDialog::getFileExtensions() const
-    {
-      return QStringList() << "txt" << "dat" << "data" << "res";
+
+    QStringList ImportTextDataDialog::getFileExtensions() const {
+      return QStringList() << "txt"
+                           << "dat"
+                           << "data"
+                           << "res";
     }
 
-  } // end of namespace plot
-  
-} // end of namespace tfel
+  }  // end of namespace plot
 
+}  // end of namespace tfel

@@ -9,8 +9,8 @@
 #ifndef LIB_TFEL_PLOT_DATACURVE_HXX_
 #define LIB_TFEL_PLOT_DATACURVE_HXX_ 
 
+#include<vector>
 #include<memory>
-#include<QtCore/QVector>
 #include<QtCore/QFileSystemWatcher>
 #include"TFEL/Plot/Config.hxx"
 #include"TFEL/Math/Parser/ExternalFunctionManager.hxx"
@@ -22,13 +22,8 @@ namespace tfel{
 
     struct TextDataReader;
 
-    class TFELPLOT_VISIBILITY_EXPORT DataCurve
-      : public CurveBase
-    {
-
-      Q_OBJECT
-
-    public slots:
+    struct TFELPLOT_VISIBILITY_EXPORT DataCurve : CurveBase {
+     public slots:
 
       void setNumberOfSamples(const unsigned short,const bool) override;
 
@@ -60,29 +55,31 @@ namespace tfel{
 		const QString&,
 		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
-      DataCurve(const QVector<qreal>&,
-		const QVector<qreal>&);
+      DataCurve(const std::vector<qreal>&,
+		const std::vector<qreal>&);
 
       bool  hasRange() const override;
       qreal minRange() const override;
       qreal maxRange() const override;
 
-      void getValues(QVector<Point>&,const qreal,
+      void getValues(std::vector<Point>&,const qreal,
 		     const qreal,const unsigned short) override;
 
       bool hasSpecifiedNumberOfSamples() const override;
 
       unsigned short getNumberOfSamples() const override;
 
-      const QVector<qreal>&
+      const std::vector<qreal>&
       getAbscissa() const;
 
-      const QVector<qreal>&
+      const std::vector<qreal>&
       getValues() const;
 
       ~DataCurve() override;
 
     public slots:
+
+      void updateDataFile();
       
       void updatedDataFile(const QString&);
 
@@ -104,7 +101,7 @@ namespace tfel{
 
       void loadDataFromFile(const bool);
 
-      void getValues(QVector<double>&,
+      void getValues(std::vector<double>&,
 		     const TextDataReader&,
 		     const QString&);
       
@@ -118,8 +115,11 @@ namespace tfel{
       const QString cy;
       const unsigned short ucx;
       const unsigned short ucy;
-      QVector<qreal> xvalues;
-      QVector<qreal> yvalues;
+      std::vector<qreal> xvalues;
+      std::vector<qreal> yvalues;
+
+     private:
+      Q_OBJECT
 
     }; // end of DataCurve
     

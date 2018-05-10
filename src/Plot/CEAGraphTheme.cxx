@@ -111,7 +111,7 @@ namespace tfel
 	// }	
       } // end of StandardGraphTheme::drawBackGround
 
-      ~CEAGraphTheme() = default;
+      ~CEAGraphTheme() override = default;
 
     };
 

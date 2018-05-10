@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ImportAlcyoneCurveDialog.cxx
  * \brief
  * \author Helfer Thomas
@@ -6,42 +6,32 @@
  */
 
 #ifndef LIB_TFEL_PLOT_IMPORTALCYONECURVEDIALOG_H_
-#define LIB_TFEL_PLOT_IMPORTALCYONECURVEDIALOG_H_ 
+#define LIB_TFEL_PLOT_IMPORTALCYONECURVEDIALOG_H_
 
-#include<TFEL/Plot/Config.hxx>
-#include<TFEL/Plot/ImportTextDataDialogBase.hxx>
+#include <TFEL/Plot/Config.hxx>
+#include <TFEL/Plot/ImportTextDataDialogBase.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportAlcyoneCurveDialog 
-      : public ImportTextDataDialogBase
-    {
-
-      ImportAlcyoneCurveDialog(Graph&,
-			       QWidget * const = nullptr);
+    struct TFELPLOT_VISIBILITY_EXPORT ImportAlcyoneCurveDialog
+        : public ImportTextDataDialogBase {
+      ImportAlcyoneCurveDialog(Graph&, QWidget* const = nullptr);
       //! destructor
-      virtual ~ImportAlcyoneCurveDialog();
-      
-    protected:
-      
-      virtual QVector<QString>
-      getCurveKeys() override;
+      ~ImportAlcyoneCurveDialog() override;
 
-      virtual QString
-      getFileDescription() const override;
-    
-      virtual QStringList
-      getFileExtensions() const override;
+     protected:
+      QStringList getCurveKeys() override;
 
-    }; // end of ImportAlcyoneCurveDialog
+      QString getFileDescription() const override;
 
-  } // end of namespace plot
+      QStringList getFileExtensions() const override;
 
-} // end of namespace tfel
+    };  // end of ImportAlcyoneCurveDialog
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_IMPORTALCYONECURVEDIALOG_H */
-

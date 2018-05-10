@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GraphTextItem.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,56 +6,43 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GRAPHTEXTITEM_H_
-#define LIB_TFEL_PLOT_GRAPHTEXTITEM_H_ 
+#define LIB_TFEL_PLOT_GRAPHTEXTITEM_H_
 
-#include<QtWidgets/QGraphicsTextItem>
+#include <QtWidgets/QGraphicsTextItem>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    class Graph;
-    
-    class GraphTextItem
-      : public QGraphicsTextItem
-    {
+    struct Graph;
+
+    struct GraphTextItem : QGraphicsTextItem {
       
-      Q_OBJECT
-
-    public:
-
       GraphTextItem(Graph *const,
-		    void (Graph:: *)(const QString&,
-				     const bool));
+                    void (Graph::*)(const QString &, const bool));
 
       GraphTextItem(const QString &,
-		    Graph *const,
-		    void (Graph:: *)(const QString&,
-				     const bool));
-						     
-    public slots:
+                    Graph *const,
+                    void (Graph::*)(const QString &, const bool));
+
+     public slots:
 
       void textChanged();
 
-      void graphFontChanged(const QFont&);
+      void graphFontChanged(const QFont &);
 
-    private:
-
+     private:
       Graph *const graph;
 
-      /*!
-       * update label method
-       */
-      void (Graph:: *um)(const QString&,
-			 const bool);
-      
-    }; // end of class GraphTextItem
+      //! update label method
+      void (Graph::*um)(const QString &, const bool);
 
-  } // end of namespace plot
+      Q_OBJECT
 
-} // end of namespace tfel
+    };  // end of struct GraphTextItem
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GRAPHTEXTITEM_H */
-

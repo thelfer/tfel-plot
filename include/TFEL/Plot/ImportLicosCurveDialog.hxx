@@ -20,22 +20,16 @@ namespace tfel
     struct TFELPLOT_VISIBILITY_EXPORT ImportLicosCurveDialog 
       : public ImportTextDataDialogBase
     {
+      ImportLicosCurveDialog(Graph&, QWidget* const = nullptr);
 
-      ImportLicosCurveDialog(Graph&,
-			     QWidget * const = nullptr);
+      ~ImportLicosCurveDialog() override;
 
-      virtual ~ImportLicosCurveDialog();
-      
-    protected:
-      
-      virtual QVector<QString>
-      getCurveKeys() override;
+     protected:
+      QStringList getCurveKeys() override;
 
-      virtual QString
-      getFileDescription() const override;
-    
-      virtual QStringList
-      getFileExtensions() const override;
+      QString getFileDescription() const override;
+
+      QStringList getFileExtensions() const override;
 
     }; // end of ImportLicosCurveDialog
 
