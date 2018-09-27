@@ -35,11 +35,11 @@ namespace tfel {
     }
 
     void TextDataReader::extractData(QTextStream& in) {
-      auto splitLine = [this](const QString line) {
+      auto splitLine = [this](const QString& line) {
         if (this->separator.isEmpty()) {
           return line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
         }
-        return line.split(QRegExp("\\s+" + this->separator + "\\s+"),
+        return line.split(QRegExp("\\s?" + this->separator + "\\s?"),
                           QString::SkipEmptyParts);
       };
       this->lines.clear();

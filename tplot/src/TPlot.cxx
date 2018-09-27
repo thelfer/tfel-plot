@@ -8,7 +8,6 @@
 #include <cassert>
 #include <sstream>
 
-#include <QtCore/QDebug>
 #include <QtCore/QProcess>
 #include <QtCore/QMimeData>
 #include <QtCore/QUrl>
@@ -1490,7 +1489,6 @@ namespace tfel {
       unsigned short cy = 2;
       bool bcx = true;
       bool bcy = true;
-      qDebug() << d.xvalues << d.yvalues;
       if (!d.xvalues.isEmpty()) {
         if (TPlot::isUnsignedShort(d.xvalues)) {
           cx = TPlot::convertToUnsignedShort(d.xvalues);
