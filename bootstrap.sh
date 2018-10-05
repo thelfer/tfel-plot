@@ -8,7 +8,12 @@ then
 fi
 
 mkdir -p config
+echo 'aclocal'
 aclocal -I m4
+echo 'libtoolize'
 libtoolize
+echo 'automake'
 automake --add-missing
+echo 'autoconf'
 autoconf
+echo 'end'

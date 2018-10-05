@@ -11,4 +11,3 @@ EXTRA_DIST=autotools.cmake		 \
 	   pandoc.cmake			 \
 	   tfel.cmake			 \
 	   tfel-plot.cmake
-

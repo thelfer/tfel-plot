@@ -2,8 +2,8 @@
 
 AM_CPPFLAGS = -I$(top_builddir)/src/Plot          \
 	      -I$(top_srcdir)/include             \
-	      @QT_CXXFLAGS@                       \
-	     `@TFELCONFIG@ --includes --cppflags`
+	      $(QT_CXXFLAGS)                      \
+	      `$(TFELCONFIG) --includes --cppflags`
 
 lib_LTLIBRARIES = libTFELPlot.la               \
 		  libTFELGnuplotInterpreter.la
@@ -37,6 +37,7 @@ libTFELPlot_la_SOURCES = GetInstallPath.cxx               \
 			 ImportAlcyoneCurveDialog.cxx     \
 			 ImportLicosResultsDialog.cxx     \
 			 ImportMTestResultsDialog.cxx     \
+			 InitRessources.cxx               \
 			 Graph.cxx
 libTFELPlot_la_CPPFLAGS = $(AM_CPPFLAGS) -DTFELPlot_EXPORTS
 
@@ -54,6 +55,7 @@ nodist_libTFELPlot_la_SOURCES = moc_Graph.cxx                        \
 				moc_GraphKeyItem.cxx                 \
 				moc_GraphTextItem.cxx                \
 				moc_GraphBorderItem.cxx              \
+				moc_ImportTextDataDialog.cxx     \
 				moc_ImportTextDataDialogBase.cxx     \
 				moc_ImportLicosResultsDialog.cxx     \
 				TFELPlotResources.cxx
@@ -75,8 +77,8 @@ nodist_libTFELGnuplotInterpreter_la_SOURCES = moc_GnuplotInterpreterBase.cxx \
 
 libTFELGnuplotInterpreter_la_DEPENDENCIES = libTFELPlot.la
 
-libTFELPlot_la_LIBADD = @QT_LIBS@                       \
-			-L@TFELHOME@/lib                \
+libTFELPlot_la_LIBADD = $(QT_LIBS)                       \
+			-L$(TFELHOME)/lib                \
 			-lTFELMathParser                \
 			-lTFELMath                      \
 			-lTFELUtilities                 \
@@ -84,8 +86,8 @@ libTFELPlot_la_LIBADD = @QT_LIBS@                       \
 			-lTFELException
 
 libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la        \
-			    	      @QT_LIBS@             \
-			    	      -L@TFELHOME@/lib      \
+			    	      $(QT_LIBS)             \
+			    	      -L$(TFELHOME)/lib      \
 			    	      -lTFELMathKriging     \
 			    	      -lTFELMathParser      \
 			    	      -lTFELMath            \
@@ -98,11 +100,11 @@ TFELGRAPHICSRESOURCES=images/CEABanner2012.svg   \
 		      images/CEALogo2012.svg     \
 		      images/mfront-en.svg
 
-moc_%.cxx : @top_srcdir@/include/TFEL/Plot/%.hxx
-	@QT_MOC@ $< -o $@	
+moc_%.cxx : $(top_srcdir)/include/TFEL/Plot/%.hxx
+	$(QT_MOC) $< -o $@
 
 TFELPlotResources.cxx : TFELPlotResources.qrc $(TFELGRAPHICSRESOURCES)
-	@QT_RCC@ -name TFELPlotResources @srcdir@/TFELPlotResources.qrc -o TFELPlotResources.cxx
+	$(QT_RCC) -name TFELPlotResources $(srcdir)/TFELPlotResources.qrc -o TFELPlotResources.cxx
 
 clean-local:
 	$(RM) $(nodist_libTFELPlot_la_SOURCES)

@@ -1,30 +1,30 @@
 ## Makefile.am -- Process this file with automake to produce a Makefile.in file.
 
 nobase_include_HEADERS = TFEL/Plot/Config.hxx	                \
-			 TFEL/Plot/Config/GetInstallPath.hxx            \
-			 TFEL/Plot/ArrowStyle.hxx	                \
-			 TFEL/Plot/GraphSize.hxx	                \
+			 TFEL/Plot/Config/GetInstallPath.hxx    \
+			 TFEL/Plot/ArrowStyle.hxx	        \
+			 TFEL/Plot/GraphSize.hxx	        \
 			 TFEL/Plot/GraphCoordinates.hxx	        \
 			 TFEL/Plot/Point.hxx		        \
-			 TFEL/Plot/GraphLayout.hxx	                \
-			 TFEL/Plot/GraphTheme.hxx	                \
-			 TFEL/Plot/StandardGraphTheme.hxx           \
-			 TFEL/Plot/Curve.hxx                        \
-			 TFEL/Plot/CurveBase.hxx                    \
+			 TFEL/Plot/GraphLayout.hxx	        \
+			 TFEL/Plot/GraphTheme.hxx	        \
+			 TFEL/Plot/StandardGraphTheme.hxx       \
+			 TFEL/Plot/Curve.hxx                    \
+			 TFEL/Plot/CurveBase.hxx                \
 			 TFEL/Plot/EvaluatedCurve.hxx	        \
-			 TFEL/Plot/DataCurve.hxx	                \
-			 TFEL/Plot/CurveConfigurationAction.hxx     \
+			 TFEL/Plot/DataCurve.hxx	        \
+			 TFEL/Plot/CurveConfigurationAction.hxx \
 			 TFEL/Plot/CurveConfigurationDialogBase.hxx \
 			 TFEL/Plot/CurveConfigurationDialog.hxx     \
-			 TFEL/Plot/Graph.hxx		        \
+			 TFEL/Plot/Graph.hxx		            \
 			 TFEL/Plot/GraphCurveItem.hxx               \
 			 TFEL/Plot/GraphTextItem.hxx                \
 			 TFEL/Plot/GraphKeyItem.hxx                 \
 			 TFEL/Plot/GraphBorderItem.hxx              \
 			 TFEL/Plot/GraphConfigurationDialog.hxx     \
 			 TFEL/Plot/ThemeSelectionAction.hxx         \
-			 TFEL/Plot/ThemeManager.ixx	                \
-			 TFEL/Plot/ThemeManager.hxx	                \
+			 TFEL/Plot/ThemeManager.ixx	            \
+			 TFEL/Plot/ThemeManager.hxx	            \
 			 TFEL/Plot/Grid.hxx                         \
 			 TFEL/Plot/TextDataReader.hxx               \
 			 TFEL/Plot/ImportTextDataDialogBase.hxx     \
