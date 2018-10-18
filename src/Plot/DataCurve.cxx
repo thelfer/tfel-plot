@@ -134,8 +134,8 @@ namespace tfel {
           points.push_back(point);
         }
       } else {
-        bool pinc =
-            false;  // true if the previous segments was selected
+        // true if the previous segments was selected
+        auto pinc = false;
         for (nbr = 0u; nbr != this->xvalues.size() - 1; ++nbr) {
           const qreal xl = this->xvalues[nbr];
           const qreal xr = this->xvalues[nbr + 1];
