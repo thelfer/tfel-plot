@@ -1,7 +1,8 @@
 ## Makefile.am -- Process this file with automake to produce a Makefile.in file.
 
 nobase_include_HEADERS = TFEL/Plot/Config.hxx	                \
-			 TFEL/Plot/Config/GetInstallPath.hxx    \
+                         TFEL/Plot/Config/GetInstallPath.hxx    \
+			 TFEL/Plot/InitRessources.hxx           \
 			 TFEL/Plot/ArrowStyle.hxx	        \
 			 TFEL/Plot/GraphSize.hxx	        \
 			 TFEL/Plot/GraphCoordinates.hxx	        \
