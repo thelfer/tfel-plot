@@ -24,7 +24,8 @@ namespace tfel {
       if (p == pe) {
         return k;
       }
-      if (*p != " first column: time") {
+      if ((*p != " first column: time")&&
+	  (*p != " first column : time")){
         return k;
       }
       k.push_back("time");
@@ -35,10 +36,18 @@ namespace tfel {
         if (tokens.size() < 3) {
           return k;
         }
-        if (tokens[1] != "column:") {
-          return k;
+	auto offset = 2u;
+	if (tokens[1] != "column:") {
+	  if (tokens.size() < 4) {
+	    return k;
+	  }
+	  if ((tokens[1] == "column") && (tokens[2] == ":")) {
+	    offset = 3u;
+	  } else {
+	    return k;
+	  }
         }
-        auto pt = tokens.begin() + 2u;
+        auto pt = tokens.begin() + offset;
         const auto pte = tokens.end();
         QString r;
         while (pt != pte) {
