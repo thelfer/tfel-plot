@@ -1108,25 +1108,21 @@ namespace tfel {
     void Graph::computeRange(qreal& x0,
                              qreal& x1,
                              const unsigned short axis) {
-      using namespace std;
-      std::vector<CurveHandler>::const_iterator p;
       bool found = false;
-      if (!this->curves.empty()) {
-        for (p = this->curves.begin(); p != this->curves.end(); ++p) {
-          if ((p->curve->hasRange()) && (p->axis & axis)) {
-            const qreal pmin = p->curve->minRange();
-            const qreal pmax = p->curve->maxRange();
-            if (!found) {
-              x0 = pmin;
-              x1 = pmax;
-            } else {
-              x0 = qMin(x0, pmin);
-              x1 = qMax(x1, pmax);
-            }
-            found = true;
+      for (const auto& c : this->curves) {
+        if ((c.curve->hasRange()) && (c.axis & axis)) {
+          const qreal pmin = c.curve->minRange();
+          const qreal pmax = c.curve->maxRange();
+          if (!found) {
+            x0 = pmin;
+            x1 = pmax;
+          } else {
+            x0 = qMin(x0, pmin);
+            x1 = qMax(x1, pmax);
           }
-        }  // end of for p
-      }
+          found = true;
+        }
+      }  // end of for p
       if (!found) {
         x0 = Graph::defaultLinearScaleMinValue;
         x1 = Graph::defaultLinearScaleMaxValue;
@@ -1136,28 +1132,24 @@ namespace tfel {
     void Graph::computeRange2(qreal& x0,
                               qreal& x1,
                               const unsigned short axis) {
-      using namespace std;
-      std::vector<CurveHandler>::const_iterator p;
       bool logx = false;
       if (this->xAxis.id == axis) {
         logx = this->xAxis.scale == Graph::Axis::LOGSCALE;
       } else {
         logx = this->x2Axis.scale == Graph::Axis::LOGSCALE;
       }
-      if (!this->curves.empty()) {
-        for (p = this->curves.begin(); p != this->curves.end(); ++p) {
-          if ((p->curve->hasRange()) && (p->axis & axis)) {
-            qreal pmin = p->curve->minRange();
-            qreal pmax = p->curve->maxRange();
-            if (logx) {
-              pmin = Graph::log10(pmin);
-              pmax = Graph::log10(pmax);
-            }
-            x0 = qMin(pmin, x0);
-            x1 = qMax(pmax, x1);
+      for (const auto& c : this->curves) {
+        if ((c.curve->hasRange()) && (c.axis & axis)) {
+          auto pmin = c.curve->minRange();
+          auto pmax = c.curve->maxRange();
+          if (logx) {
+            pmin = Graph::log10(pmin);
+            pmax = Graph::log10(pmax);
           }
-        }  // end of for p
-      }
+          x0 = qMin(pmin, x0);
+          x1 = qMax(pmax, x1);
+        }
+      }  // end of for p
     }  // end of Graph::computeRange2
 
     void Graph::computePoints(CurveHandler& h,
