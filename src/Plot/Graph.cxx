@@ -1094,7 +1094,6 @@ namespace tfel {
     }  // end of Graph::printer
 
     void Graph::removeCurves(const bool b) {
-      using namespace std;
       this->curves.clear();
       this->hasXAxisCurve = false;
       this->hasX2AxisCurve = false;
@@ -1102,8 +1101,8 @@ namespace tfel {
       this->hasY2AxisCurve = false;
       if (b) {
         this->replot();
+        emit curvesRemoved();
       }
-      emit curvesRemoved();
     }  // end of Graph::removeCurves
 
     void Graph::computeRange(qreal& x0,
