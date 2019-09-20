@@ -4,10 +4,10 @@ cmake_minimum_required(VERSION 2.4)
 
 include(cmake/modules/autotools.cmake)
 
-#compiler options
-include(cmake/modules/compiler.cmake)
 #find the tfel package
 include(cmake/modules/tfel.cmake)
+#compiler options
+include(cmake/modules/compiler.cmake)
 # qt support
 include(cmake/modules/qt.cmake)
 

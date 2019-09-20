@@ -603,7 +603,7 @@ namespace tfel {
         options.style = Curve::TRIANGLE;
       } else if ((p->value == "c") || (p->value == "crosses")) {
         options.style = Curve::CROSS;
-      } else if ((p->value == "d") || (p->value == "diamonds")) {
+      } else if (p->value == "diamonds") {
         options.style = Curve::DIAMOND;
       } else if ((p->value == "s") || (p->value == "square")) {
         options.style = Curve::SQUARE;

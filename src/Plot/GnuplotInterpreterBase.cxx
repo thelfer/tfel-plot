@@ -9,6 +9,7 @@
 #include <iterator>
 #include <stdexcept>
 #include "TFEL/Raise.hxx"
+#include "TFEL/UnicodeSupport/UnicodeSupport.hxx"
 #include "TFEL/Math/Evaluator.hxx"
 #include "TFEL/Utilities/CxxTokenizer.hxx"
 #include "TFEL/Plot/TextDataReader.hxx"
@@ -55,9 +56,9 @@ namespace tfel {
         CxxTokenizer::readSpecifiedToken(m, "(", p, pe);
       }
       tfel::raise_if(p == pe, "unexpected end of line");
-      tfel::raise_if(
-          !GnuplotInterpreterBase::isValidIdentifier(p->value),
-          p->value + " is not a valid identifer.");
+      const auto v = tfel::unicode::getMangledString(p->value);
+      tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(v),
+                     p->value + " is not a valid identifer.");
       vars.push_back(p->value);
       ++p;
       tfel::raise_if(b && (p == pe), "unexpected end of line");
@@ -65,12 +66,12 @@ namespace tfel {
         ++p;
         CxxTokenizer::checkNotEndOfLine(m, "expected variable name", p,
                                         pe);
-        tfel::raise_if(
-            !GnuplotInterpreterBase::isValidIdentifier(p->value),
-            p->value + " is not a valid variable name.");
-        vars.push_back(p->value);
-        ++p;
-        throw_if(b && (p == pe), "unexpected end of line");
+      const auto v = tfel::unicode::getMangledString(p->value);
+      tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(v),
+                     p->value + " is not a valid variable name.");
+      vars.push_back(p->value);
+      ++p;
+      throw_if(b && (p == pe), "unexpected end of line");
       }  // p!=pe
       if (b) {
         CxxTokenizer::readSpecifiedToken(m, ")", p, pe);

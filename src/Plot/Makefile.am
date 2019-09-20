@@ -77,12 +77,13 @@ nodist_libTFELGnuplotInterpreter_la_SOURCES = moc_GnuplotInterpreterBase.cxx \
 
 libTFELGnuplotInterpreter_la_DEPENDENCIES = libTFELPlot.la
 
-libTFELPlot_la_LIBADD = $(QT_LIBS)                       \
-			-L$(TFELHOME)/lib                \
+libTFELPlot_la_LIBADD = $(QT_LIBS)          \
+			-L$(TFELHOME)/lib               \
 			-lTFELMathParser                \
 			-lTFELMath                      \
 			-lTFELUtilities                 \
 			-lTFELSystem                    \
+			-lTFELUnicodeSupport            \
 			-lTFELException
 
 libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la        \
@@ -93,6 +94,7 @@ libTFELGnuplotInterpreter_la_LIBADD = libTFELPlot.la        \
 			    	      -lTFELMath            \
 			    	      -lTFELUtilities       \
 			    	      -lTFELSystem          \
+			    	      -lTFELUnicodeSupport  \
 			    	      -lTFELException
 
 TFELGRAPHICSRESOURCES=images/CEABanner2012.svg   \

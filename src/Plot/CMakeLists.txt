@@ -53,6 +53,7 @@ target_link_libraries(TFELPlot
   TFELMath
   TFELUtilities
   TFELSystem
+  TFELUnicodeSupport
   TFELException
   Qt5::Widgets
   Qt5::Svg
@@ -80,5 +81,6 @@ target_link_libraries(TFELGnuplotInterpreter
   TFELMath
   TFELUtilities
   TFELSystem
+  TFELUnicodeSupport
   TFELException
   ${QT_LIBRARIES})

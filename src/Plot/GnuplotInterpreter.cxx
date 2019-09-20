@@ -17,6 +17,7 @@
 #include <QtWidgets/QApplication>
 
 #include "TFEL/Raise.hxx"
+#include "TFEL/UnicodeSupport/UnicodeSupport.hxx"
 #include "TFEL/Math/Evaluator.hxx"
 #include "TFEL/Utilities/CxxTokenizer.hxx"
 #include "TFEL/Plot/Config/GetInstallPath.hxx"
@@ -70,7 +71,8 @@ namespace tfel {
       this->registerCallBacks();
     }  // end of GnuplotInterpreter::GnuplotInterpreter
 
-    void GnuplotInterpreter::setDummyVariable(const std::string& n) {
+    void GnuplotInterpreter::setDummyVariable(const std::string& v) {
+      const auto n = tfel::unicode::getMangledString(v);
       tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(n),
                      "GnuplotInterpreter::setDummyVariable: "
                      "'" +
@@ -558,7 +560,8 @@ namespace tfel {
       auto throw_if = [](const bool c, const std::string& m) {
         tfel::raise_if(c, "GnuplotInterpreter::addFunction: " + m);
       };
-      throw_if(!this->isValidIdentifier(name),
+      const auto mname = tfel::unicode::getMangledString(name);
+      throw_if(!this->isValidIdentifier(mname),
                "name '" + name + "' is not valid.");
       if (this->locks.find(name) != this->locks.end()) {
         throw_if((*(this->functions)).find(name) ==
@@ -598,10 +601,11 @@ namespace tfel {
         }
       };
       throw_if(p == pe, "unexpected end of line");
-      string var = p->value;
+      const auto variable = p->value;
+      const auto v = tfel::unicode::getMangledString(variable);
       // variable or function definition
-      throw_if(!this->isValidIdentifier(var),
-               p->value + " is not a valid identifer");
+      throw_if(!this->isValidIdentifier(v),
+               "'" + p->value + "' is not a valid identifer");
       ++p;
       throw_if(p == pe, "unexpected end of line");
       if (p->value == "=") {
@@ -611,14 +615,14 @@ namespace tfel {
         throw_if(p == pe, "unexpected end of line");
         const auto group = this->gatherTokenGroup(p, pe);
         throw_if(group.empty(),
-                 "invalid declaraction of variable '" + var + "'");
+                 "invalid declaraction of variable '" + variable + "'");
         auto ev = std::make_shared<Evaluator>(vars, group, functions);
         if (ev->getNumberOfVariables() != 0u) {
           string msg(
               "GnuplotInterpreter::analyseFunctionDefinition : ");
-          msg += "error while declaring variable " + var;
+          msg += "error while declaring variable '" + variable;
           if (ev->getNumberOfVariables() == 1u) {
-            msg += ", unknown variable " + ev->getVariablesNames()[0];
+            msg += "', unknown variable " + ev->getVariablesNames()[0];
           } else {
             const auto& evars = ev->getVariablesNames();
             std::vector<string>::const_iterator pv;
@@ -633,7 +637,7 @@ namespace tfel {
           }
           throw(runtime_error(msg));
         }
-        this->addFunction(var, ev, b1, b2);
+        this->addFunction(variable, ev, b1, b2);
       } else if (p->value == "(") {
         // adding a new function
         const auto vars = this->readVariableList(p, pe);
@@ -645,9 +649,9 @@ namespace tfel {
         throw_if(p == pe, "unexpected end of line");
         string group = this->gatherTokenGroup(p, pe);
         throw_if(group.empty(),
-                 "invalid declaraction of function '" + var + "'");
+                 "invalid declaraction of function '" + variable + "'");
         auto ev = std::make_shared<Evaluator>(vars, group, functions);
-        this->addFunction(var, ev, b1, b2);
+        this->addFunction(variable, ev, b1, b2);
       } else {
         throw_if(true, "unexpected token ('" + p->value + "')");
       }
