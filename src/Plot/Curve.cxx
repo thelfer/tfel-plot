@@ -8,6 +8,7 @@
 
 #include<QtCore/QtDebug>
 #include<QtGui/QPainter>
+#include<QtGui/QPainterPath>
 
 #include"TFEL/Plot/Curve.hxx"
 
