@@ -100,6 +100,8 @@ plot cos_wrapper(x)
 
 - the `master` branch follows the evolution of the `master` branch of
   the `TFEL` project
+- the `rliv-1.2` follows the evolution of the 3.4.x series of the `TFEL`
+  project.
 - the `rliv-1.1` follows the evolution of the 3.3.x series of the `TFEL`
   project.
 - the `rliv-1.0` follows the evolution of the 3.2.x series of the `TFEL`

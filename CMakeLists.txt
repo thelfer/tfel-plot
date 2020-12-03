@@ -1,5 +1,5 @@
 include(cmake/modules/tfel-plot.cmake)
-tfel_plot_project(tfel-plot "1" "1-dev")
+tfel_plot_project(tfel-plot "1" "2-dev")
 cmake_minimum_required(VERSION 2.4)
 
 include(cmake/modules/autotools.cmake)
