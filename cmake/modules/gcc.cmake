@@ -11,6 +11,7 @@ if(NOT i586-mingw32msvc_COMPILER)
   set(COMPILER_DEFAULT_VISIBILITY "-fvisibility=default")
 endif(NOT i586-mingw32msvc_COMPILER)
 
+tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS_MARCH "march=native")
 tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS_MARCH "ftree-vectorize")
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
@@ -35,14 +36,23 @@ endif(WIN32)
 if(enable-fast-math)
   tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS  "ffast-math")
 else(enable-fast-math)
+  tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS  "fno-fast-math")
   tfel_enable_cxx_compiler_flag(OPTIMISATION_FLAGS2 "ffast-math")
 endif(enable-fast-math)
 
 option(enable-sanitize-options "enable various gcc sanitize options (undefined, address,...)" OFF)
 
+option(enable-glibcxx-debug "use the debug version of the C++ standard as implemented by the glib C++ library" OFF)
+if(enable-glibcxx-debug)
+SET(CMAKE_CXX_FLAGS_DEBUG "-g -D_GLIBCXX_DEBUG" CACHE STRING
+    "Flags used by the C++ compiler during debug builds."
+    FORCE)
+else(enable-glibcxx-debug)
 SET(CMAKE_CXX_FLAGS_DEBUG "-g" CACHE STRING
     "Flags used by the C++ compiler during debug builds."
     FORCE)
+endif(enable-glibcxx-debug)
+
 SET(CMAKE_C_FLAGS_DEBUG "-g" CACHE STRING
     "Flags used by the C compiler during debug builds."
     FORCE)
@@ -77,6 +87,7 @@ MARK_AS_ADVANCED(CMAKE_CXX_FLAGS_PROFILING
   CMAKE_C_FLAGS_PROFILING)
 
 if(enable-sanitize-options)
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fcheck-pointer-bounds")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=bounds-strict")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=undefined")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=float-divide-by-zero")
@@ -86,14 +97,18 @@ if(enable-sanitize-options)
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=object-size")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=vpt")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=address")
-#  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=leak")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=null")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=return")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=signed-integer-overflow")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=bool")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=enum")
+  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fstack-check")
+  #  tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=leak")
   tfel_enable_cxx_compiler_flag(COMPILER_FLAGS "fno-omit-frame-pointer")
 endif(enable-sanitize-options)
 
-if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
-  message(FATAL_ERROR "TFEL C++11 support is only available for gcc version >= 4.7")
-endif(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
-set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -std=c++11")
+set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -std=c++17")  
+
 # unsable flag
 # set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -D_GLIBCXX_CONCEPT_CHECKS")
 
