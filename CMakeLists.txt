@@ -1,8 +1,10 @@
 include(cmake/modules/tfel-plot.cmake)
 tfel_plot_project(tfel-plot "1" "3-dev")
 cmake_minimum_required(VERSION 2.4)
-
 include(cmake/modules/autotools.cmake)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
 
 #find the tfel package
 include(cmake/modules/tfel.cmake)

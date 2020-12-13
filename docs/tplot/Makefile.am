@@ -1,2 +1,0 @@
-SUBDIRS=gp
-EXTRA_DIST=CMakeLists.txt
