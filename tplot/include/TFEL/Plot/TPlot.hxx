@@ -136,21 +136,17 @@ namespace tfel {
         QString fileName;
       };
 
-      struct TFEL_VISIBILITY_LOCAL TextDataInput
-          : public DataInputBase {};
+      struct TFEL_VISIBILITY_LOCAL TextDataInput : public DataInputBase {};
 
       struct TFEL_VISIBILITY_LOCAL LicosCurve : public DataInputBase {};
 
       struct TFEL_VISIBILITY_LOCAL MTestCurve : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL AlcyoneCurve : public DataInputBase {
-      };
+      struct TFEL_VISIBILITY_LOCAL AlcyoneCurve : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL LicosResults : public DataInputBase {
-      };
+      struct TFEL_VISIBILITY_LOCAL LicosResults : public DataInputBase {};
 
-      struct TFEL_VISIBILITY_LOCAL AlcyoneResults
-          : public DataInputBase {};
+      struct TFEL_VISIBILITY_LOCAL AlcyoneResults : public DataInputBase {};
 
       struct TFEL_VISIBILITY_LOCAL Function : public CurveOptions {
         QString f;
@@ -167,16 +163,15 @@ namespace tfel {
                                            MTestCurve,
                                            AlcyoneCurve,
                                            Function,
-                                           GnuplotScript>::type
-          InputTypes;
+                                           GnuplotScript>::type InputTypes;
 
       struct TFEL_VISIBILITY_LOCAL Input
           : public tfel::utilities::GenTypeBase<InputTypes> {
         CurveOptions &getCurveOptions();
       };  // end of getCurveOptions
 
-      static const std::vector<std::string> tokenize(
-          const std::string &, const char);
+      static const std::vector<std::string> tokenize(const std::string &,
+                                                     const char);
 
       void registerArgumentCallBacks();
 

@@ -22,8 +22,7 @@ namespace tfel {
     GnuplotInterpreterBase::GnuplotInterpreterBase(Graph& graph,
                                                    QObject* const p)
         : QObject(p),
-          g(graph) {
-    }  // end of GnuplotInterpreterBase::GnuplotInterpreterBase
+          g(graph) {}  // end of GnuplotInterpreterBase::GnuplotInterpreterBase
 
     unsigned short GnuplotInterpreterBase::convertToUnsignedShort(
         const std::string& value) {
@@ -64,14 +63,13 @@ namespace tfel {
       tfel::raise_if(b && (p == pe), "unexpected end of line");
       while (((p != pe)) && (p->value == ",")) {
         ++p;
-        CxxTokenizer::checkNotEndOfLine(m, "expected variable name", p,
-                                        pe);
-      const auto v = tfel::unicode::getMangledString(p->value);
-      tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(v),
-                     p->value + " is not a valid variable name.");
-      vars.push_back(p->value);
-      ++p;
-      throw_if(b && (p == pe), "unexpected end of line");
+        CxxTokenizer::checkNotEndOfLine(m, "expected variable name", p, pe);
+        const auto v = tfel::unicode::getMangledString(p->value);
+        tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(v),
+                       p->value + " is not a valid variable name.");
+        vars.push_back(p->value);
+        ++p;
+        throw_if(b && (p == pe), "unexpected end of line");
       }  // p!=pe
       if (b) {
         CxxTokenizer::readSpecifiedToken(m, ")", p, pe);
@@ -85,8 +83,7 @@ namespace tfel {
       return vars;
     }  // end of GnuplotInterpreterBase::readVariableList
 
-    bool GnuplotInterpreterBase::isValidIdentifier(
-        const std::string& name) {
+    bool GnuplotInterpreterBase::isValidIdentifier(const std::string& name) {
       using namespace tfel::math;
       if (!Evaluator::isValidIdentifier(name)) {
         return false;
@@ -94,8 +91,8 @@ namespace tfel {
       return CxxTokenizer::isValidIdentifier(name);
     }  // end of GnuplotInterpreterBase::isValidIdentifier
 
-    QString GnuplotInterpreterBase::readQString(
-        const_iterator& p, const const_iterator pe) {
+    QString GnuplotInterpreterBase::readQString(const_iterator& p,
+                                                const const_iterator pe) {
       return QString::fromStdString(CxxTokenizer::readString(p, pe));
     }  // end of GnuplotInterpreterBase::readQString
 
@@ -108,8 +105,7 @@ namespace tfel {
     }  // end of
        // GnuplotInterpreterBase::throwKeyAlreadyRegistredCallBack
 
-    bool GnuplotInterpreterBase::isUnsignedInteger(
-        const std::string& s) {
+    bool GnuplotInterpreterBase::isUnsignedInteger(const std::string& s) {
       for (const auto c : s) {
         if (!isdigit(c)) {
           return false;
@@ -118,14 +114,13 @@ namespace tfel {
       return true;
     }  // end of GnuplotInterpreterBase::isUnsignedInteger
 
-    std::string GnuplotInterpreterBase::readNextGroup(
-        const_iterator& p, const const_iterator pe) {
+    std::string GnuplotInterpreterBase::readNextGroup(const_iterator& p,
+                                                      const const_iterator pe) {
       std::string res;
       unsigned short openedParenthesis = 0;
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreterBase::readNextGroup", "", p, pe);
-      while ((p != pe) &&
-             (!((p->value == ",") && (openedParenthesis == 0)))) {
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readNextGroup",
+                                      "", p, pe);
+      while ((p != pe) && (!((p->value == ",") && (openedParenthesis == 0)))) {
         if (p->value == "(") {
           ++openedParenthesis;
         }
@@ -169,15 +164,13 @@ namespace tfel {
         const const_iterator pe) {
       using namespace std;
       using namespace tfel::math;
-      CxxTokenizer::readSpecifiedToken(
-          "GnuplotInterpreterBase::readRange", "[", p, pe);
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreterBase::readRange",
-          "expected ':' or a value", p, pe);
+      CxxTokenizer::readSpecifiedToken("GnuplotInterpreterBase::readRange", "[",
+                                       p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readRange",
+                                      "expected ':' or a value", p, pe);
       if (p->value != ":") {
         vector<string> vars;
-        Evaluator ev(vars,
-                     GnuplotInterpreterBase::readUntil(p, pe, ":"),
+        Evaluator ev(vars, GnuplotInterpreterBase::readUntil(p, pe, ":"),
                      functions);
         ev.removeDependencies();
         if (ev.getNumberOfVariables() != 0u) {
@@ -203,13 +196,11 @@ namespace tfel {
         hasRMinValue = false;
         ++p;
       }
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreterBase::readRange",
-          "expected ']' or a value", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readRange",
+                                      "expected ']' or a value", p, pe);
       if (p->value != "]") {
         vector<string> vars;
-        Evaluator ev(vars,
-                     GnuplotInterpreterBase::readUntil(p, pe, "]"),
+        Evaluator ev(vars, GnuplotInterpreterBase::readUntil(p, pe, "]"),
                      functions);
         ev.removeDependencies();
         if (ev.getNumberOfVariables() != 0u) {
@@ -236,14 +227,13 @@ namespace tfel {
       }
     }  // end of GnuplotInterpreterBase::readRange
 
-    std::string GnuplotInterpreterBase::readUntil(
-        const_iterator& p,
-        const const_iterator pe,
-        const std::string& delim) {
+    std::string GnuplotInterpreterBase::readUntil(const_iterator& p,
+                                                  const const_iterator pe,
+                                                  const std::string& delim) {
       std::string res;
       unsigned short openedParenthesis = 0;
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreterBase::readUntil", "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::readUntil", "",
+                                      p, pe);
       while ((p != pe) && (p->value != delim)) {
         if (p->value == "(") {
           ++openedParenthesis;
@@ -274,8 +264,7 @@ namespace tfel {
           "GnuplotInterpreterBase::readDataFunctionInUsingDeclaration:"
           " ");
       unsigned short openedParenthesis;
-      CxxTokenizer::checkNotEndOfLine(m, "expected using declaration",
-                                      p, pe);
+      CxxTokenizer::checkNotEndOfLine(m, "expected using declaration", p, pe);
       if (p->value == "(") {
         ++p;
         CxxTokenizer::checkNotEndOfLine(m, "", p, pe);
@@ -296,10 +285,9 @@ namespace tfel {
         ++p;
       } else {
         // this shall be a column number
-        tfel::raise_if(
-            !GnuplotInterpreterBase::isUnsignedInteger(p->value),
-            m + ": unexpected token '" + p->value +
-                "', expected column number");
+        tfel::raise_if(!GnuplotInterpreterBase::isUnsignedInteger(p->value),
+                       m + ": unexpected token '" + p->value +
+                           "', expected column number");
         d = p->value;
         ++p;
       }
@@ -312,17 +300,14 @@ namespace tfel {
         const TextDataReader& data,
         const_iterator& p,
         const const_iterator pe) {
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreterBase::getData : ",
-          "expected column number", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreterBase::getData : ",
+                                      "expected column number", p, pe);
       if (p->value == "(") {
         GnuplotInterpreterBase::getData(
-            v, functions, data,
-            GnuplotInterpreterBase::readNextGroup(p, pe));
+            v, functions, data, GnuplotInterpreterBase::readNextGroup(p, pe));
       } else {
         data.getColumn(
-            v,
-            GnuplotInterpreterBase::convertToUnsignedShort(p->value));
+            v, GnuplotInterpreterBase::convertToUnsignedShort(p->value));
         ++p;
       }
     }  // end of GnuplotInterpreterBase::getData
@@ -340,8 +325,7 @@ namespace tfel {
         tfel::raise_if(c, "GnuplotInterpreterBase::getData: " + msg);
       };
       if (GnuplotInterpreterBase::isUnsignedInteger(s)) {
-        const auto c =
-            GnuplotInterpreterBase::convertToUnsignedShort(s);
+        const auto c = GnuplotInterpreterBase::convertToUnsignedShort(s);
         fdata.getColumn(v, c);
         return fdata.getLegend(c);
       } else {
@@ -357,19 +341,16 @@ namespace tfel {
         for (p = vnames.begin(); p != vnames.end(); ++p) {
           if (((*p)[0] != '$')) {
             const auto p4 = functions->find(*p);
-            throw_if(p4 == functions->end(),
-                     "invalid variable '" + *p + "'");
+            throw_if(p4 == functions->end(), "invalid variable '" + *p + "'");
             throw_if(p4->second->getNumberOfVariables() != 0,
                      "invalid variable '" + *p + "'");
             e.setVariableValue(*p, p4->second->getValue());
           } else {
-            throw_if(!GnuplotInterpreterBase::isUnsignedInteger(
-                         p->substr(1)),
-                     "invalid variable name '" + *p +
-                         "' in function '" + s + "'");
+            throw_if(
+                !GnuplotInterpreterBase::isUnsignedInteger(p->substr(1)),
+                "invalid variable name '" + *p + "' in function '" + s + "'");
             const auto vc =
-                GnuplotInterpreterBase::convertToUnsignedShort(
-                    p->substr(1));
+                GnuplotInterpreterBase::convertToUnsignedShort(p->substr(1));
             throw_if(vc == 0, "invalid variable name '" + *p +
                                   "' in function '" + s + "'.");
             vars.push_back(make_pair(*p, vc));
@@ -379,8 +360,7 @@ namespace tfel {
           for (p3 = vars.begin(); p3 != vars.end(); ++p3) {
             if (p2->values.size() < p3->second) {
               std::ostringstream msg;
-              msg << "TextDataReader::getColumn : line '" << p2->nbr
-                  << "' "
+              msg << "TextDataReader::getColumn : line '" << p2->nbr << "' "
                   << "does not have '" << p3->second << "' columns.";
               tfel::raise(msg.str());
             }

@@ -38,8 +38,7 @@ namespace tfel {
         const_iterator& p, const const_iterator pe, const bool b) {
       auto throw_if = [](const bool c, const std::string& m) {
         tfel::raise_if(
-            c,
-            "GnuplotInterpreter::ImportInterpreter::treatImport: " + m);
+            c, "GnuplotInterpreter::ImportInterpreter::treatImport: " + m);
       };
       ImportOptions options;
       CxxTokenizer::checkNotEndOfLine(
@@ -96,16 +95,14 @@ namespace tfel {
             } catch (std::runtime_error&) {
               throw_if(true, "unknown option '" + p->value + "'");
             }
-            throw_if(
-                options.numberOfVariables != -1,
-                "the number of variables has alread been specified");
+            throw_if(options.numberOfVariables != -1,
+                     "the number of variables has alread been specified");
             options.numberOfVariables = static_cast<int>(nbr);
           }
           ++p;
           throw_if(p == pe, "unexpected end of line");
           throw_if((p->value != ">") && (p->value != ","),
-                   "unexpected token '" + p->value +
-                       "', expected ',' or '>'");
+                   "unexpected token '" + p->value + "', expected ',' or '>'");
           if (p->value == ",") {
             ++p;
           }
@@ -125,17 +122,16 @@ namespace tfel {
         const std::string& library,
         const unsigned short varNumber,
         const bool b) {
-      auto& elm = tfel::system::ExternalLibraryManager::
-          getExternalLibraryManager();
-      const auto nb =
-          elm.getCastemFunctionNumberOfVariables(library, function);
+      auto& elm =
+          tfel::system::ExternalLibraryManager::getExternalLibraryManager();
+      const auto nb = elm.getCastemFunctionNumberOfVariables(library, function);
       tfel::raise_if(nb != varNumber,
                      "GnuplotInterpreter::ImportInterpreter::"
                      "importCastemFunction: "
                      "the function '" +
                          function + "' declares " + std::to_string(nb) +
-                         " variables, not " +
-                         std::to_string(varNumber) + " as requested");
+                         " variables, not " + std::to_string(varNumber) +
+                         " as requested");
       auto func = elm.getCastemFunction(library, function);
       interpreter.addFunction(
           function,
@@ -150,8 +146,8 @@ namespace tfel {
         const std::string& library,
         const unsigned short varNumber,
         const bool b) {
-      auto& elm = tfel::system::ExternalLibraryManager::
-          getExternalLibraryManager();
+      auto& elm =
+          tfel::system::ExternalLibraryManager::getExternalLibraryManager();
       const auto nb =
           elm.getCyranoMaterialPropertyNumberOfVariables(library, function);
       tfel::raise_if(nb != varNumber,
@@ -159,8 +155,8 @@ namespace tfel {
                      "importCyranoFunction: "
                      "the function '" +
                          function + "' declares " + std::to_string(nb) +
-                         " variables, not " +
-                         std::to_string(varNumber) + " as requested");
+                         " variables, not " + std::to_string(varNumber) +
+                         " as requested");
       auto func = elm.getCyranoMaterialProperty(library, function);
       interpreter.addFunction(
           function,
@@ -177,51 +173,51 @@ namespace tfel {
         const bool b) {
       using namespace tfel::math::parser;
       using EFunctionPtr = std::shared_ptr<ExternalFunction>;
-      auto& elm = tfel::system::ExternalLibraryManager::
-          getExternalLibraryManager();
+      auto& elm =
+          tfel::system::ExternalLibraryManager::getExternalLibraryManager();
       auto declare = [this, &f, b](const EFunctionPtr& ptr) {
         interpreter.addFunction(f, ptr, b, false);
       };
       switch (varNumber) {
         case 0:
-          declare(std::make_shared<ExternalCFunction<0>>(
-              elm.getCFunction0(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<0>>(elm.getCFunction0(l, f)));
           break;
         case 1:
-          declare(std::make_shared<ExternalCFunction<1>>(
-              elm.getCFunction1(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<1>>(elm.getCFunction1(l, f)));
           break;
         case 2:
-          declare(std::make_shared<ExternalCFunction<2>>(
-              elm.getCFunction2(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<2>>(elm.getCFunction2(l, f)));
           break;
         case 3:
-          declare(std::make_shared<ExternalCFunction<3>>(
-              elm.getCFunction3(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<3>>(elm.getCFunction3(l, f)));
           break;
         case 4:
-          declare(std::make_shared<ExternalCFunction<4>>(
-              elm.getCFunction4(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<4>>(elm.getCFunction4(l, f)));
           break;
         case 5:
-          declare(std::make_shared<ExternalCFunction<5>>(
-              elm.getCFunction5(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<5>>(elm.getCFunction5(l, f)));
           break;
         case 6:
-          declare(std::make_shared<ExternalCFunction<6>>(
-              elm.getCFunction6(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<6>>(elm.getCFunction6(l, f)));
           break;
         case 7:
-          declare(std::make_shared<ExternalCFunction<7>>(
-              elm.getCFunction7(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<7>>(elm.getCFunction7(l, f)));
           break;
         case 8:
-          declare(std::make_shared<ExternalCFunction<8>>(
-              elm.getCFunction8(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<8>>(elm.getCFunction8(l, f)));
           break;
         case 9:
-          declare(std::make_shared<ExternalCFunction<9>>(
-              elm.getCFunction9(l, f)));
+          declare(
+              std::make_shared<ExternalCFunction<9>>(elm.getCFunction9(l, f)));
           break;
         case 10:
           declare(std::make_shared<ExternalCFunction<10>>(
@@ -257,8 +253,7 @@ namespace tfel {
     void GnuplotInterpreter::ImportInterpreter::importFunction(
         const_iterator& p,
         const const_iterator pe,
-        const GnuplotInterpreter::ImportInterpreter::ImportOptions
-            options,
+        const GnuplotInterpreter::ImportInterpreter::ImportOptions options,
         const bool b) {
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::ImportInterpreter::importFunction : ",
@@ -281,8 +276,8 @@ namespace tfel {
           if (p->value == "(") {
             const auto& vars = this->readVariableList(p, pe);
             tfel::raise_if(
-                vars.size() != static_cast<unsigned short>(
-                                   options.numberOfVariables),
+                vars.size() !=
+                    static_cast<unsigned short>(options.numberOfVariables),
                 "GnuplotInterpreter::ImportInterpreter::importFunction:"
                 " "
                 "the number variables of function '" +
@@ -291,8 +286,7 @@ namespace tfel {
                     "is not the same as that specified in the options");
           }
         }
-        varNumber =
-            static_cast<unsigned short>(options.numberOfVariables);
+        varNumber = static_cast<unsigned short>(options.numberOfVariables);
       }
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::ImportInterpreter::importFunction : ",

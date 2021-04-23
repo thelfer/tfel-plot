@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GnuplotFitInterpreter.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,35 +6,26 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GNUPLOTFITINTERPRETER_H_
-#define LIB_TFEL_PLOT_GNUPLOTFITINTERPRETER_H_ 
+#define LIB_TFEL_PLOT_GNUPLOTFITINTERPRETER_H_
 
-#include"TFEL/Plot/GnuplotInterpreter.hxx"
+#include "TFEL/Plot/GnuplotInterpreter.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct GnuplotInterpreter::FitInterpreter
-      : public GnuplotInterpreterBase
-    {
+    struct GnuplotInterpreter::FitInterpreter : public GnuplotInterpreterBase {
+      FitInterpreter(GnuplotInterpreter&, Graph&);
 
-      FitInterpreter(GnuplotInterpreter&,
-		     Graph&);
+      void eval(const_iterator&, const const_iterator);
 
-      void eval(const_iterator&, 
-		const const_iterator);
-
-    protected:
-
+     protected:
       GnuplotInterpreter& interpreter;
 
-    }; // end of struct GnuplotInterpreter::FitInterpreter
+    };  // end of struct GnuplotInterpreter::FitInterpreter
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GNUPLOTFITINTERPRETER_H */
-

@@ -1,37 +1,35 @@
-/*! 
+/*!
  * \file  ImportAlcyoneCurveDialoag.cxx
  * \brief
  * \author Helfer Thomas
  * \brief 19 juin 2012
  */
 
-#include"TFEL/Plot/ImportAlcyoneCurveDialog.hxx"
+#include "TFEL/Plot/ImportAlcyoneCurveDialog.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
     ImportAlcyoneCurveDialog::ImportAlcyoneCurveDialog(Graph& graph,
-						       QWidget * const p)
-      : ImportTextDataDialogBase(graph,p)
-    {} // end of ImportAlcyoneCurveDialog
+                                                       QWidget* const p)
+        : ImportTextDataDialogBase(graph, p) {
+    }  // end of ImportAlcyoneCurveDialog
 
-    QStringList ImportAlcyoneCurveDialog::getCurveKeys(){
+    QStringList ImportAlcyoneCurveDialog::getCurveKeys() {
       return this->data->getLegends();
     }
 
-    QString ImportAlcyoneCurveDialog::getFileDescription() const{
+    QString ImportAlcyoneCurveDialog::getFileDescription() const {
       return "Alcyone Curve";
     }
-    
-    QStringList ImportAlcyoneCurveDialog::getFileExtensions() const{
+
+    QStringList ImportAlcyoneCurveDialog::getFileExtensions() const {
       return QStringList() << "res";
     }
 
     ImportAlcyoneCurveDialog::~ImportAlcyoneCurveDialog() = default;
-    
-  } // end of namespace plot
-  
-} // end of namespace tfel
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel

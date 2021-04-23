@@ -1,111 +1,106 @@
 /*!
  * \file   DataCurve.hxx
- * \brief  
- * 
+ * \brief
+ *
  * \author Helfer Thomas
  * \date   19 jan 2008
  */
 
 #ifndef LIB_TFEL_PLOT_DATACURVE_HXX_
-#define LIB_TFEL_PLOT_DATACURVE_HXX_ 
+#define LIB_TFEL_PLOT_DATACURVE_HXX_
 
-#include<vector>
-#include<memory>
-#include<QtCore/QFileSystemWatcher>
-#include"TFEL/Plot/Config.hxx"
-#include"TFEL/Math/Parser/ExternalFunctionManager.hxx"
-#include"TFEL/Plot/CurveBase.hxx"
+#include <vector>
+#include <memory>
+#include <QtCore/QFileSystemWatcher>
+#include "TFEL/Plot/Config.hxx"
+#include "TFEL/Math/Parser/ExternalFunctionManager.hxx"
+#include "TFEL/Plot/CurveBase.hxx"
 
-namespace tfel{
+namespace tfel {
 
-  namespace plot{
+  namespace plot {
 
     struct TextDataReader;
 
     struct TFELPLOT_VISIBILITY_EXPORT DataCurve : CurveBase {
      public slots:
 
-      void setNumberOfSamples(const unsigned short,const bool) override;
+      void setNumberOfSamples(const unsigned short, const bool) override;
 
-    public:
-      
-      typedef tfel::math::parser::ExternalFunctionManager    ExternalFunctionManager;
-      typedef tfel::math::parser::ExternalFunctionManagerPtr ExternalFunctionManagerPtr;
-
-      DataCurve(const QString&,
-		const QString&,
-		const unsigned short,
-		const unsigned short);
+     public:
+      typedef tfel::math::parser::ExternalFunctionManager
+          ExternalFunctionManager;
+      typedef tfel::math::parser::ExternalFunctionManagerPtr
+          ExternalFunctionManagerPtr;
 
       DataCurve(const QString&,
-		const QString&,
-		const QString&,
-		const unsigned short,
-		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
+                const QString&,
+                const unsigned short,
+                const unsigned short);
 
       DataCurve(const QString&,
-		const QString&,
-		const unsigned short,
-		const QString&,
-		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
+                const QString&,
+                const QString&,
+                const unsigned short,
+                ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
       DataCurve(const QString&,
-		const QString&,
-		const QString&,
-		const QString&,
-		ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
+                const QString&,
+                const unsigned short,
+                const QString&,
+                ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
-      DataCurve(const std::vector<qreal>&,
-		const std::vector<qreal>&);
+      DataCurve(const QString&,
+                const QString&,
+                const QString&,
+                const QString&,
+                ExternalFunctionManagerPtr = ExternalFunctionManagerPtr());
 
-      bool  hasRange() const override;
+      DataCurve(const std::vector<qreal>&, const std::vector<qreal>&);
+
+      bool hasRange() const override;
       qreal minRange() const override;
       qreal maxRange() const override;
 
-      void getValues(std::vector<Point>&,const qreal,
-		     const qreal,const unsigned short) override;
+      void getValues(std::vector<Point>&,
+                     const qreal,
+                     const qreal,
+                     const unsigned short) override;
 
       bool hasSpecifiedNumberOfSamples() const override;
 
       unsigned short getNumberOfSamples() const override;
 
-      const std::vector<qreal>&
-      getAbscissa() const;
+      const std::vector<qreal>& getAbscissa() const;
 
-      const std::vector<qreal>&
-      getValues() const;
+      const std::vector<qreal>& getValues() const;
 
       ~DataCurve() override;
 
-    public slots:
+     public slots:
 
       void updateDataFile();
-      
+
       void updatedDataFile(const QString&);
 
-    protected slots:
-      
-      void  executeDelayedDataLoading();
+     protected slots:
 
-    protected:
+      void executeDelayedDataLoading();
 
-      static double
-      readDouble(const std::string&,
-		 const unsigned short);
+     protected:
+      static double readDouble(const std::string&, const unsigned short);
 
-      static bool
-      isUnsignedInteger(const std::string&);
+      static bool isUnsignedInteger(const std::string&);
 
-      static unsigned short
-      convertToUnsignedShort(const std::string&);
+      static unsigned short convertToUnsignedShort(const std::string&);
 
       void loadDataFromFile(const bool);
 
       void getValues(std::vector<double>&,
-		     const TextDataReader&,
-		     const QString&);
-      
-      QFileSystemWatcher *watcher;
+                     const TextDataReader&,
+                     const QString&);
+
+      QFileSystemWatcher* watcher;
 
       ExternalFunctionManagerPtr fm;
 
@@ -121,11 +116,10 @@ namespace tfel{
      private:
       Q_OBJECT
 
-    }; // end of DataCurve
-    
-  } // end of namespace plot
+    };  // end of DataCurve
 
-} // end of namespace tfel
+  }  // end of namespace plot
+
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_DATACURVE_HXX */
-

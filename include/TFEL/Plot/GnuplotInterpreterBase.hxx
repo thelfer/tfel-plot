@@ -28,9 +28,8 @@ namespace tfel {
      * base class for classes in charge of interpreting gnuplot
      * commands
      */
-    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT
-        GnuplotInterpreterBase : QObject {
-
+    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GnuplotInterpreterBase
+        : QObject {
      protected:
       //! a simple alias
       using Token = tfel::utilities::Token;
@@ -55,8 +54,7 @@ namespace tfel {
 
       static QString readQString(const_iterator&, const const_iterator);
 
-      static double readDouble(const std::string&,
-                               const unsigned short);
+      static double readDouble(const std::string&, const unsigned short);
 
       static bool isUnsignedInteger(const std::string&);
 
@@ -67,42 +65,40 @@ namespace tfel {
                                    const const_iterator,
                                    const bool = true);
 
-      static std::vector<std::string> readVariableList(
-          const_iterator&, const const_iterator, const bool = true);
+      static std::vector<std::string> readVariableList(const_iterator&,
+                                                       const const_iterator,
+                                                       const bool = true);
 
       static bool isValidIdentifier(const std::string&);
 
-      static std::string readNextGroup(const_iterator&,
-                                       const const_iterator);
+      static std::string readNextGroup(const_iterator&, const const_iterator);
 
-      static void readRange(
-          bool&,
-          bool&,
-          double&,
-          double&,
-          tfel::math::parser::ExternalFunctionManagerPtr&,
-          const_iterator&,
-          const const_iterator);
+      static void readRange(bool&,
+                            bool&,
+                            double&,
+                            double&,
+                            tfel::math::parser::ExternalFunctionManagerPtr&,
+                            const_iterator&,
+                            const const_iterator);
 
       static std::string readUntil(const_iterator&,
                                    const const_iterator,
                                    const std::string&);
 
-      static void readDataFunctionInUsingDeclaration(
-          std::string&, const_iterator&, const const_iterator);
+      static void readDataFunctionInUsingDeclaration(std::string&,
+                                                     const_iterator&,
+                                                     const const_iterator);
 
-      static void getData(
-          std::vector<double>&,
-          tfel::math::parser::ExternalFunctionManagerPtr,
-          const TextDataReader&,
-          const_iterator&,
-          const const_iterator);
+      static void getData(std::vector<double>&,
+                          tfel::math::parser::ExternalFunctionManagerPtr,
+                          const TextDataReader&,
+                          const_iterator&,
+                          const const_iterator);
 
-      static QString getData(
-          std::vector<double>&,
-          tfel::math::parser::ExternalFunctionManagerPtr,
-          const TextDataReader&,
-          const std::string&);
+      static QString getData(std::vector<double>&,
+                             tfel::math::parser::ExternalFunctionManagerPtr,
+                             const TextDataReader&,
+                             const std::string&);
 
       //! graph that will be affected by the interpreter
       Graph& g;

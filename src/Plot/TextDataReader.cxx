@@ -70,7 +70,7 @@ namespace tfel {
           }
         }
         this->lines.push_back(l);
-      }; // end of treatLine
+      };  // end of treatLine
       auto line = in.readLine();
       if (!line.isEmpty()) {
         if (line[0] == '#') {
@@ -150,12 +150,11 @@ namespace tfel {
                                    const unsigned short i) const {
       tab.reserve(this->lines.size());
       // sanity check
-      tfel::raise_if(
-          i == 0u,
-          "TextDataReader::getColumn: "
-          "column '0' requested (column numbers begins at '1').");
+      tfel::raise_if(i == 0u,
+                     "TextDataReader::getColumn: "
+                     "column '0' requested (column numbers begins at '1').");
       // treatment
-      int j=0;
+      int j = 0;
       for (const auto& line : this->lines) {
         if (line.values.size() < i) {
           tfel::raise(
@@ -171,8 +170,8 @@ namespace tfel {
       }
     }  // end of TextDataReader::getColumn
 
-    std::vector<TextDataReader::Line>::const_iterator
-    TextDataReader::begin() const {
+    std::vector<TextDataReader::Line>::const_iterator TextDataReader::begin()
+        const {
       return this->lines.begin();
     }  // end of TextDataReader::begin
 

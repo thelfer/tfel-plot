@@ -14,13 +14,10 @@ namespace tfel {
 
   namespace plot {
 
-    struct GnuplotInterpreter::ImportInterpreter
-        : GnuplotInterpreterBase {
+    struct GnuplotInterpreter::ImportInterpreter : GnuplotInterpreterBase {
       ImportInterpreter(GnuplotInterpreter&, Graph&);
 
-      void treatImport(const_iterator&,
-                       const const_iterator,
-                       const bool);
+      void treatImport(const_iterator&, const const_iterator, const bool);
 
      protected:
       struct ImportOptions;

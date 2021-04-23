@@ -22,8 +22,7 @@ namespace tfel {
     /*!
      * class handling graph configuration
      */
-    struct TFELPLOT_VISIBILITY_EXPORT GraphConfigurationDialog
-        : QDialog {
+    struct TFELPLOT_VISIBILITY_EXPORT GraphConfigurationDialog : QDialog {
       GraphConfigurationDialog(Graph &);
      protected slots:
       void xMinRangeChanged(const QString &);

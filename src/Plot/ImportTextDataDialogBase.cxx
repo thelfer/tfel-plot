@@ -28,19 +28,17 @@ namespace tfel {
         const QString& qvalue) {
       const auto& value = qvalue.toStdString();
       for (const auto& c : value) {
-        tfel::raise_if(
-            !isdigit(c),
-            "ImportTextDataDialogBase::convertToUnsignedShort:"
-            " invalid entry");
+        tfel::raise_if(!isdigit(c),
+                       "ImportTextDataDialogBase::convertToUnsignedShort:"
+                       " invalid entry");
       }
       unsigned short u;
       std::istringstream converter(value);
       converter >> u;
-      tfel::raise_if(
-          !converter && (!converter.eof()),
-          "ImportTextDataDialogBase::convertToUnsignedShort: "
-          "not read value from token '" +
-              value + "'.");
+      tfel::raise_if(!converter && (!converter.eof()),
+                     "ImportTextDataDialogBase::convertToUnsignedShort: "
+                     "not read value from token '" +
+                         value + "'.");
       return u;
     }  // end of ImportTextDataDialogBase::convertToUnsignedShort
 
@@ -83,8 +81,8 @@ namespace tfel {
         }
         desc += ")";
       }
-      this->file = QFileDialog::getOpenFileName(
-          this, tr("Open %1 File").arg(d), "", desc);
+      this->file = QFileDialog::getOpenFileName(this, tr("Open %1 File").arg(d),
+                                                "", desc);
       if (this->file.isEmpty()) {
         this->ok = false;
         return this->ok;
@@ -116,8 +114,7 @@ namespace tfel {
       auto* hl = new QHBoxLayout;
       auto* gl = new QGridLayout;
       const auto l = this->getCurveKeys();
-      this->setWindowTitle(
-          tr("Import %1").arg(this->getFileDescription()));
+      this->setWindowTitle(tr("Import %1").arg(this->getFileDescription()));
       if (!l.isEmpty()) {
         auto pl = l.begin();
         int i;
@@ -151,8 +148,7 @@ namespace tfel {
       gl->addWidget(this->lo, 1, 2);
       auto* cb = new QPushButton(QObject::tr("Cancel"), this);
       auto* ib = new QPushButton(QObject::tr("Import"), this);
-      auto* ib2 =
-          new QPushButton(QObject::tr("Import and close"), this);
+      auto* ib2 = new QPushButton(QObject::tr("Import and close"), this);
       hl->addWidget(cb);
       hl->addWidget(ib);
       hl->addWidget(ib2);
@@ -170,12 +166,12 @@ namespace tfel {
                        &ImportTextDataDialogBase::ordinateChanged);
       QObject::connect(
           this->la,
-          static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-          this, &ImportTextDataDialogBase::currentAbscissaIndexChanged);
+          static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this,
+          &ImportTextDataDialogBase::currentAbscissaIndexChanged);
       QObject::connect(
           this->lo,
-          static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-          this, &ImportTextDataDialogBase::currentOrdinateIndexChanged);
+          static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this,
+          &ImportTextDataDialogBase::currentOrdinateIndexChanged);
       QObject::connect(this->ke, &QLineEdit::textChanged, this,
                        &ImportTextDataDialogBase::keyChanged);
       vl->addLayout(this->cl);
@@ -245,8 +241,7 @@ namespace tfel {
       if (this->afirst) {
         this->a->setText("$" + QString::number(i + 1));
       } else {
-        this->a->setText(this->a->text() + "$" +
-                         QString::number(i + 1));
+        this->a->setText(this->a->text() + "$" + QString::number(i + 1));
       }
       QObject::connect(this->a, &QLineEdit::textChanged, this,
                        &ImportTextDataDialogBase::abscissaChanged);
@@ -258,8 +253,7 @@ namespace tfel {
       if (this->ofirst) {
         this->o->setText("$" + QString::number(i + 1));
       } else {
-        this->o->setText(this->o->text() + "$" +
-                         QString::number(i + 1));
+        this->o->setText(this->o->text() + "$" + QString::number(i + 1));
       }
       QObject::connect(this->o, &QLineEdit::textChanged, this,
                        &ImportTextDataDialogBase::ordinateChanged);

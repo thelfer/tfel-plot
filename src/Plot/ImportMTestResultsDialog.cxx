@@ -1,11 +1,11 @@
 /*!
  * \file   ImportMTestCurveDialog.cxx
- * \brief    
+ * \brief
  * \author THOMAS HELFER
  * \date   26 janv. 2016
  */
 
-#include"TFEL/Plot/ImportMTestResultsDialog.hxx"
+#include "TFEL/Plot/ImportMTestResultsDialog.hxx"
 
 namespace tfel {
 
@@ -25,7 +25,7 @@ namespace tfel {
     }
 
     ImportMTestResultsDialog::~ImportMTestResultsDialog() = default;
-    
-  } // end of namespace plot
-  
-} // end of namespace tfel
+
+  }  // end of namespace plot
+
+}  // end of namespace tfel

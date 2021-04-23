@@ -23,9 +23,7 @@ namespace tfel {
      * base class used to choose :
      *
      */
-    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationDialogBase
-        : QDialog {
-
+    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationDialogBase : QDialog {
      protected slots:
 
       virtual void chooseCurveColor();

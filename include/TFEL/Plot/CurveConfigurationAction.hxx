@@ -21,12 +21,8 @@ namespace tfel {
     /*!
      * class handling curve configuration
      */
-    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationAction
-        : QAction {
-
-      CurveConfigurationAction(Curve *const,
-                               const QString &,
-                               QWidget *const);
+    struct TFELPLOT_VISIBILITY_EXPORT CurveConfigurationAction : QAction {
+      CurveConfigurationAction(Curve *const, const QString &, QWidget *const);
 
      public slots:
 

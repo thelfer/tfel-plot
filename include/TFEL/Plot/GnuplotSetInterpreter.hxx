@@ -184,8 +184,7 @@ namespace tfel {
        * \param[in,out] p:  current position
        * \param[in]     pe: end of current instruction
        */
-      std::map<qreal, QString> treatTics(const_iterator&,
-                                         const const_iterator);
+      std::map<qreal, QString> treatTics(const_iterator&, const const_iterator);
 
       typedef void (SetInterpreter::*MemFuncPtr)(const_iterator&,
                                                  const const_iterator);

@@ -17,9 +17,7 @@ namespace tfel {
     struct Graph;
 
     struct GraphTextItem : QGraphicsTextItem {
-      
-      GraphTextItem(Graph *const,
-                    void (Graph::*)(const QString &, const bool));
+      GraphTextItem(Graph *const, void (Graph::*)(const QString &, const bool));
 
       GraphTextItem(const QString &,
                     Graph *const,

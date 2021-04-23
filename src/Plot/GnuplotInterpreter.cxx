@@ -51,19 +51,15 @@ namespace tfel {
     }
 
     GnuplotInterpreter::ParsingResult::ParsingResult() = default;
-    GnuplotInterpreter::ParsingResult::ParsingResult(ParsingResult&&) =
+    GnuplotInterpreter::ParsingResult::ParsingResult(ParsingResult&&) = default;
+    GnuplotInterpreter::ParsingResult::ParsingResult(const ParsingResult&) =
         default;
-    GnuplotInterpreter::ParsingResult::ParsingResult(
-        const ParsingResult&) = default;
-    GnuplotInterpreter::ParsingResult&
-    GnuplotInterpreter::ParsingResult::operator=(ParsingResult&&) =
-        default;
-    GnuplotInterpreter::ParsingResult&
-    GnuplotInterpreter::ParsingResult::operator=(const ParsingResult&) =
-        default;
+    GnuplotInterpreter::ParsingResult& GnuplotInterpreter::ParsingResult::
+    operator=(ParsingResult&&) = default;
+    GnuplotInterpreter::ParsingResult& GnuplotInterpreter::ParsingResult::
+    operator=(const ParsingResult&) = default;
 
-    GnuplotInterpreter::GnuplotInterpreter(Graph& graph,
-                                           QObject* const p)
+    GnuplotInterpreter::GnuplotInterpreter(Graph& graph, QObject* const p)
         : GnuplotInterpreterBase(graph, p),
           dummyVariable("x"),
           terminal("x11"),
@@ -161,8 +157,7 @@ namespace tfel {
           append(r.output, r2.output);
           if (!r2.error.isEmpty()) {
             QString msg("GnuplotInterpreter::parseFile: ");
-            msg += QObject::tr(
-                       "error at line '%1' while parsing file '%2'\n")
+            msg += QObject::tr("error at line '%1' while parsing file '%2'\n")
                        .arg(pos)
                        .arg(f);
             msg += r2.error;
@@ -176,10 +171,9 @@ namespace tfel {
       }
       if (!line.isEmpty()) {
         QString msg("GnuplotInterpreter::parseFile : ");
-        msg +=
-            QObject::tr("error at line '%1' while parsing file '%2'\n")
-                .arg(pos)
-                .arg(f);
+        msg += QObject::tr("error at line '%1' while parsing file '%2'\n")
+                   .arg(pos)
+                   .arg(f);
         msg += QObject::tr("last line ended with a continuation mark");
         append(r.error, msg);
       }
@@ -281,12 +275,11 @@ namespace tfel {
       return r;
     }
 
-    void GnuplotInterpreter::setTerminal(
-        const std::string& t, const std::vector<std::string>&) {
-      if (!((t == "pdf") || (t == "table") || (t == "svg") ||
-            (t == "bmp") || (t == "png") || (t == "jpg") ||
-            (t == "jpeg") || (t == "ppm") || (t == "xbm") ||
-            (t == "xpm") || (t == "x11"))) {
+    void GnuplotInterpreter::setTerminal(const std::string& t,
+                                         const std::vector<std::string>&) {
+      if (!((t == "pdf") || (t == "table") || (t == "svg") || (t == "bmp") ||
+            (t == "png") || (t == "jpg") || (t == "jpeg") || (t == "ppm") ||
+            (t == "xbm") || (t == "xpm") || (t == "x11"))) {
         tfel::raise(
             "GnuplotInterpreter::setTerminal: "
             "unsupported terminal '" +
@@ -297,15 +290,14 @@ namespace tfel {
 
     GnuplotInterpreter::ParsingResult GnuplotInterpreter::treatHelp(
         const_iterator& p, const const_iterator pe) {
-      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatHelp",
-                                      "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatHelp", "", p,
+                                      pe);
       ParsingResult r;
       const auto k = p->value;
       const auto f = getDocumentationFilePath(k);
       ++p;
       if (f.empty()) {
-        r.output +=
-            QString::fromStdString("no help available for '" + k + "'");
+        r.output += QString::fromStdString("no help available for '" + k + "'");
       } else {
         std::ifstream desc(f);
         std::ostringstream o;
@@ -370,8 +362,7 @@ namespace tfel {
         } else if (this->terminal == "bmp") {
           this->g.replot();
           this->g.exportToBMP(QString::fromStdString(this->output));
-        } else if ((this->terminal == "jpg") ||
-                   (this->terminal == "jepg")) {
+        } else if ((this->terminal == "jpg") || (this->terminal == "jepg")) {
           this->g.replot();
           this->g.exportToJPEG(QString::fromStdString(this->output));
         } else if (this->terminal == "table") {
@@ -414,15 +405,12 @@ namespace tfel {
       return this->parseFile(f);
     }  // end of GnuplotInterpreter::treatInclude
 
-    std::shared_ptr<tfel::math::Evaluator>
-    GnuplotInterpreter::readFunction(const_iterator& p,
-                                     const const_iterator pe,
-                                     const std::string& delim) {
+    std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(
+        const_iterator& p, const const_iterator pe, const std::string& delim) {
       return this->readFunction(p, pe, std::vector<std::string>{delim});
     }
 
-    std::shared_ptr<tfel::math::Evaluator>
-    GnuplotInterpreter::readFunction(
+    std::shared_ptr<tfel::math::Evaluator> GnuplotInterpreter::readFunction(
         const_iterator& p,
         const const_iterator pe,
         const std::vector<std::string>& delim) {
@@ -491,8 +479,8 @@ namespace tfel {
         const_iterator& p,
         const const_iterator pe,
         const std::vector<std::string>& delim) {
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::readCoordinates", "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::readCoordinates", "",
+                                      p, pe);
       if (p->value == "first") {
         c = GraphCoordinates(GraphCoordinates::FIRST,
                              this->readFunction(p, pe, delim));
@@ -542,8 +530,8 @@ namespace tfel {
       return {};
     }  // end of GnuplotInterpreter::treatFit
 
-    std::string GnuplotInterpreter::gatherTokenGroup(
-        const_iterator& p, const const_iterator pe) {
+    std::string GnuplotInterpreter::gatherTokenGroup(const_iterator& p,
+                                                     const const_iterator pe) {
       auto all = std::string{};
       while (p != pe) {
         all += p->value;
@@ -564,8 +552,7 @@ namespace tfel {
       throw_if(!this->isValidIdentifier(mname),
                "name '" + name + "' is not valid.");
       if (this->locks.find(name) != this->locks.end()) {
-        throw_if((*(this->functions)).find(name) ==
-                     (*(this->functions)).end(),
+        throw_if((*(this->functions)).find(name) == (*(this->functions)).end(),
                  "internal error, a lock has been posed for a variable "
                  "called '"
                  "'" +
@@ -584,16 +571,15 @@ namespace tfel {
       }
     }  // end of GnuplotInterpreter::addFunction
 
-    void GnuplotInterpreter::analyseFunctionDefinition(
-        const_iterator& p,
-        const const_iterator pe,
-        const bool b1,
-        const bool b2) {
+    void GnuplotInterpreter::analyseFunctionDefinition(const_iterator& p,
+                                                       const const_iterator pe,
+                                                       const bool b1,
+                                                       const bool b2) {
       using namespace std;
       using namespace tfel::utilities;
+      using std::vector;
       using tfel::math::Evaluator;
       using tfel::math::parser::ExternalFunction;
-      using std::vector;
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(std::runtime_error(
@@ -618,8 +604,7 @@ namespace tfel {
                  "invalid declaraction of variable '" + variable + "'");
         auto ev = std::make_shared<Evaluator>(vars, group, functions);
         if (ev->getNumberOfVariables() != 0u) {
-          string msg(
-              "GnuplotInterpreter::analyseFunctionDefinition : ");
+          string msg("GnuplotInterpreter::analyseFunctionDefinition : ");
           msg += "error while declaring variable '" + variable;
           if (ev->getNumberOfVariables() == 1u) {
             msg += "', unknown variable " + ev->getVariablesNames()[0];
@@ -729,8 +714,8 @@ namespace tfel {
       bool cont = true;
       std::ostringstream res;
       res.precision(15);
-      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint",
-                                      "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint", "", p,
+                                      pe);
       while ((p != pe) && (cont)) {
         if (p->flag == Token::String) {
           res << p->value.substr(1, p->value.size() - 2);
@@ -739,10 +724,10 @@ namespace tfel {
           res << this->eval(p, pe);
         }
         if (p != pe) {
-          CxxTokenizer::readSpecifiedToken(
-              "GnuplotInterpreter::treatPrint", ",", p, pe);
-          CxxTokenizer::checkNotEndOfLine(
-              "GnuplotInterpreter::treatPrint", "", p, pe);
+          CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatPrint",
+                                           ",", p, pe);
+          CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatPrint", "",
+                                          p, pe);
         }
       }
       ParsingResult r;

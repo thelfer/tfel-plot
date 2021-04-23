@@ -26,9 +26,7 @@ namespace tfel {
      * This class provides a simple shell
      * to interpreter gnuplot shell
      */
-    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell
-        : QTextEdit {
-      
+    struct TFELGNUPLOTINTERPRETER_VISIBILITY_EXPORT GraphShell : QTextEdit {
       GraphShell(Graph &, QWidget *const = nullptr);
 
       virtual GnuplotInterpreter::ParsingResult treatNewCommand(

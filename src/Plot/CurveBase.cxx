@@ -1,143 +1,115 @@
-/*! 
+/*!
  * \file  CurveBase.cxx
  * \brief
  * \author Helfer Thomas
  * \brief 06 juin 2012
  */
 
-#include"TFEL/Raise.hxx"
-#include"TFEL/Plot/CurveBase.hxx"
+#include "TFEL/Raise.hxx"
+#include "TFEL/Plot/CurveBase.hxx"
 
-namespace tfel{
+namespace tfel {
 
-  namespace plot{
-        
+  namespace plot {
+
     CurveBase::CurveBase() = default;
 
-    bool CurveBase::shouldFollowThemeLineStyle() const
-    {
+    bool CurveBase::shouldFollowThemeLineStyle() const {
       return this->useThemeLineStyle;
     }
-      
-    unsigned short
-    CurveBase::getThemeLineStyle() const
-    {
+
+    unsigned short CurveBase::getThemeLineStyle() const {
       return this->themeLineStyle;
-    } // end of Curve::getThemeLineStyle
+    }  // end of Curve::getThemeLineStyle
 
-    void
-    CurveBase::setThemeLineStyle(const unsigned short t)
-    {
+    void CurveBase::setThemeLineStyle(const unsigned short t) {
       this->themeLineStyle = t;
-    } // end of Curve::getThemeLineStyle
+    }  // end of Curve::getThemeLineStyle
 
-    unsigned short CurveBase::getWidth() const
-    {
-      return this->width;
-    }
-    
-    void CurveBase::setWidth(const unsigned short w,const bool b)
-    {
+    unsigned short CurveBase::getWidth() const { return this->width; }
+
+    void CurveBase::setWidth(const unsigned short w, const bool b) {
       this->width = w;
       emit widthChanged(w);
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
     }
 
-    void CurveBase::sendRemoveSignal()
-    {
-      emit remove(this);
-    }
+    void CurveBase::sendRemoveSignal() { emit remove(this); }
 
-    bool CurveBase::isFilled() const
-    {
+    bool CurveBase::isFilled() const {
       return this->filled;
-    } // end of CurveBase::isFilled
+    }  // end of CurveBase::isFilled
 
-    void CurveBase::setFilled(const bool f,
-			      const bool b)
-    {
+    void CurveBase::setFilled(const bool f, const bool b) {
       this->filled = f;
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
-    } // end of CurveBase::setFilled
+    }  // end of CurveBase::setFilled
 
-    void CurveBase::setKey(const QString& l,
-			   const bool b)
-    {
+    void CurveBase::setKey(const QString& l, const bool b) {
       this->hasLegend = !l.isEmpty();
       this->legend = l;
       emit keyChanged(l);
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
-    } // end of CurveBase::setKey
+    }  // end of CurveBase::setKey
 
-    bool CurveBase::hasKey() const
-    {
+    bool CurveBase::hasKey() const {
       return this->hasLegend;
-    } // end of CurveBase::hasKey
+    }  // end of CurveBase::hasKey
 
-    QString CurveBase::getKey() const
-    {
+    QString CurveBase::getKey() const {
       return this->legend;
-    } // end of CurveBase::getKey()
+    }  // end of CurveBase::getKey()
 
-    bool CurveBase::hasSpecifiedColor() const
-    {
+    bool CurveBase::hasSpecifiedColor() const {
       return this->hasColor;
-    } // end of CurveBase::hasSpecifiedColor
+    }  // end of CurveBase::hasSpecifiedColor
 
-    void CurveBase::setColor(const QColor& c,
-			     const bool b)
-    {
+    void CurveBase::setColor(const QColor& c, const bool b) {
       this->hasColor = true;
       this->color = c;
       emit colorChanged(c);
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
-    } // end of CurveBase::setColor
+    }  // end of CurveBase::setColor
 
-    void CurveBase::unsetColor(const bool b)
-    {
+    void CurveBase::unsetColor(const bool b) {
       this->hasColor = false;
       this->color = QColor();
       emit colorChanged(this->color);
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
-    } // end of CurveBase::unsetColor
+    }  // end of CurveBase::unsetColor
 
-    void CurveBase::setStyle(const Style& s,
-			     const bool b)
-    {
+    void CurveBase::setStyle(const Style& s, const bool b) {
       this->useThemeLineStyle = false;
       this->style = s;
       emit styleChanged(this->style);
-      if(b){
-	emit updated(this);
+      if (b) {
+        emit updated(this);
       }
-    } // end of CurveBase::setStyle
+    }  // end of CurveBase::setStyle
 
-    QColor CurveBase::getColor() const
-    {
+    QColor CurveBase::getColor() const {
       tfel::raise_if(!this->hasColor,
-		     "CurveBase::getColor: "
-		     "no color has been specified.");
+                     "CurveBase::getColor: "
+                     "no color has been specified.");
       return this->color;
-    } // end of CurveBase::getColor
+    }  // end of CurveBase::getColor
 
-    Curve::Style CurveBase::getStyle() const
-    {
+    Curve::Style CurveBase::getStyle() const {
       return this->style;
-    } // end of CurveBase::getStyle
+    }  // end of CurveBase::getStyle
 
     CurveBase::~CurveBase() = default;
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
-
+}  // end of namespace tfel

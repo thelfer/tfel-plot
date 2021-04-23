@@ -21,8 +21,8 @@ namespace tfel {
         GnuplotInterpreter& i, Graph& graph)
         : GnuplotInterpreterBase(graph), interpreter(i) {}
 
-    void GnuplotInterpreter::KrigingInterpreter::eval(
-        const_iterator& p, const const_iterator pe) {
+    void GnuplotInterpreter::KrigingInterpreter::eval(const_iterator& p,
+                                                      const const_iterator pe) {
       using namespace std;
       using namespace tfel::utilities;
       using namespace tfel::math;
@@ -34,18 +34,16 @@ namespace tfel {
       std::vector<double> vx4;
       std::vector<double> vy;
       int numberOfVariables = -1;
-      CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::treatKriging : ",
-          "expected function name", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatKriging : ",
+                                      "expected function name", p, pe);
       const auto function = p->value;
       string file;
       ++p;
       unsigned short varNumber = 0;
       auto functions = this->interpreter.getExternalFunctionManager();
       if (numberOfVariables == -1) {
-        CxxTokenizer::checkNotEndOfLine(
-            "GnuplotInterpreter::treatKriging : ",
-            "expected variable list", p, pe);
+        CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatKriging : ",
+                                        "expected variable list", p, pe);
         if (p->value == "(") {
           const std::vector<string>& vars = this->readVariableList(p, pe);
           varNumber = static_cast<unsigned short>(vars.size());
@@ -56,11 +54,9 @@ namespace tfel {
         if (p != pe) {
           if (p->value == "(") {
             const auto vars = this->readVariableList(p, pe);
-            if (vars.size() !=
-                static_cast<unsigned short>(numberOfVariables)) {
+            if (vars.size() != static_cast<unsigned short>(numberOfVariables)) {
               string msg("GnuplotInterpreter::treatKriging : ");
-              msg +=
-                  "the number variables of function '" + function + "'";
+              msg += "the number variables of function '" + function + "'";
               msg += "is not the same as that specified in the options";
               throw(runtime_error(msg));
             }
@@ -74,11 +70,9 @@ namespace tfel {
         throw(runtime_error(msg));
       }
       CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::treatKriging : ", "expected file name",
-          p, pe);
+          "GnuplotInterpreter::treatKriging : ", "expected file name", p, pe);
       TextDataReader data;
-      data.extractData(
-          QString::fromStdString(CxxTokenizer::readString(p, pe)));
+      data.extractData(QString::fromStdString(CxxTokenizer::readString(p, pe)));
       if (p == pe) {
         if (varNumber == 1) {
           data.getColumn(vx1, 1);
@@ -106,8 +100,8 @@ namespace tfel {
         // using
         CxxTokenizer::readSpecifiedToken(
             "GnuplotInterpreter::treatKriging : ", "using", p, pe);
-        CxxTokenizer::checkNotEndOfLine(
-            "GnuplotInterpreter::treatKriging", "", p, pe);
+        CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatKriging", "",
+                                        p, pe);
         if (varNumber == 1) {
           this->getData(vx1, functions, data, p, pe);
           CxxTokenizer::readSpecifiedToken(
@@ -141,14 +135,14 @@ namespace tfel {
       if (varNumber == 1) {
         std::vector<std::pair<double, double>> points(vx1.size());
         decltype(points.size()) i;
-        auto pt  = vx1.begin();
+        auto pt = vx1.begin();
         auto pt2 = vy.begin();
         for (i = 0; pt != vx1.end(); ++pt, ++pt2, ++i) {
           points[i] = pair<double, double>(*pt, *pt2);
         }
-        interpreter.addFunction(
-            function, EFunctionPtr(new KrigedFunction<1>(points)),
-            false, false);
+        interpreter.addFunction(function,
+                                EFunctionPtr(new KrigedFunction<1>(points)),
+                                false, false);
       } else if (varNumber == 2) {
         if ((vx1.size() != vx2.size()) || (vx1.size() != vy.size())) {
           string msg("GnuplotInterpreter::treatKriging : ");
@@ -157,15 +151,15 @@ namespace tfel {
         }
         std::vector<pair<tvector<2>, double>> points(vx1.size());
         decltype(points.size()) i;
-        auto pt  = vx1.begin();
+        auto pt = vx1.begin();
         auto pt2 = vx2.begin();
         auto pt3 = vy.begin();
         for (i = 0; pt != vx1.end(); ++pt, ++pt2, ++pt3, ++i) {
-          points[i] = {{*pt,*pt2},*pt3};
+          points[i] = {{*pt, *pt2}, *pt3};
         }
-        interpreter.addFunction(
-            function, EFunctionPtr(new KrigedFunction<2>(points)),
-            false, false);
+        interpreter.addFunction(function,
+                                EFunctionPtr(new KrigedFunction<2>(points)),
+                                false, false);
       } else if (varNumber == 3) {
         if ((vx1.size() != vx2.size()) || (vx1.size() != vx3.size()) ||
             (vx1.size() != vy.size())) {
@@ -180,12 +174,12 @@ namespace tfel {
         auto pt3 = vx3.begin();
         auto pt4 = vy.begin();
         for (i = 0; pt != vx1.end(); ++pt, ++pt2, ++pt3, ++pt4, ++i) {
-          tvector<3> v = {*pt,*pt2,*pt3};
+          tvector<3> v = {*pt, *pt2, *pt3};
           points[i] = pair<tvector<3>, double>(v, *pt4);
         }
-        interpreter.addFunction(
-            function, EFunctionPtr(new KrigedFunction<3>(points)),
-            false, false);
+        interpreter.addFunction(function,
+                                EFunctionPtr(new KrigedFunction<3>(points)),
+                                false, false);
       } else {
         string msg("GnuplotInterpreter::treatKriging : ");
         msg += "unsupported number of variables";

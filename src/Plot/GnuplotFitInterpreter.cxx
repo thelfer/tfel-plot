@@ -23,25 +23,23 @@ namespace tfel {
 
   namespace plot {
 
-    GnuplotInterpreter::FitInterpreter::FitInterpreter(
-        GnuplotInterpreter& i, Graph& graph)
+    GnuplotInterpreter::FitInterpreter::FitInterpreter(GnuplotInterpreter& i,
+                                                       Graph& graph)
         : GnuplotInterpreterBase(graph), interpreter(i) {}
 
-    void GnuplotInterpreter::FitInterpreter::eval(
-        const_iterator& p, const const_iterator pe) {
+    void GnuplotInterpreter::FitInterpreter::eval(const_iterator& p,
+                                                  const const_iterator pe) {
       using namespace std;
       using namespace tfel::math;
       using namespace tfel::math::parser;
       using namespace tfel::utilities;
       using std::vector;
-      using ExternalFunctionWrapper =
-          LevenbergMarquardtExternalFunctionWrapper;
+      using ExternalFunctionWrapper = LevenbergMarquardtExternalFunctionWrapper;
       auto throw_if = [](const bool c, const std::string& msg) {
-        tfel::raise_if(
-            c, "GnuplotInterpreter::FitInterpreter::eval: " + msg);
+        tfel::raise_if(c, "GnuplotInterpreter::FitInterpreter::eval: " + msg);
       };
-      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatFit",
-                                      "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatFit", "", p,
+                                      pe);
       std::vector<std::vector<double>> values;
       std::vector<string> params;
       set<string> ev_params;
@@ -62,8 +60,7 @@ namespace tfel {
       ++p;
       std::vector<string> vars;
       this->readVariableList(vars, p, pe);
-      throw_if(vars.empty(),
-               "no variable defined for function '" + f + "'");
+      throw_if(vars.empty(), "no variable defined for function '" + f + "'");
       function = f + '(';
       for (ps = vars.begin(); ps != vars.end();) {
         function += *ps;
@@ -75,23 +72,22 @@ namespace tfel {
       auto functions = this->interpreter.getExternalFunctionManager();
       auto ev = std::make_shared<Evaluator>(vars, function, functions);
       vars = ev->getVariablesNames();
-      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatFit",
-                                      "", p, pe);
+      CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatFit", "", p,
+                                      pe);
       file = CxxTokenizer::readString(p, pe);
       columns.resize(vars.size() + 1);
       if ((p->value == "using") || (p->value == "u")) {
         ++p;
         CxxTokenizer::checkNotEndOfLine("GnuplotInterpreter::treatFit",
-                                        "expected using declaration", p,
-                                        pe);
+                                        "expected using declaration", p, pe);
         for (i = 0; i != vars.size(); ++i) {
-          GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(
-              columns[i], p, pe);
-          CxxTokenizer::readSpecifiedToken(
-              "GnuplotInterpreter::treatFit", ":", p, pe);
+          GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(columns[i],
+                                                                     p, pe);
+          CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatFit", ":",
+                                           p, pe);
         }
-        GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(
-            columns[i], p, pe);
+        GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(columns[i],
+                                                                   p, pe);
       } else {
         for (i = 0; i != vars.size() + 1; ++i) {
           ostringstream converter;
@@ -99,26 +95,22 @@ namespace tfel {
           columns[i] = converter.str();
         }
       }
-      CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatFit",
-                                       "via", p, pe);
+      CxxTokenizer::readSpecifiedToken("GnuplotInterpreter::treatFit", "via", p,
+                                       pe);
       this->readVariableList(params, p, pe, false);
-      throw_if(params.empty(),
-               "no parameter defined for function '" + f + "'");
+      throw_if(params.empty(), "no parameter defined for function '" + f + "'");
       for (ps = vars.begin(); ps != vars.end(); ++ps) {
-        throw_if(
-            find(params.begin(), params.end(), *ps) != params.end(),
-            "'" + *ps + "' is both a variable and a parameter");
+        throw_if(find(params.begin(), params.end(), *ps) != params.end(),
+                 "'" + *ps + "' is both a variable and a parameter");
       }
       // preparing the evaluator
-      auto nev = ev->createFunctionByChangingParametersIntoVariables(
-          params);
+      auto nev = ev->createFunctionByChangingParametersIntoVariables(params);
       // reading data
       values.resize(vars.size() + 1);
       TextDataReader data;
       data.extractData(QString::fromStdString(file));
       for (i = 0; i != vars.size() + 1; ++i) {
-        GnuplotInterpreterBase::getData(values[i], functions, data,
-                                        columns[i]);
+        GnuplotInterpreterBase::getData(values[i], functions, data, columns[i]);
       }
       size = values[0].size();
       for (i = 1; i != vars.size() + 1; ++i) {

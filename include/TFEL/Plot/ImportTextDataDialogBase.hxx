@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ImportTextDataDialogBase.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,17 +6,17 @@
  */
 
 #ifndef LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H_
-#define LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H_ 
+#define LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H_
 
-#include<vector>
-#include<memory>
-#include<QtCore/QString>
-#include<QtWidgets/QDialog>
-#include<QtWidgets/QLineEdit>
-#include<QtWidgets/QComboBox>
-#include<TFEL/Plot/Config.hxx>
-#include"TFEL/Plot/TextDataReader.hxx"
-#include"TFEL/Plot/CurveConfigurationDialogBase.hxx"
+#include <vector>
+#include <memory>
+#include <QtCore/QString>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QComboBox>
+#include <TFEL/Plot/Config.hxx>
+#include "TFEL/Plot/TextDataReader.hxx"
+#include "TFEL/Plot/CurveConfigurationDialogBase.hxx"
 
 namespace tfel {
 
@@ -24,23 +24,21 @@ namespace tfel {
 
     struct Graph;
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase 
-      : CurveConfigurationDialogBase
-    {
+    struct TFELPLOT_VISIBILITY_EXPORT ImportTextDataDialogBase
+        : CurveConfigurationDialogBase {
+      ImportTextDataDialogBase(Graph &, QWidget *const = nullptr);
 
-     ImportTextDataDialogBase(Graph &, QWidget *const = nullptr);
+      int exec() override;
 
-     int exec() override;
+      bool exec(const QString &);
 
-     bool exec(const QString &);
+      operator bool() const;
 
-     operator bool() const;
+     protected slots:
 
-    protected slots:
+      void abscissaChanged(const QString &);
 
-      void abscissaChanged(const QString&);
-
-      void ordinateChanged(const QString&);
+      void ordinateChanged(const QString &);
 
       void currentAbscissaIndexChanged(int);
 
@@ -49,8 +47,8 @@ namespace tfel {
       void import();
 
       void importAndClose();
-      
-      void keyChanged(const QString&);
+
+      void keyChanged(const QString &);
 
      protected:
       static bool isUnsignedShort(const QString &);
@@ -88,10 +86,10 @@ namespace tfel {
      private:
       Q_OBJECT
 
-    }; // end of ImportTextDataDialogBase
+    };  // end of ImportTextDataDialogBase
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_IMPORTTEXTDATADIALOGBASE_H */

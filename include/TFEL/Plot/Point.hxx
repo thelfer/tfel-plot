@@ -1,27 +1,25 @@
 /*!
  * \file   Point.hxx
- * \brief  
- * 
+ * \brief
+ *
  * \author Helfer Thomas
  * \date   19 jan 2008
  */
 
 #ifndef LIB_TFEL_PLOT_POINT_HXX_
-#define LIB_TFEL_PLOT_POINT_HXX_ 
+#define LIB_TFEL_PLOT_POINT_HXX_
 
-namespace tfel{
+namespace tfel {
 
-  namespace plot{
+  namespace plot {
 
-    struct Point
-    {
+    struct Point {
       qreal x;
       qreal y;
-    }; // end of struct Point
+    };  // end of struct Point
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_POINT_HXX */
-

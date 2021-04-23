@@ -16,7 +16,6 @@ namespace tfel {
   namespace plot {
 
     struct GraphBorderItem : QObject, QGraphicsPathItem {
-
       GraphBorderItem(const QPainterPath &,
                       Graph *const,
                       const Graph::GraphBorder,
@@ -29,11 +28,9 @@ namespace tfel {
       void configure();
 
      protected:
-      virtual void contextMenuEvent(
-          QGraphicsSceneContextMenuEvent *) override;
+      virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *) override;
 
-      virtual void mouseDoubleClickEvent(
-          QGraphicsSceneMouseEvent *) override;
+      virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
 
       Graph *const graph;
 

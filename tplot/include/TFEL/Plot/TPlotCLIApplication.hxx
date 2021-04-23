@@ -1,6 +1,6 @@
 /*!
  * \file   TPlotCLIApplication.hxx
- * \brief    
+ * \brief
  * \author THOMAS HELFER
  * \date   16 avril 2017
  */
@@ -8,43 +8,37 @@
 #ifndef LIB_TPLOT_TPLOTCLIAPPLICATION_HXX
 #define LIB_TPLOT_TPLOTCLIAPPLICATION_HXX
 
-#include<QtCore/QCoreApplication>
-#include<QtCore/QThread>
-#include<QtCore/QProcess>
-#include"TFEL/Plot/CLIHandler.hxx"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QThread>
+#include <QtCore/QProcess>
+#include "TFEL/Plot/CLIHandler.hxx"
 
-namespace tfel
-{
-  namespace plot
-  {
+namespace tfel {
+  namespace plot {
 
-    class TPlotCLIApplication
-      : QCoreApplication
-    {
+    class TPlotCLIApplication : QCoreApplication {
       Q_OBJECT
-    
-    public:
-    
-      TPlotCLIApplication(int,char**);
 
-    public slots:
-      
+     public:
+      TPlotCLIApplication(int, char **);
+
+     public slots:
+
       //! \brief exit.
       virtual void quit();
-				     
-    private slots:
-      
+
+     private slots:
+
       //! \brief exit.
       virtual void exit(int);
-      
-    private:
-  
+
+     private:
       QProcess *g;
-      QThread  *th;
+      QThread *th;
       tfel::plot::CLIHandler *h;
     };
-    
-  } // end of namespace plot
-} // end of namespace tfel
+
+  }  // end of namespace plot
+}  // end of namespace tfel
 
 #endif /* LIB_TPLOT_TPLOTCLIAPPLICATION_HXX */

@@ -25,10 +25,9 @@ namespace tfel {
       lm.loadLibrary(lib.toStdString());
     }
 
-    ThemeManager::ThemePtr ThemeManager::getTheme(
-        const QString& n) const {
+    ThemeManager::ThemePtr ThemeManager::getTheme(const QString& n) const {
       const auto p = this->proxies.find(n);
-      if(p == this->proxies.end()){
+      if (p == this->proxies.end()) {
         tfel::raise(
             "ThemeManager::getTheme: "
             "no theme named '" +
@@ -46,13 +45,12 @@ namespace tfel {
             "'" +
             name.toStdString() + "' has already been registred.");
       }
-      this->proxies.insert(
-          {name, std::shared_ptr<const ThemeProxy>(proxy)});
+      this->proxies.insert({name, std::shared_ptr<const ThemeProxy>(proxy)});
     }  // end of ThemeManager::getTheme
 
     QStringList ThemeManager::getAvailableThemesNames() const {
       QStringList names;
-      for(const auto& p : this->proxies){
+      for (const auto& p : this->proxies) {
         names.append(p.first);
       }
       return names;

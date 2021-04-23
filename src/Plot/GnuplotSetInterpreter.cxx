@@ -20,8 +20,8 @@ namespace tfel {
 
   namespace plot {
 
-    GnuplotInterpreter::SetInterpreter::SetInterpreter(
-        GnuplotInterpreter& i, Graph& graph)
+    GnuplotInterpreter::SetInterpreter::SetInterpreter(GnuplotInterpreter& i,
+                                                       Graph& graph)
         : GnuplotInterpreterBase(graph), interpreter(i) {
       this->registerCallBacks();
     }  // end of GnuplotInterpreter::SetInterpreter::SetInterpreter
@@ -109,8 +109,8 @@ namespace tfel {
                              &SetInterpreter::treatTheme);
     }  // end of GnuplotInterpreter::SetInterpreter::registerCallBack
 
-    void GnuplotInterpreter::SetInterpreter::eval(
-        const_iterator& p, const const_iterator pe) {
+    void GnuplotInterpreter::SetInterpreter::eval(const_iterator& p,
+                                                  const const_iterator pe) {
       using namespace std;
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::SetInterpreter::eval", "", p, pe);
@@ -125,8 +125,8 @@ namespace tfel {
       (this->*(ps->second))(p, pe);
     }  // end of GnuplotInterpreter::SetInterpreter::eval
 
-    void GnuplotInterpreter::SetInterpreter::treatBorder(
-        const_iterator&, const const_iterator) {
+    void GnuplotInterpreter::SetInterpreter::treatBorder(const_iterator&,
+                                                         const const_iterator) {
       this->g.showBorder(true);
     }
 
@@ -139,8 +139,8 @@ namespace tfel {
         const_iterator& p, const const_iterator pe) {
       using namespace std;
       CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::SetInterpreter::treatCurve",
-          "expected curve id", p, pe);
+          "GnuplotInterpreter::SetInterpreter::treatCurve", "expected curve id",
+          p, pe);
       string msg("GnuplotInterpreter::treatCurve : ");
       msg += "unimplemented feature";
       throw(runtime_error(msg));
@@ -155,8 +155,8 @@ namespace tfel {
       this->g.setXLabel(this->readQString(p, pe), true);
     }  // end of GnuplotInterpreter::SetInterpreter::treatXLabel
 
-    void GnuplotInterpreter::SetInterpreter::treatKey(
-        const_iterator& p, const const_iterator pe) {
+    void GnuplotInterpreter::SetInterpreter::treatKey(const_iterator& p,
+                                                      const const_iterator pe) {
       using namespace std;
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::SetInterpreter::treatXLabel",
@@ -266,8 +266,7 @@ namespace tfel {
             grid = grid ^ Grid::Y2;
           }
         } else {
-          string msg(
-              "GnuplotInterpreter::SetInterpreter::treatGrid : ");
+          string msg("GnuplotInterpreter::SetInterpreter::treatGrid : ");
           msg += "unknown grid type '" + p->value + "'";
           throw(runtime_error(msg));
         }
@@ -292,8 +291,8 @@ namespace tfel {
         bool bmax = false;
         qreal min;
         qreal max;
-        GnuplotInterpreterBase::readRange(bmin, bmax, min, max,
-                                          functions, p, pe);
+        GnuplotInterpreterBase::readRange(bmin, bmax, min, max, functions, p,
+                                          pe);
         if (bmin || bmax) {
           qreal v0;
           qreal v1;
@@ -324,8 +323,8 @@ namespace tfel {
         bool bmax = false;
         qreal min;
         qreal max;
-        GnuplotInterpreterBase::readRange(bmin, bmax, min, max,
-                                          functions, p, pe);
+        GnuplotInterpreterBase::readRange(bmin, bmax, min, max, functions, p,
+                                          pe);
         if (bmin || bmax) {
           qreal v0;
           qreal v1;
@@ -356,8 +355,8 @@ namespace tfel {
         bool bmax = false;
         qreal min;
         qreal max;
-        GnuplotInterpreterBase::readRange(bmin, bmax, min, max,
-                                          functions, p, pe);
+        GnuplotInterpreterBase::readRange(bmin, bmax, min, max, functions, p,
+                                          pe);
         if (bmin || bmax) {
           qreal v0;
           qreal v1;
@@ -388,8 +387,8 @@ namespace tfel {
         bool bmax = false;
         qreal min;
         qreal max;
-        GnuplotInterpreterBase::readRange(bmin, bmax, min, max,
-                                          functions, p, pe);
+        GnuplotInterpreterBase::readRange(bmin, bmax, min, max, functions, p,
+                                          pe);
         if (bmin || bmax) {
           qreal v0;
           qreal v1;
@@ -486,8 +485,7 @@ namespace tfel {
       }
     }  // end of GnuplotInterpreter::SetInterpreter::treatY2Tics
 
-    std::map<qreal, QString>
-    GnuplotInterpreter::SetInterpreter::treatTics(
+    std::map<qreal, QString> GnuplotInterpreter::SetInterpreter::treatTics(
         const_iterator& p, const const_iterator pe) {
       using namespace std;
       using namespace tfel::utilities;
@@ -495,14 +493,11 @@ namespace tfel {
       using namespace tfel::math::parser;
       std::map<qreal, QString> res;
       CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-          pe);
+          "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
       CxxTokenizer::readSpecifiedToken(
-          "GnuplotInterpreter::SetInterpreter::treatSetTics", "(", p,
-          pe);
+          "GnuplotInterpreter::SetInterpreter::treatSetTics", "(", p, pe);
       CxxTokenizer::checkNotEndOfLine(
-          "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-          pe);
+          "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
       if (p->value == ")") {
         ++p;
         return std::map<qreal, QString>();
@@ -513,21 +508,18 @@ namespace tfel {
         if (p->flag == Token::String) {
           tic = CxxTokenizer::readString(p, pe);
           if (tic.empty()) {
-            string msg(
-                "GnuplotInterpreter::SetInterpreter::treatSetTics : ");
+            string msg("GnuplotInterpreter::SetInterpreter::treatSetTics : ");
             msg += "empty tic specified";
             throw(runtime_error(msg));
           }
         }
         CxxTokenizer::checkNotEndOfLine(
-            "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-            pe);
+            "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
         while ((p->value != ",") && (p->value != ")")) {
           sev += p->value;
           ++p;
           CxxTokenizer::checkNotEndOfLine(
-              "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-              pe);
+              "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
         }
         shared_ptr<ExternalFunctionManager> functions;
         functions = this->interpreter.getExternalFunctionManager();
@@ -538,8 +530,7 @@ namespace tfel {
           if (vars.size() != 1u) {
             msg << "GnuplotInterpreter::SetInterpreter::treatSetTics : "
                    "invalid print declaration (unknown variables ";
-            copy(vars.begin(), vars.end(),
-                 ostream_iterator<string>(msg, " "));
+            copy(vars.begin(), vars.end(), ostream_iterator<string>(msg, " "));
             msg << ")";
           } else {
             msg << "GnuplotInterpreter::SetInterpreter::treatSetTics : "
@@ -557,15 +548,12 @@ namespace tfel {
           res[value] = QString::fromStdString(tic);
         }
         CxxTokenizer::checkNotEndOfLine(
-            "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-            pe);
+            "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
         if (p->value != ")") {
           CxxTokenizer::readSpecifiedToken(
-              "GnuplotInterpreter::SetInterpreter::treatSetTics", ",",
-              p, pe);
+              "GnuplotInterpreter::SetInterpreter::treatSetTics", ",", p, pe);
           CxxTokenizer::checkNotEndOfLine(
-              "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p,
-              pe);
+              "GnuplotInterpreter::SetInterpreter::treatSetTics", "", p, pe);
         }
       }
       ++p;
@@ -579,8 +567,7 @@ namespace tfel {
           "GnuplotInterpreter::SetInterpreter::treatTheme", "", p, pe);
       QString t;
       if (p->flag == Token::String) {
-        t = QString::fromStdString(
-            p->value.substr(1, p->value.size() - 2));
+        t = QString::fromStdString(p->value.substr(1, p->value.size() - 2));
       } else {
         t = QString::fromStdString(p->value);
       }
@@ -598,15 +585,13 @@ namespace tfel {
       if (p->value != "from") {
         name = p->value;
         if (!GnuplotInterpreterBase::isValidIdentifier(p->value)) {
-          string msg(
-              "GnuplotInterpreter::SetInterpreter::treatArrow : '");
+          string msg("GnuplotInterpreter::SetInterpreter::treatArrow : '");
           msg += p->value + "' is not a valid identifer.";
           throw(runtime_error(msg));
         }
         ++p;
         CxxTokenizer::readSpecifiedToken(
-            "GnuplotInterpreter::SetInterpreter::treatArrow", "from", p,
-            pe);
+            "GnuplotInterpreter::SetInterpreter::treatArrow", "from", p, pe);
       } else {
         ++p;
       }
@@ -617,8 +602,7 @@ namespace tfel {
       GraphCoordinates y0;
       this->interpreter.readCoordinates(y0, p, pe, "to");
       CxxTokenizer::readSpecifiedToken(
-          "GnuplotInterpreter::SetInterpreter::treatArrow ", "to", p,
-          pe);
+          "GnuplotInterpreter::SetInterpreter::treatArrow ", "to", p, pe);
       GraphCoordinates x1;
       this->interpreter.readCoordinates(x1, p, pe, ",");
       CxxTokenizer::readSpecifiedToken(
@@ -640,8 +624,7 @@ namespace tfel {
         } else if (p->value == "backhead") {
           style.style = ArrowStyle::BACKHEAD;
         } else {
-          string msg(
-              "GnuplotInterpreter::SetInterpreter::treatArrow : ");
+          string msg("GnuplotInterpreter::SetInterpreter::treatArrow : ");
           msg += "unknown arrow style '" + p->value + "'";
           throw(runtime_error(msg));
         }
@@ -650,8 +633,7 @@ namespace tfel {
       if (name.empty()) {
         this->g.addArrow(x0, y0, x1, y1, style);
       } else {
-        this->g.addArrow(QString::fromStdString(name), x0, y0, x1, y1,
-                         style);
+        this->g.addArrow(QString::fromStdString(name), x0, y0, x1, y1, style);
       }
     }  // end of GnuplotInterpreter::SetInterpreter::treatArrow
 

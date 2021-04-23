@@ -11,10 +11,8 @@ namespace tfel {
 
   namespace plot {
 
-    ImportTextDataDialog::ImportTextDataDialog(Graph& graph,
-                                               QWidget* const p)
-        : ImportTextDataDialogBase(graph, p) {
-    }  // end of TextDataTreeWidget
+    ImportTextDataDialog::ImportTextDataDialog(Graph& graph, QWidget* const p)
+        : ImportTextDataDialogBase(graph, p) {}  // end of TextDataTreeWidget
 
     QStringList ImportTextDataDialog::getCurveKeys() {
       QStringList keys;

@@ -24,28 +24,26 @@ namespace tfel {
       if (p == pe) {
         return k;
       }
-      if ((*p != " first column: time")&&
-	  (*p != " first column : time")){
+      if ((*p != " first column: time") && (*p != " first column : time")) {
         return k;
       }
       k.push_back("time");
       ++p;
       while (p != pe) {
-        const auto& tokens =
-            p->split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        const auto& tokens = p->split(QRegExp("\\s+"), QString::SkipEmptyParts);
         if (tokens.size() < 3) {
           return k;
         }
-	auto offset = 2u;
-	if (tokens[1] != "column:") {
-	  if (tokens.size() < 4) {
-	    return k;
-	  }
-	  if ((tokens[1] == "column") && (tokens[2] == ":")) {
-	    offset = 3u;
-	  } else {
-	    return k;
-	  }
+        auto offset = 2u;
+        if (tokens[1] != "column:") {
+          if (tokens.size() < 4) {
+            return k;
+          }
+          if ((tokens[1] == "column") && (tokens[2] == ":")) {
+            offset = 3u;
+          } else {
+            return k;
+          }
         }
         auto pt = tokens.begin() + offset;
         const auto pte = tokens.end();
@@ -58,18 +56,18 @@ namespace tfel {
         ++p;
       }
       return k;
-    } // end of ImportLicosCurveDialog::getCurveKeys
+    }  // end of ImportLicosCurveDialog::getCurveKeys
 
     QString ImportLicosCurveDialog::getFileDescription() const {
       return "Licos Curve";
-    } // end of ImportLicosCurveDialog::getFileDescription
+    }  // end of ImportLicosCurveDialog::getFileDescription
 
     QStringList ImportLicosCurveDialog::getFileExtensions() const {
       return QStringList() << "txt"
                            << "dat"
                            << "data"
                            << "res";
-    } // end of ImportLicosCurveDialog::getFileExtensions
+    }  // end of ImportLicosCurveDialog::getFileExtensions
 
     ImportLicosCurveDialog::~ImportLicosCurveDialog() = default;
 

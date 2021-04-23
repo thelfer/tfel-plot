@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  GnuplotKrigingInterpreter.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,35 +6,25 @@
  */
 
 #ifndef LIB_TFEL_PLOT_GNUPLOTKRIGINGINTERPRETER_H_
-#define LIB_TFEL_PLOT_GNUPLOTKRIGINGINTERPRETER_H_ 
+#define LIB_TFEL_PLOT_GNUPLOTKRIGINGINTERPRETER_H_
 
-#include"TFEL/Plot/GnuplotInterpreter.hxx"
+#include "TFEL/Plot/GnuplotInterpreter.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct GnuplotInterpreter::KrigingInterpreter
-      : GnuplotInterpreterBase
-    {
+    struct GnuplotInterpreter::KrigingInterpreter : GnuplotInterpreterBase {
+      KrigingInterpreter(GnuplotInterpreter&, Graph& g);
 
-      KrigingInterpreter(GnuplotInterpreter&,
-			 Graph& g);
+      void eval(const_iterator&, const const_iterator);
 
-      void eval(const_iterator&, 
-		const const_iterator);
-
-    protected:
-
+     protected:
       GnuplotInterpreter& interpreter;
-
     };
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_GNUPLOTKRIGINGINTERPRETER_H */
-

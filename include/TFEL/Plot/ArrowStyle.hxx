@@ -1,36 +1,28 @@
 /*!
  * \file   ArrowStyle.hxx
- * \brief  
- * 
+ * \brief
+ *
  * \author Helfer Thomas
  * \date   22 jan 2009
  */
 
 #ifndef LIB_TFEL_PLOT_ARROWSTYLE_HXX_
-#define LIB_TFEL_PLOT_ARROWSTYLE_HXX_ 
+#define LIB_TFEL_PLOT_ARROWSTYLE_HXX_
 
-#include"TFEL/Plot/Config.hxx"
+#include "TFEL/Plot/Config.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct TFELPLOT_VISIBILITY_EXPORT ArrowStyle
-    {
-      enum Style{
-	NOHEAD,
-	HEAD,
-	BACKHEAD,
-	HEADS
-      }; // end of enum Style
+    struct TFELPLOT_VISIBILITY_EXPORT ArrowStyle {
+      enum Style { NOHEAD, HEAD, BACKHEAD, HEADS };  // end of enum Style
       ArrowStyle(const Style = HEAD);
       Style style;
-    }; // end of struct ArrowStyle
+    };  // end of struct ArrowStyle
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_ARROWSTYLE_HXX */

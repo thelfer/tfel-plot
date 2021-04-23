@@ -34,13 +34,11 @@ namespace tfel {
         const QString& f, LicosResultsTreeWidget* p)
         : QTreeWidgetItem(p), file(f) {}
 
-    LicosCurveTreeWidgetItem::LicosCurveTreeWidgetItem(
-        const QString& f, QTreeWidgetItem* p)
+    LicosCurveTreeWidgetItem::LicosCurveTreeWidgetItem(const QString& f,
+                                                       QTreeWidgetItem* p)
         : QTreeWidgetItem(p), file(f) {}
 
-    QString LicosCurveTreeWidgetItem::getFile() const {
-      return this->file;
-    }
+    QString LicosCurveTreeWidgetItem::getFile() const { return this->file; }
 
     LicosCurveTreeWidgetItem::~LicosCurveTreeWidgetItem() = default;
 
@@ -95,8 +93,7 @@ namespace tfel {
       l->addWidget(this->tree);
       this->loadFile(f);
       this->setLayout(l);
-      this->tree->setSelectionMode(
-          QAbstractItemView::ExtendedSelection);
+      this->tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }  // end of LicosResultsTreeWidget
 
     ImportLicosResultsDialog::ImportLicosResultsDialog(Graph& g,
@@ -108,8 +105,7 @@ namespace tfel {
       l->addWidget(this->tree);
       this->loadFile(f);
       this->setLayout(l);
-      this->tree->setSelectionMode(
-          QAbstractItemView::ExtendedSelection);
+      this->tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }  // end of ImportLicosResultsDialog
 
     struct DataFiles {
@@ -129,8 +125,7 @@ namespace tfel {
         this->fails(tr("Can't open file '%1'").arg(f));
         return;
       }
-      if (!doc.setContent(&file, true, &errorStr, &errorLine,
-                          &errorColumn)) {
+      if (!doc.setContent(&file, true, &errorStr, &errorLine, &errorColumn)) {
         this->fails(tr("Parse error at line %1, column %2:\n%3")
                         .arg(errorLine)
                         .arg(errorColumn)
@@ -140,8 +135,8 @@ namespace tfel {
       file.close();
       QDomElement docElem = doc.documentElement();
       if (docElem.tagName() != "licos_results") {
-        this->fails(tr("Invalid root element tag name '%1'")
-                        .arg(docElem.tagName()));
+        this->fails(
+            tr("Invalid root element tag name '%1'").arg(docElem.tagName()));
         return;
       }
       QDomNode n = docElem.firstChild();
@@ -190,8 +185,7 @@ namespace tfel {
         items.append(go);
       }
       for (const auto& lo : local_outputs) {
-        auto* const o =
-            this->getTopLevelItem("SubMesh '" + lo.first + "'");
+        auto* const o = this->getTopLevelItem("SubMesh '" + lo.first + "'");
         this->fillTree(o, lo.second);
         items.append(o);
       }
@@ -212,10 +206,9 @@ namespace tfel {
     }
 
     void ImportLicosResultsDialog::fillTree(
-        QTreeWidgetItem* t,
-        const std::map<QString, QStringList>& items) const {
+        QTreeWidgetItem* t, const std::map<QString, QStringList>& items) const {
       for (const auto& i : items) {
-        const auto& type  = i.first;
+        const auto& type = i.first;
         const auto& files = i.second;
         auto* const tw = new QTreeWidgetItem(t, QStringList() << type);
         for (const auto& f : files) {
@@ -235,8 +228,7 @@ namespace tfel {
     ImportLicosResultsDialog::operator bool() const { return this->ok; }
 
     bool ImportLicosResultsDialog::getOutputFiles(
-        std::map<QString, QStringList>& outputs,
-        const QDomElement& elt) {
+        std::map<QString, QStringList>& outputs, const QDomElement& elt) {
       QDomNode n2 = elt.firstChild();
       while (!n2.isNull()) {
         if (!n2.isElement()) {

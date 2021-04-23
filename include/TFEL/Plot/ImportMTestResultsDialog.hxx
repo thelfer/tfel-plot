@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ImportMTestResultsDialog.cxx
  * \brief
  * \author Helfer Thomas
@@ -6,10 +6,10 @@
  */
 
 #ifndef LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_
-#define LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_ 
+#define LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H_
 
-#include<TFEL/Plot/Config.hxx>
-#include<TFEL/Plot/ImportLicosCurveDialog.hxx>
+#include <TFEL/Plot/Config.hxx>
+#include <TFEL/Plot/ImportLicosCurveDialog.hxx>
 
 namespace tfel {
 
@@ -26,10 +26,10 @@ namespace tfel {
 
       QStringList getFileExtensions() const override;
 
-    }; // end of ImportMTestResultsDialog
+    };  // end of ImportMTestResultsDialog
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_IMPORTMTESTRESULTSDIALOG_H */

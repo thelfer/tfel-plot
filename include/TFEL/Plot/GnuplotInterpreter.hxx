@@ -114,15 +114,15 @@ namespace tfel {
        * \param[in] t : terminal type
        * \param[in] o : options
        */
-      void setTerminal(const std::string&,
-                       const std::vector<std::string>&);
+      void setTerminal(const std::string&, const std::vector<std::string>&);
 
       void setOutput(const std::string&);
 
       void registerCallBacks();
 
-      std::shared_ptr<tfel::math::Evaluator> readFunction(
-          const_iterator&, const const_iterator, const std::string&);
+      std::shared_ptr<tfel::math::Evaluator> readFunction(const_iterator&,
+                                                          const const_iterator,
+                                                          const std::string&);
 
       std::shared_ptr<tfel::math::Evaluator> readFunction(
           const_iterator&,
@@ -168,11 +168,10 @@ namespace tfel {
        * \param[in]     b1: if true, lock the function definition
        * \param[in]     b2: if true, the dependencies are removed
        */
-      void addFunction(
-          const std::string&,
-          std::shared_ptr<tfel::math::parser::ExternalFunction>,
-          const bool,
-          const bool);
+      void addFunction(const std::string&,
+                       std::shared_ptr<tfel::math::parser::ExternalFunction>,
+                       const bool,
+                       const bool);
 
       void readDataFunctionInUsingDeclaration(std::string&,
                                               const_iterator&,
@@ -274,8 +273,7 @@ namespace tfel {
        */
       ParsingResult treatFit(const_iterator&, const const_iterator);
 
-      std::string gatherTokenGroup(const_iterator&,
-                                   const const_iterator);
+      std::string gatherTokenGroup(const_iterator&, const const_iterator);
 
       void setDummyVariable(const std::string&);
 

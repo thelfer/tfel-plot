@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  CurveBase.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,48 +6,46 @@
  */
 
 #ifndef LIB_TFEL_PLOT_CURVEBASE_H_
-#define LIB_TFEL_PLOT_CURVEBASE_H_ 
+#define LIB_TFEL_PLOT_CURVEBASE_H_
 
-#include"TFEL/Plot/Curve.hxx"
+#include "TFEL/Plot/Curve.hxx"
 
-namespace tfel{
+namespace tfel {
 
-  namespace plot{
+  namespace plot {
 
     struct TFELPLOT_VISIBILITY_EXPORT CurveBase : Curve {
+     public slots:
 
-    public slots:
-
-      void setFilled(const bool,const bool) override;
-      void setKey(const QString&,const bool) override;
-      void setColor(const QColor&,const bool) override;
-      void setStyle(const Style&,const bool) override;
-      void setWidth(const unsigned short,const bool) override;
+      void setFilled(const bool, const bool) override;
+      void setKey(const QString&, const bool) override;
+      void setColor(const QColor&, const bool) override;
+      void setStyle(const Style&, const bool) override;
+      void setWidth(const unsigned short, const bool) override;
       void unsetColor(const bool) override;
 
-    public:
-     bool shouldFollowThemeLineStyle() const override;
+     public:
+      bool shouldFollowThemeLineStyle() const override;
 
-     unsigned short getThemeLineStyle() const override;
+      unsigned short getThemeLineStyle() const override;
 
-     void setThemeLineStyle(const unsigned short) override;
+      void setThemeLineStyle(const unsigned short) override;
 
-     void sendRemoveSignal() override;
-     bool hasSpecifiedColor() const override;
-     bool isFilled() const override;
-     bool hasKey() const override;
-     QString getKey() const override;
-     QColor getColor() const override;
-     Curve::Style getStyle() const override;
-     unsigned short getWidth() const override;
+      void sendRemoveSignal() override;
+      bool hasSpecifiedColor() const override;
+      bool isFilled() const override;
+      bool hasKey() const override;
+      QString getKey() const override;
+      QColor getColor() const override;
+      Curve::Style getStyle() const override;
+      unsigned short getWidth() const override;
 
-     ~CurveBase() override;
+      ~CurveBase() override;
 
-    protected:
+     protected:
+      CurveBase();
 
-      CurveBase();      
-
-      QString  legend;
+      QString legend;
       QColor color;
 
       Curve::Style style = Curve::SOLIDLINE;
@@ -61,11 +59,10 @@ namespace tfel{
      private:
       Q_OBJECT
 
-    }; // end of struct Curve
+    };  // end of struct Curve
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_CURVEBASE_H */
-

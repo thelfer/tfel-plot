@@ -55,8 +55,7 @@ namespace tfel {
           hasStyle(false),
           style(Curve::SOLIDLINE),
           hasColor(false),
-          axis(Graph::XY) {
-    }  // end of TPlot::CurveOptions::CurveOptions
+          axis(Graph::XY) {}  // end of TPlot::CurveOptions::CurveOptions
 
     TPlot::CurveOptions& TPlot::Input::getCurveOptions() {
       if (this->is<TPlot::Data>()) {
@@ -69,8 +68,7 @@ namespace tfel {
                              "input has no curve options"));
     }
 
-    unsigned short TPlot::convertToUnsignedShort(
-        const QString& qvalue) {
+    unsigned short TPlot::convertToUnsignedShort(const QString& qvalue) {
       const auto value = qvalue.toStdString();
       for (const auto& c : value) {
         if (!isdigit(c)) {
@@ -106,9 +104,7 @@ namespace tfel {
           shell(new GraphShell(*g, this)),
           name(argv[0]) {
       auto throw_if = [](const bool b, const std::string& m) {
-        if (b)
-          (throw(
-              std::runtime_error("TPlot::TPlot: " + std::string(m))));
+        if (b) (throw(std::runtime_error("TPlot::TPlot: " + std::string(m))));
       };
       this->registerArgumentCallBacks();
       this->parseArguments();
@@ -118,8 +114,7 @@ namespace tfel {
       if (!this->isCLIModeEnabled()) {
         this->shell->setPrompt("tplot>");
         auto* dock = new QDockWidget(tr("TPlot Shell"), this);
-        dock->setFeatures(dock->features() ^
-                          QDockWidget::DockWidgetClosable);
+        dock->setFeatures(dock->features() ^ QDockWidget::DockWidgetClosable);
         dock->setAllowedAreas(Qt::BottomDockWidgetArea);
         dock->setWidget(shell);
         this->shell->setVisible(false);
@@ -134,14 +129,12 @@ namespace tfel {
       if (this->output.isEmpty()) {
         this->goutput = true;
       } else {
-        throw_if(
-            this->goutput,
-            "an input (for example a gnuplot script, a licos curve) "
-            "is not compatible with the definition of an output file");
+        throw_if(this->goutput,
+                 "an input (for example a gnuplot script, a licos curve) "
+                 "is not compatible with the definition of an output file");
         const auto o = this->output.toStdString();
         auto spos = o.find_last_of('.');
-        throw_if(spos == std::string::npos,
-                 "invalid output name '" + o + "'");
+        throw_if(spos == std::string::npos, "invalid output name '" + o + "'");
         const auto extension = o.substr(spos + 1);
         if (extension == "pdf") {
           this->g->exportToPDF(this->output);
@@ -157,8 +150,8 @@ namespace tfel {
         }
         this->goutput = false;
       }
-      QObject::connect(this->shell, &GraphShell::quitCommandTreated,
-                       this, &TPlot::close);
+      QObject::connect(this->shell, &GraphShell::quitCommandTreated, this,
+                       &TPlot::close);
       QObject::connect(this->shell, &GraphShell::graphicalPlot, this,
                        &TPlot::show);
       QObject::connect(this->g, &Graph::updated, this,
@@ -181,10 +174,9 @@ namespace tfel {
 
     struct ChooseImportFilter : public QDialog {
       ChooseImportFilter(QWidget* p) : QDialog(p) {
-        auto* b1 =
-            new QRadioButton(QObject::tr("Import as txt file"), this);
-        auto* b2 = new QRadioButton(
-            QObject::tr("Import as licos result file"), this);
+        auto* b1 = new QRadioButton(QObject::tr("Import as txt file"), this);
+        auto* b2 =
+            new QRadioButton(QObject::tr("Import as licos result file"), this);
         b1->setChecked(true);
         this->bgrp = new QButtonGroup(this);
         this->bgrp->addButton(b1, 0);
@@ -192,8 +184,7 @@ namespace tfel {
         auto* vl = new QVBoxLayout;
         vl->addWidget(b1);
         vl->addWidget(b2);
-        bbox = new QDialogButtonBox(QDialogButtonBox::Ok,
-                                    Qt::Horizontal, this);
+        bbox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
         vl->addWidget(bbox);
         this->setLayout(vl);
         // signals
@@ -264,31 +255,26 @@ namespace tfel {
       QObject::connect(this->etxta, &QAction::triggered, this,
                        &TPlot::exportToTable);
 
-      this->pa =
-          new QAction(QIcon(":/images/print.png"), tr("&Print"), this);
+      this->pa = new QAction(QIcon(":/images/print.png"), tr("&Print"), this);
       this->pa->setStatusTip(tr("Print the graph"));
       this->pa->setIcon(QIcon::fromTheme("document-print"));
       this->pa->setIconVisibleInMenu(true);
-      QObject::connect(this->pa, &QAction::triggered, this,
-                       &TPlot::print);
+      QObject::connect(this->pa, &QAction::triggered, this, &TPlot::print);
 
       this->na = new QAction(tr("&New window"), this);
       this->na->setShortcuts(QKeySequence::New);
       this->na->setStatusTip(tr("Open a new window"));
       this->na->setIcon(QIcon::fromTheme("document-new"));
       this->na->setIconVisibleInMenu(true);
-      QObject::connect(this->na, &QAction::triggered, this,
-                       &TPlot::newWindow);
+      QObject::connect(this->na, &QAction::triggered, this, &TPlot::newWindow);
       this->ea = new QAction(tr("E&xit"), this);
       this->ea->setShortcuts(QKeySequence::Quit);
       this->ea->setStatusTip(tr("Exit the application"));
       this->ea->setIcon(QIcon::fromTheme("window-close"));
       this->ea->setIconVisibleInMenu(true);
-      QObject::connect(this->ea, &QAction::triggered, this,
-                       &TPlot::close);
+      QObject::connect(this->ea, &QAction::triggered, this, &TPlot::close);
       this->gca = new QAction(tr("&Configuration"), this);
-      this->gca->setStatusTip(
-          tr("Open the graph configuration dialog"));
+      this->gca->setStatusTip(tr("Open the graph configuration dialog"));
       QObject::connect(this->gca, &QAction::triggered, this,
                        &TPlot::showGraphConfigurationDialog);
       this->fa = new QAction(tr("&Select Font"), this);
@@ -328,24 +314,19 @@ namespace tfel {
       connect(this->igsa, &QAction::triggered, this,
               &TPlot::importGnuplotScript);
       this->itda = new QAction(tr("Import Text Data"), this);
-      this->itda->setStatusTip(
-          tr("Open a dialog box to import text data"));
+      this->itda->setStatusTip(tr("Open a dialog box to import text data"));
       this->itda->setIcon(QIcon::fromTheme("document-open"));
       this->itda->setIconVisibleInMenu(true);
-      connect(this->itda, &QAction::triggered, this,
-              &TPlot::importTextData);
+      connect(this->itda, &QAction::triggered, this, &TPlot::importTextData);
 
       this->ilca = new QAction(tr("Import Licos Curve"), this);
-      this->ilca->setStatusTip(
-          tr("Open a dialog box to import licos curves"));
+      this->ilca->setStatusTip(tr("Open a dialog box to import licos curves"));
       this->ilca->setIcon(QIcon::fromTheme("document-open"));
       this->ilca->setIconVisibleInMenu(true);
-      connect(this->ilca, &QAction::triggered, this,
-              &TPlot::importLicosCurve);
+      connect(this->ilca, &QAction::triggered, this, &TPlot::importLicosCurve);
 
       this->ilra = new QAction(tr("Import Licos Results"), this);
-      this->ilra->setStatusTip(
-          tr("Open a dialog box to import licos results"));
+      this->ilra->setStatusTip(tr("Open a dialog box to import licos results"));
       this->ilra->setIcon(QIcon::fromTheme("document-open"));
       this->ilra->setIconVisibleInMenu(true);
       connect(this->ilra, &QAction::triggered, this,
@@ -365,10 +346,8 @@ namespace tfel {
       connect(this->csvga, &QAction::triggered, this,
               &TPlot::copyToClipboardAsSVG);
 
-      this->ctablea =
-          new QAction(tr("Copy to clipboard as plain text"), this);
-      this->ctablea->setStatusTip(
-          tr("Copy to clipboard as plain text"));
+      this->ctablea = new QAction(tr("Copy to clipboard as plain text"), this);
+      this->ctablea->setStatusTip(tr("Copy to clipboard as plain text"));
       this->ctablea->setIcon(QIcon::fromTheme("edit-copy"));
       this->ctablea->setIconVisibleInMenu(true);
       connect(this->ctablea, &QAction::triggered, this,
@@ -403,8 +382,7 @@ namespace tfel {
       connect(this->aa, &QAction::triggered, this, &TPlot::about);
       this->aa2 = new QAction(tr("About &Qt"), this);
       this->aa2->setStatusTip(tr("Show the Qt library's About box"));
-      connect(this->aa2, &QAction::triggered, qApp,
-              &QApplication::aboutQt);
+      connect(this->aa2, &QAction::triggered, qApp, &QApplication::aboutQt);
     }
 
     void TPlot::createCurvesMenu() {
@@ -482,10 +460,8 @@ namespace tfel {
       this->createCurvesMenu();
       QObject::connect(g, &Graph::curvesRemoved, this,
                        &TPlot::createCurvesMenu);
-      QObject::connect(g, &Graph::curveRemoved, this,
-                       &TPlot::createCurvesMenu);
-      QObject::connect(g, &Graph::curveAdded, this,
-                       &TPlot::createCurvesMenu);
+      QObject::connect(g, &Graph::curveRemoved, this, &TPlot::createCurvesMenu);
+      QObject::connect(g, &Graph::curveAdded, this, &TPlot::createCurvesMenu);
       this->sm = this->menuBar()->addMenu(tr("&Show"));
       this->sm->addAction(this->showGridAction);
       if (!this->isCLIModeEnabled()) {
@@ -506,8 +482,7 @@ namespace tfel {
 
     void TPlot::importGnuplotScript() {
       auto f = QFileDialog::getOpenFileName(
-          this, tr("Choose file"), "",
-          tr("Gnuplot script (*.gp *.gnuplot)"));
+          this, tr("Choose file"), "", tr("Gnuplot script (*.gp *.gnuplot)"));
       if (f.isEmpty()) {
         return;
       }
@@ -596,16 +571,14 @@ namespace tfel {
       this->registerNewCallBack("--noborder", &TPlot::treatNoBorder,
                                 "don't show the graph border");
 #ifdef TPLOT_ENABLE_CLI
-      this->registerNewCallBack(
-          "--input-socket", &TPlot::treatInputSocket,
-          "give the name of the input socket for "
-          "receiving commands from the command line",
-          true);
-      this->registerNewCallBack(
-          "--output-socket", &TPlot::treatOutputSocket,
-          "give the name of the output socket for "
-          "sending message to the command line",
-          true);
+      this->registerNewCallBack("--input-socket", &TPlot::treatInputSocket,
+                                "give the name of the input socket for "
+                                "receiving commands from the command line",
+                                true);
+      this->registerNewCallBack("--output-socket", &TPlot::treatOutputSocket,
+                                "give the name of the output socket for "
+                                "sending message to the command line",
+                                true);
 #endif /* TPLOT_ENABLE_CLI */
       this->registerNewCallBack("--xy", "-xy", &TPlot::treatXY,
                                 "specify axis used for drawing");
@@ -616,8 +589,7 @@ namespace tfel {
       this->registerNewCallBack("--x2y2", "-x2y2", &TPlot::treatX2Y2,
                                 "specify axis used for drawing");
       this->registerNewCallBack("--using", "-u", &TPlot::treatUsing,
-                                "specify columns used for drawing",
-                                true);
+                                "specify columns used for drawing", true);
       this->registerNewCallBack("--output", "-o", &TPlot::treatOutput,
                                 "specify an output file", true);
       this->registerNewCallBack("--color", "-c", &TPlot::treatColor,
@@ -645,19 +617,14 @@ namespace tfel {
       this->registerNewCallBack("--theme", &TPlot::treatTheme,
                                 "set the graph theme", true);
       this->registerNewCallBack("--title", "-t", &TPlot::treatTitle,
-                                "set title of the previous curve",
-                                true);
-      this->registerNewCallBack("--upperTitle", "-ut",
-                                &TPlot::treatUpperTitle,
+                                "set title of the previous curve", true);
+      this->registerNewCallBack("--upperTitle", "-ut", &TPlot::treatUpperTitle,
                                 "set graph upper title", true);
-      this->registerNewCallBack("--downTitle", "-dt",
-                                &TPlot::treatDownTitle,
+      this->registerNewCallBack("--downTitle", "-dt", &TPlot::treatDownTitle,
                                 "set graph down title", true);
-      this->registerNewCallBack("--leftTitle", "-lt",
-                                &TPlot::treatLeftTitle,
+      this->registerNewCallBack("--leftTitle", "-lt", &TPlot::treatLeftTitle,
                                 "set graph left title", true);
-      this->registerNewCallBack("--rightTitle", "-rt",
-                                &TPlot::treatRightTitle,
+      this->registerNewCallBack("--rightTitle", "-rt", &TPlot::treatRightTitle,
                                 "set graph right title", true);
       this->registerNewCallBack("--x2title", &TPlot::treatUpperTitle,
                                 "set graph upper title", true);
@@ -673,17 +640,13 @@ namespace tfel {
       this->registerNewCallBack("--key-horizontal-position", "-kh",
                                 &TPlot::treatKeyHorizontalPosition,
                                 "set key horizontal position", true);
-      this->registerNewCallBack("--upperLabel", "-ul",
-                                &TPlot::treatUpperLabel,
+      this->registerNewCallBack("--upperLabel", "-ul", &TPlot::treatUpperLabel,
                                 "set graph upper label", true);
-      this->registerNewCallBack("--downLabel", "-dl",
-                                &TPlot::treatDownLabel,
+      this->registerNewCallBack("--downLabel", "-dl", &TPlot::treatDownLabel,
                                 "set graph down label", true);
-      this->registerNewCallBack("--leftLabel", "-ll",
-                                &TPlot::treatLeftLabel,
+      this->registerNewCallBack("--leftLabel", "-ll", &TPlot::treatLeftLabel,
                                 "set graph left label", true);
-      this->registerNewCallBack("--rightLabel", "-rl",
-                                &TPlot::treatRightLabel,
+      this->registerNewCallBack("--rightLabel", "-rl", &TPlot::treatRightLabel,
                                 "set graph right label", true);
       this->registerNewCallBack("--x2label", &TPlot::treatUpperLabel,
                                 "set graph upper label", true);
@@ -693,20 +656,16 @@ namespace tfel {
                                 "set graph left label", true);
       this->registerNewCallBack("--y2label", &TPlot::treatRightLabel,
                                 "set graph right label", true);
-      this->registerNewCallBack("--line-style", "-ls",
-                                &TPlot::treatLineStyle,
+      this->registerNewCallBack("--line-style", "-ls", &TPlot::treatLineStyle,
                                 "set the line style (the type of line "
                                 "and the color is given by the theme)",
                                 true);
-      this->registerNewCallBack(
-          "--with-solidline", &TPlot::treatWithSolidLine,
-          "draw the preceeding curve with a solid line");
-      this->registerNewCallBack(
-          "--with-dotline", &TPlot::treatWithDotLine,
-          "draw the preceeding curve with a dot line");
-      this->registerNewCallBack(
-          "--with-dashline", &TPlot::treatWithDashLine,
-          "draw the preceeding curve with a dash line");
+      this->registerNewCallBack("--with-solidline", &TPlot::treatWithSolidLine,
+                                "draw the preceeding curve with a solid line");
+      this->registerNewCallBack("--with-dotline", &TPlot::treatWithDotLine,
+                                "draw the preceeding curve with a dot line");
+      this->registerNewCallBack("--with-dashline", &TPlot::treatWithDashLine,
+                                "draw the preceeding curve with a dash line");
       this->registerNewCallBack(
           "--with-dashdotline", &TPlot::treatWithDashDotLine,
           "draw the preceeding curve with a dash and dot line");
@@ -719,23 +678,17 @@ namespace tfel {
           "draw the preceeding curve with a solid line and plus mark");
       this->registerNewCallBack("--with-dots", &TPlot::treatWithDots,
                                 "draw the preceeding curve with dots");
-      this->registerNewCallBack(
-          "--with-squares", &TPlot::treatWithSquares,
-          "draw the preceeding curve with squares");
-      this->registerNewCallBack(
-          "--with-triangles", &TPlot::treatWithTriangles,
-          "draw the preceeding curve with triangles");
-      this->registerNewCallBack(
-          "--with-diamonds", &TPlot::treatWithDiamonds,
-          "draw the preceeding curve with diamonds");
-      this->registerNewCallBack(
-          "--with-crosses", &TPlot::treatWithCrosses,
-          "draw the preceeding curve with crosses");
-      this->registerNewCallBack("--font-size", "-fs",
-                                &TPlot::treatFontSize,
+      this->registerNewCallBack("--with-squares", &TPlot::treatWithSquares,
+                                "draw the preceeding curve with squares");
+      this->registerNewCallBack("--with-triangles", &TPlot::treatWithTriangles,
+                                "draw the preceeding curve with triangles");
+      this->registerNewCallBack("--with-diamonds", &TPlot::treatWithDiamonds,
+                                "draw the preceeding curve with diamonds");
+      this->registerNewCallBack("--with-crosses", &TPlot::treatWithCrosses,
+                                "draw the preceeding curve with crosses");
+      this->registerNewCallBack("--font-size", "-fs", &TPlot::treatFontSize,
                                 "specify font size", true);
-      this->registerNewCallBack("--font-family", "-ff",
-                                &TPlot::treatFontFamily,
+      this->registerNewCallBack("--font-family", "-ff", &TPlot::treatFontFamily,
                                 "specify font family", true);
       this->registerNewCallBack("--gnuplot-instruction", "-gp",
                                 &TPlot::treatGnuplotInstruction,
@@ -749,8 +702,9 @@ namespace tfel {
                                   const std::string& key) {
       const auto& o = this->currentArgument->getOption();
       if (!w.isEmpty()) {
-        throw(std::runtime_error("TPlot::" + method + ": "
-                                                      "key " +
+        throw(std::runtime_error("TPlot::" + method +
+                                 ": "
+                                 "key " +
                                  key + " has already been declared"));
       }
       if (o.empty()) {
@@ -777,8 +731,8 @@ namespace tfel {
     double TPlot::getDoubleOption() {
       auto throw_if = [](const bool b, const std::string& m) {
         if (b)
-          (throw(std::runtime_error("TPlot::getDoubleOption: " +
-                                    std::string(m))));
+          (throw(
+              std::runtime_error("TPlot::getDoubleOption: " + std::string(m))));
       };
       const auto o = this->currentArgument->getOption();
       throw_if(o.empty(), "no argument given to the '" +
@@ -815,8 +769,7 @@ namespace tfel {
                               "' option");
       throw_if(this->in != nullptr, "input socket already defined");
       this->in = new QLocalSocket(this);
-      this->in->connectToServer(QString::fromStdString(o),
-                                QIODevice::ReadOnly);
+      this->in->connectToServer(QString::fromStdString(o), QIODevice::ReadOnly);
       throw_if(this->in->state() != QLocalSocket::ConnectedState,
                "can't connect to socket '" + o + "'");
       QObject::connect(this->in, &QLocalSocket::readyRead, this,
@@ -850,8 +803,7 @@ namespace tfel {
       const auto r = this->shell->treatNewCommand(l);
       if (r.status == GnuplotInterpreter::ParsingResult::QUIT) {
         write("2");
-      } else if (r.status ==
-                 GnuplotInterpreter::ParsingResult::FAILURE) {
+      } else if (r.status == GnuplotInterpreter::ParsingResult::FAILURE) {
         write("1");
       } else {
         write("0");
@@ -885,18 +837,16 @@ namespace tfel {
     void TPlot::treatLineStyle() {
       auto throw_if = [](const bool b, const std::string& m) {
         if (b)
-          (throw(std::runtime_error("TPlot::treatLineStyle: " +
-                                    std::string(m))));
+          (throw(
+              std::runtime_error("TPlot::treatLineStyle: " + std::string(m))));
       };
       throw_if(this->inputs.empty(), "no curve specified");
       QString ls;
-      this->getStringFromArgs(ls, "treatLineStyle",
-                              "gnuplot instruction");
+      this->getStringFromArgs(ls, "treatLineStyle", "gnuplot instruction");
       if (TPlot::isUnsignedShort(ls)) {
         const auto lsn = TPlot::convertToUnsignedShort(ls);
         auto& o = this->inputs.back().getCurveOptions();
-        throw_if(o.hasThemeLineStyle,
-                 "theme line style already specified");
+        throw_if(o.hasThemeLineStyle, "theme line style already specified");
         o.hasThemeLineStyle = true;
         o.themestyle = lsn;
       } else {
@@ -921,8 +871,7 @@ namespace tfel {
     void TPlot::treatTitle() {
       auto throw_if = [](const bool b, const std::string& m) {
         if (b)
-          (throw(std::runtime_error("TPlot::treatTitle: " +
-                                    std::string(m))));
+          (throw(std::runtime_error("TPlot::treatTitle: " + std::string(m))));
       };
       throw_if(this->inputs.empty(), "no curve declared");
       auto& o = this->inputs.back().getCurveOptions();
@@ -934,8 +883,8 @@ namespace tfel {
     void TPlot::treatCurveStyle(const Curve::Style cs) {
       auto throw_if = [](const bool b, const std::string& m) {
         if (b)
-          (throw(std::runtime_error("TPlot::treatCurveStyle: " +
-                                    std::string(m))));
+          (throw(
+              std::runtime_error("TPlot::treatCurveStyle: " + std::string(m))));
       };
       throw_if(this->inputs.empty(), "no curve declared");
       auto& o = this->inputs.back().getCurveOptions();
@@ -1034,13 +983,11 @@ namespace tfel {
     }  // end of TPlot::treatUpperTitle
 
     void TPlot::treatDownTitle() {
-      this->getStringFromArgs(this->downTitle, "treatDownTitle",
-                              "downTitle");
+      this->getStringFromArgs(this->downTitle, "treatDownTitle", "downTitle");
     }  // end of TPlot::treatDownTitle
 
     void TPlot::treatLeftTitle() {
-      this->getStringFromArgs(this->leftTitle, "treatLeftTitle",
-                              "leftTitle");
+      this->getStringFromArgs(this->leftTitle, "treatLeftTitle", "leftTitle");
     }  // end of TPlot::treatLeftTitle
 
     void TPlot::treatRightTitle() {
@@ -1054,13 +1001,11 @@ namespace tfel {
     }  // end of TPlot::treatUpperLabel
 
     void TPlot::treatDownLabel() {
-      this->getStringFromArgs(this->downLabel, "treatDownLabel",
-                              "downLabel");
+      this->getStringFromArgs(this->downLabel, "treatDownLabel", "downLabel");
     }  // end of TPlot::treatDownLabel
 
     void TPlot::treatLeftLabel() {
-      this->getStringFromArgs(this->leftLabel, "treatLeftLabel",
-                              "leftLabel");
+      this->getStringFromArgs(this->leftLabel, "treatLeftLabel", "leftLabel");
     }  // end of TPlot::treatLeftLabel
 
     void TPlot::treatRightLabel() {
@@ -1170,8 +1115,7 @@ namespace tfel {
     void TPlot::treatUsing() {
       auto throw_if = [](const bool b, const std::string& m) {
         if (b)
-          (throw(std::runtime_error("TPlot::treatUsing: " +
-                                    std::string(m))));
+          (throw(std::runtime_error("TPlot::treatUsing: " + std::string(m))));
       };
       throw_if(this->inputs.empty(), "no curve specified");
       throw_if(!this->inputs.back().is<Data>(),
@@ -1198,8 +1142,7 @@ namespace tfel {
           (throw(std::runtime_error("TPlot::treatUnknownArgument: " +
                                     std::string(m))));
       };
-      auto import_data = [this, throw_if](const QString& f,
-                                          const QString& s) {
+      auto import_data = [this, throw_if](const QString& f, const QString& s) {
         Data d;
         d.fileName = f;
         const auto pd = this->dataSources.find(d.fileName);
@@ -1266,8 +1209,7 @@ namespace tfel {
         if (a.startsWith("alcyone:")) {
           c.fileName = a.mid(8);
         }
-        throw_if(c.fileName.isEmpty(),
-                 "empty alcyone results file name");
+        throw_if(c.fileName.isEmpty(), "empty alcyone results file name");
         Input i;
         i.set(c);
         this->inputs.push_back(i);
@@ -1422,10 +1364,10 @@ namespace tfel {
           this->treatFunctionInput(i.get<Function>());
         } else if (i.is<GnuplotScript>()) {
           if (!this->output.isEmpty()) {
-            throw(std::runtime_error(
-                "TPlot::initialize: "
-                "gnuplot script is not compatible with "
-                "the definition of an output file"));
+            throw(
+                std::runtime_error("TPlot::initialize: "
+                                   "gnuplot script is not compatible with "
+                                   "the definition of an output file"));
           }
           const auto& gs = i.get<GnuplotScript>();
           this->shell->importGnuplotFile(gs.fileName);
@@ -1455,8 +1397,7 @@ namespace tfel {
           }
         } else if (i.is<LicosResults>()) {
           const auto& c = i.get<LicosResults>();
-          auto* d = new ImportLicosResultsDialog(*(this->g), c.fileName,
-                                                 this);
+          auto* d = new ImportLicosResultsDialog(*(this->g), c.fileName, this);
           if (*d) {
             d->setWindowModality(Qt::NonModal);
             d->show();
@@ -1505,17 +1446,16 @@ namespace tfel {
       }
       DataCurve* curve;
       if (bcx && bcy) {
-        curve = new DataCurve(d.fileName, p2->second->getSeparator(),
-                              cx, cy);
+        curve = new DataCurve(d.fileName, p2->second->getSeparator(), cx, cy);
       } else if (bcx && (!bcy)) {
-        curve = new DataCurve(d.fileName, p2->second->getSeparator(),
-                              cx, d.yvalues);
+        curve = new DataCurve(d.fileName, p2->second->getSeparator(), cx,
+                              d.yvalues);
       } else if ((!bcx) && bcy) {
-        curve = new DataCurve(d.fileName, p2->second->getSeparator(),
-                              d.xvalues, cy);
+        curve = new DataCurve(d.fileName, p2->second->getSeparator(), d.xvalues,
+                              cy);
       } else {
-        curve = new DataCurve(d.fileName, p2->second->getSeparator(),
-                              d.xvalues, d.yvalues);
+        curve = new DataCurve(d.fileName, p2->second->getSeparator(), d.xvalues,
+                              d.yvalues);
       }
       if (d.hasThemeLineStyle) {
         curve->setThemeLineStyle(d.themestyle);
@@ -1538,8 +1478,8 @@ namespace tfel {
           } else {
             std::ostringstream legend;
             if (d.xvalues.isEmpty()) {
-              legend << "\"" << d.fileName.toStdString() << "\" using "
-                     << 1 << ":" << coly;
+              legend << "\"" << d.fileName.toStdString() << "\" using " << 1
+                     << ":" << coly;
             } else {
               legend << "\"" << d.fileName.toStdString() << "\" using "
                      << d.xvalues.toStdString() << ":" << coly;
@@ -1598,7 +1538,7 @@ namespace tfel {
             for (unsigned short i = 1; i != c; ++i) {
               const auto& vy = dr.getColumn(i + 1);
               auto curve = std::make_shared<DataCurve>(vx, vy);
-              curve->setKey(dr.getLegend(i),true);
+              curve->setKey(dr.getLegend(i), true);
               this->g->addCurve(curve);
               this->g->replot();
             }
@@ -1676,8 +1616,8 @@ namespace tfel {
     }
 
     void TPlot::exportToTable() {
-      const auto f = QFileDialog::getSaveFileName(
-          this, tr("Choose file"), "", tr("Text (*.txt)"));
+      const auto f = QFileDialog::getSaveFileName(this, tr("Choose file"), "",
+                                                  tr("Text (*.txt)"));
       if (f.isEmpty()) {
         return;
       }

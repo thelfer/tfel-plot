@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file  ImportLicosCurveDialog.cxx
  * \brief
  * \author Helfer Thomas
@@ -6,20 +6,17 @@
  */
 
 #ifndef LIB_TFEL_PLOT_IMPORTLICOSCURVEDIALOG_H_
-#define LIB_TFEL_PLOT_IMPORTLICOSCURVEDIALOG_H_ 
+#define LIB_TFEL_PLOT_IMPORTLICOSCURVEDIALOG_H_
 
-#include<TFEL/Plot/Config.hxx>
-#include<TFEL/Plot/ImportTextDataDialogBase.hxx>
+#include <TFEL/Plot/Config.hxx>
+#include <TFEL/Plot/ImportTextDataDialogBase.hxx>
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportLicosCurveDialog 
-      : public ImportTextDataDialogBase
-    {
+    struct TFELPLOT_VISIBILITY_EXPORT ImportLicosCurveDialog
+        : public ImportTextDataDialogBase {
       ImportLicosCurveDialog(Graph&, QWidget* const = nullptr);
 
       ~ImportLicosCurveDialog() override;
@@ -31,11 +28,10 @@ namespace tfel
 
       QStringList getFileExtensions() const override;
 
-    }; // end of ImportLicosCurveDialog
+    };  // end of ImportLicosCurveDialog
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_IMPORTLICOSCURVEDIALOG_H */
-

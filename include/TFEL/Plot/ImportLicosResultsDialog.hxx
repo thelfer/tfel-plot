@@ -36,9 +36,7 @@ namespace tfel {
       Graph &graph;
     };
 
-    struct TFELPLOT_VISIBILITY_EXPORT ImportLicosResultsDialog
-        : QDialog {
-
+    struct TFELPLOT_VISIBILITY_EXPORT ImportLicosResultsDialog : QDialog {
       ImportLicosResultsDialog(Graph &, QWidget *const = nullptr);
 
       ImportLicosResultsDialog(Graph &,
@@ -55,9 +53,8 @@ namespace tfel {
 
       virtual QTreeWidgetItem *getTopLevelItem(const QString &);
 
-      virtual void fillTree(
-          QTreeWidgetItem *,
-          const std::map<QString, QStringList> &) const;
+      virtual void fillTree(QTreeWidgetItem *,
+                            const std::map<QString, QStringList> &) const;
 
       virtual void fails(const QString &);
 

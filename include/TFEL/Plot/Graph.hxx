@@ -32,7 +32,6 @@ namespace tfel {
     struct GraphConfigurationDialog;
 
     struct TFELPLOT_VISIBILITY_EXPORT Graph : QGraphicsView {
-
       enum GraphBorder {
         X,   // lower border
         X2,  // upper border
@@ -123,14 +122,12 @@ namespace tfel {
 
       virtual void setGrid(const unsigned short, const bool = true);
 
-      virtual void setXTics(const std::map<qreal, QString>&,
-                            const bool = true);
+      virtual void setXTics(const std::map<qreal, QString>&, const bool = true);
 
       virtual void setX2Tics(const std::map<qreal, QString>&,
                              const bool = true);
 
-      virtual void setYTics(const std::map<qreal, QString>&,
-                            const bool = true);
+      virtual void setYTics(const std::map<qreal, QString>&, const bool = true);
 
       virtual void setY2Tics(const std::map<qreal, QString>&,
                              const bool = true);
@@ -171,21 +168,13 @@ namespace tfel {
 
       virtual QFont getGraphFont() const;
 
-      virtual void setXRange(const qreal,
-                             const qreal,
-                             const bool = true);
+      virtual void setXRange(const qreal, const qreal, const bool = true);
 
-      virtual void setYRange(const qreal,
-                             const qreal,
-                             const bool = true);
+      virtual void setYRange(const qreal, const qreal, const bool = true);
 
-      virtual void setX2Range(const qreal,
-                              const qreal,
-                              const bool = true);
+      virtual void setX2Range(const qreal, const qreal, const bool = true);
 
-      virtual void setY2Range(const qreal,
-                              const qreal,
-                              const bool = true);
+      virtual void setY2Range(const qreal, const qreal, const bool = true);
 
       virtual void setXAxisLogScale(const bool = true);
 
@@ -211,8 +200,8 @@ namespace tfel {
 
       virtual void unsetY2Range(const bool = true);
 
-      virtual void setKeyHorizontalPosition(
-          const KeyHorizontalPosition&, const bool = true);
+      virtual void setKeyHorizontalPosition(const KeyHorizontalPosition&,
+                                            const bool = true);
 
       virtual void setKeyVerticalPosition(const KeyVerticalPosition&,
                                           const bool = true);
@@ -221,8 +210,7 @@ namespace tfel {
                                    const KeyVerticalPosition&,
                                    const bool = true);
 
-      virtual void setKeyAlignment(const KeyAlignment&,
-                                   const bool = true);
+      virtual void setKeyAlignment(const KeyAlignment&, const bool = true);
 
       virtual void removeLabel(const QString&, const bool = true);
 
@@ -379,10 +367,7 @@ namespace tfel {
       static QColor getColorByName(const QString&);
 
       struct Axis {
-        enum AxisScale {
-          LINEARSCALE,
-          LOGSCALE
-        };  // end of enum AxisScale
+        enum AxisScale { LINEARSCALE, LOGSCALE };  // end of enum AxisScale
         explicit Axis(const unsigned short);
         void reset();
         const unsigned short id;
@@ -438,8 +423,7 @@ namespace tfel {
       std::shared_ptr<GraphTheme> getTheme() const;
       bool hasGrid() const;
       unsigned short getGrid() const;
-      virtual void addCurve(std::shared_ptr<Curve>,
-                            const GraphAxis = XY);
+      virtual void addCurve(std::shared_ptr<Curve>, const GraphAxis = XY);
       qreal getXMin() const;
       qreal getXMax() const;
       qreal getYMin() const;
@@ -489,8 +473,7 @@ namespace tfel {
           const QString&);
       std::vector<std::shared_ptr<Graph::Arrow>>::iterator findArrow(
           const QString&);
-      std::vector<CurveHandler>::iterator findCurveHandler(
-          Curve* const);
+      std::vector<CurveHandler>::iterator findCurveHandler(Curve* const);
       void exportToFile(const QString&, const char* const);
       void setTics(Graph::Axis&, const std::map<qreal, QString>&);
       void unsetTics(Graph::Axis&);
@@ -498,12 +481,9 @@ namespace tfel {
       void addCurve(CurveHandler&, Graph::Axis&);
       void setLogScale(Graph::Axis&);
       void unsetLogScale(Graph::Axis&);
-      void plot(QGraphicsScene&,
-                const unsigned short,
-                const unsigned short);
+      void plot(QGraphicsScene&, const unsigned short, const unsigned short);
       QString convertToString(const qreal);
-      QString convertTicsToString(const qreal,
-                                  const Graph::Axis::AxisScale);
+      QString convertTicsToString(const qreal, const Graph::Axis::AxisScale);
       bool computeMinMax(qreal&, qreal&, Graph::Axis&);
       bool computeMinMax(Graph::Axis&);
       qreal convertHorizontalGraphCoordinatesToAbsolutePosition(
@@ -515,10 +495,7 @@ namespace tfel {
                     const qreal,
                     const qreal,
                     const Graph::Axis::AxisScale);
-      void setRange(Graph::Axis&,
-                    const qreal,
-                    const qreal,
-                    const bool = true);
+      void setRange(Graph::Axis&, const qreal, const qreal, const bool = true);
       void updateBordersSize();
       void updateCurves(const Graph::Axis&);
       void updateCurve(CurveHandler&, const Graph::Axis&);
@@ -528,13 +505,9 @@ namespace tfel {
       void computeRange(qreal&, qreal&, const unsigned short);
       void computeRange2(qreal&, qreal&, const unsigned short);
       qreal computeTicsIncrements(const qreal, const qreal) const;
-      void insertIntoTics(std::map<qreal, QString>&,
-                          const qreal,
-                          const qreal);
+      void insertIntoTics(std::map<qreal, QString>&, const qreal, const qreal);
       void computeLinearScaleTics(Graph::Axis&);
-      void computeLogScaleTics(std::map<qreal, QString>&,
-                               qreal&,
-                               qreal&);
+      void computeLogScaleTics(std::map<qreal, QString>&, qreal&, qreal&);
       void computeTics(Graph::Axis&);
       void computeGraphLayout(const qreal, const qreal, GraphLayout&);
 

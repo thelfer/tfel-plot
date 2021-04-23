@@ -28,16 +28,15 @@ namespace tfel {
      * abstract class for graph themes
      */
     struct TFELPLOT_VISIBILITY_EXPORT GraphTheme {
-      virtual void getDefaultColor(QColor &,
-                                   const unsigned short) const = 0;
-      virtual qreal getYTicsWidth(
-          Graph &, const std::map<qreal, QString> &) const = 0;
-      virtual qreal getY2TicsWidth(
-          Graph &, const std::map<qreal, QString> &) const = 0;
-      virtual qreal getXTicsHeight(
-          Graph &, const std::map<qreal, QString> &) const = 0;
-      virtual qreal getX2TicsHeight(
-          Graph &, const std::map<qreal, QString> &) const = 0;
+      virtual void getDefaultColor(QColor &, const unsigned short) const = 0;
+      virtual qreal getYTicsWidth(Graph &,
+                                  const std::map<qreal, QString> &) const = 0;
+      virtual qreal getY2TicsWidth(Graph &,
+                                   const std::map<qreal, QString> &) const = 0;
+      virtual qreal getXTicsHeight(Graph &,
+                                   const std::map<qreal, QString> &) const = 0;
+      virtual qreal getX2TicsHeight(Graph &,
+                                    const std::map<qreal, QString> &) const = 0;
       virtual qreal getLeftMargin() const = 0;
       virtual qreal getRightMargin() const = 0;
       virtual qreal getUpperMargin() const = 0;
@@ -74,26 +73,22 @@ namespace tfel {
                                 const GraphLayout &,
                                 const GraphSize &,
                                 const QString &) const = 0;
-      virtual void printXTics(
-          Graph &,
-          const GraphLayout &,
-          const GraphSize &,
-          const std::map<qreal, QString> &) const = 0;
-      virtual void printYTics(
-          Graph &,
-          const GraphLayout &,
-          const GraphSize &,
-          const std::map<qreal, QString> &) const = 0;
-      virtual void printX2Tics(
-          Graph &,
-          const GraphLayout &,
-          const GraphSize &,
-          const std::map<qreal, QString> &) const = 0;
-      virtual void printY2Tics(
-          Graph &,
-          const GraphLayout &,
-          const GraphSize &,
-          const std::map<qreal, QString> &) const = 0;
+      virtual void printXTics(Graph &,
+                              const GraphLayout &,
+                              const GraphSize &,
+                              const std::map<qreal, QString> &) const = 0;
+      virtual void printYTics(Graph &,
+                              const GraphLayout &,
+                              const GraphSize &,
+                              const std::map<qreal, QString> &) const = 0;
+      virtual void printX2Tics(Graph &,
+                               const GraphLayout &,
+                               const GraphSize &,
+                               const std::map<qreal, QString> &) const = 0;
+      virtual void printY2Tics(Graph &,
+                               const GraphLayout &,
+                               const GraphSize &,
+                               const std::map<qreal, QString> &) const = 0;
 
       virtual void getGraphBorders(
           Graph &, qreal &, qreal &, qreal &, qreal &) const = 0;
@@ -167,19 +162,14 @@ namespace tfel {
                              const Graph::KeyVerticalPosition &,
                              const Graph::KeyAlignment &) const = 0;
       virtual qreal getXLabelHeight(Graph &, const QString &) const = 0;
-      virtual qreal getX2LabelHeight(Graph &,
-                                     const QString &) const = 0;
+      virtual qreal getX2LabelHeight(Graph &, const QString &) const = 0;
       virtual qreal getYLabelWidth(Graph &, const QString &) const = 0;
       virtual qreal getY2LabelWidth(Graph &, const QString &) const = 0;
 
-      virtual qreal getDownTitleHeight(Graph &,
-                                       const QString &) const = 0;
-      virtual qreal getUpperTitleHeight(Graph &,
-                                        const QString &) const = 0;
-      virtual qreal getLeftTitleWidth(Graph &,
-                                      const QString &) const = 0;
-      virtual qreal getRightTitleWidth(Graph &,
-                                       const QString &) const = 0;
+      virtual qreal getDownTitleHeight(Graph &, const QString &) const = 0;
+      virtual qreal getUpperTitleHeight(Graph &, const QString &) const = 0;
+      virtual qreal getLeftTitleWidth(Graph &, const QString &) const = 0;
+      virtual qreal getRightTitleWidth(Graph &, const QString &) const = 0;
 
       virtual void drawRubberBand(Graph &, const QRectF &) const = 0;
       //! destructor

@@ -25,16 +25,14 @@ namespace tfel {
   namespace plot {
 
     static qreal convertFromHexadecimal(const char c1, const char c2) {
-      static const char hexc[] = {'0', '1', '2', '3', '4', '5',
-                                  '6', '7', '8', '9', 'a', 'b',
-                                  'c', 'd', 'e', 'f'};
+      static const char hexc[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+                                  '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
       const auto i1 = static_cast<unsigned short>(
           std::find(hexc, hexc + 16, tolower(c1)) - hexc);
       const auto i2 = static_cast<unsigned short>(
           std::find(hexc, hexc + 16, tolower(c2)) - hexc);
       if ((i1 > 15) || (i2 > 15)) {
-        throw(std::runtime_error(
-            "convertFromHexadecimal : invalid input"));
+        throw(std::runtime_error("convertFromHexadecimal : invalid input"));
       }
       return static_cast<qreal>((i1 << 4) + i2);
     }  // end of convertFromHexadecimal
@@ -62,8 +60,8 @@ namespace tfel {
     };  // end of struct
         // GnuplotInterpreter::PlotInterpreter::CurveOptions
 
-    GnuplotInterpreter::PlotInterpreter::PlotInterpreter(
-        GnuplotInterpreter& i, Graph& graph)
+    GnuplotInterpreter::PlotInterpreter::PlotInterpreter(GnuplotInterpreter& i,
+                                                         Graph& graph)
         : GnuplotInterpreterBase(graph), interpreter(i) {
       this->registerCallBacks();
     }  // end of GnuplotInterpreter::PlotInterpreter::PlotInterpreter
@@ -105,8 +103,8 @@ namespace tfel {
                              &PlotInterpreter::treatNoTitle);
     }  // end of GnuplotInterpreter::PlotInterpreter::registerCallBack
 
-    void GnuplotInterpreter::PlotInterpreter::eval(
-        const_iterator& p, const const_iterator pe) {
+    void GnuplotInterpreter::PlotInterpreter::eval(const_iterator& p,
+                                                   const const_iterator pe) {
       using namespace std;
       using namespace tfel::utilities;
       using namespace tfel::math;
@@ -126,16 +124,16 @@ namespace tfel {
       if (p->value == "[") {
         xrange = true;
         auto efcts = this->interpreter.getExternalFunctionManager();
-        GnuplotInterpreterBase::readRange(hasXMinValue, hasXMaxValue,
-                                          xmin, xmax, efcts, p, pe);
+        GnuplotInterpreterBase::readRange(hasXMinValue, hasXMaxValue, xmin,
+                                          xmax, efcts, p, pe);
       }
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::eval", "", p, pe);
       if (p->value == "[") {
         yrange = true;
         auto efcts = this->interpreter.getExternalFunctionManager();
-        GnuplotInterpreterBase::readRange(hasYMinValue, hasYMaxValue,
-                                          ymin, ymax, efcts, p, pe);
+        GnuplotInterpreterBase::readRange(hasYMinValue, hasYMaxValue, ymin,
+                                          ymax, efcts, p, pe);
       }
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::eval", "", p, pe);
@@ -218,8 +216,7 @@ namespace tfel {
 
     void GnuplotInterpreter::PlotInterpreter::applyCurveOptions(
         std::shared_ptr<Curve> c,
-        const GnuplotInterpreter::PlotInterpreter::CurveOptions&
-            options) {
+        const GnuplotInterpreter::PlotInterpreter::CurveOptions& options) {
       if (options.hasTitle) {
         c->setKey(QString::fromStdString(options.title));
       }
@@ -296,9 +293,9 @@ namespace tfel {
       shared_ptr<Evaluator> ev(new Evaluator(vars, f, efcts));
       ev->removeDependencies();
       const auto& options = this->treatPlotOptions(p, pe);
-      throw_if((!options.using_decl_x.empty()) ||
-                   (!options.using_decl_y.empty()),
-               "the 'using' keyword is invalid for functions");
+      throw_if(
+          (!options.using_decl_x.empty()) || (!options.using_decl_y.empty()),
+          "the 'using' keyword is invalid for functions");
       shared_ptr<Curve> c(new EvaluatedCurve(
           ev, QString::fromStdString(interpreter.getDummyVariable())));
       this->applyCurveOptions(c, options);
@@ -385,9 +382,7 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatDataPlot
 
     void GnuplotInterpreter::PlotInterpreter::treatLineType(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(
@@ -399,8 +394,7 @@ namespace tfel {
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::treatType",
           "expected line type", p, pe);
-      throw_if(options.hasSpecifiedColor,
-               "line type already specified");
+      throw_if(options.hasSpecifiedColor, "line type already specified");
       if (p->value == "rgb") {
         ++p;
         CxxTokenizer::checkNotEndOfLine(
@@ -410,16 +404,14 @@ namespace tfel {
         throw_if(type.empty(), "empty line type specified");
         if (type[0] == '#') {
           throw_if(type.size() != 7, "invalid hexadecimal number");
-          options.color =
-              QColor(convertFromHexadecimal(type[1], type[2]),
-                     convertFromHexadecimal(type[3], type[4]),
-                     convertFromHexadecimal(type[5], type[6]));
+          options.color = QColor(convertFromHexadecimal(type[1], type[2]),
+                                 convertFromHexadecimal(type[3], type[4]),
+                                 convertFromHexadecimal(type[5], type[6]));
         } else {
           throw_if(true, "expected token starting with '#'");
         }
       } else {
-        if (GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(
-                p->value)) {
+        if (GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(p->value)) {
           this->g.getTheme()->getDefaultColor(
               options.color, this->convertToUnsignedShort(p->value));
         } else {
@@ -432,9 +424,7 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatLineType
 
     void GnuplotInterpreter::PlotInterpreter::treatLineColor(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(
@@ -446,8 +436,7 @@ namespace tfel {
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::treatLineColor",
           "expected line type", p, pe);
-      throw_if(options.hasSpecifiedColor,
-               "line type already specified");
+      throw_if(options.hasSpecifiedColor, "line type already specified");
       if (p->value == "rgb") {
         ++p;
         CxxTokenizer::checkNotEndOfLine(
@@ -458,16 +447,14 @@ namespace tfel {
         if (type[0] == '#') {
           // rgb
           throw_if(type.size() != 7, "invalid hexadecimal number");
-          options.color =
-              QColor(convertFromHexadecimal(type[1], type[2]),
-                     convertFromHexadecimal(type[3], type[4]),
-                     convertFromHexadecimal(type[5], type[6]));
+          options.color = QColor(convertFromHexadecimal(type[1], type[2]),
+                                 convertFromHexadecimal(type[3], type[4]),
+                                 convertFromHexadecimal(type[5], type[6]));
         } else {
           throw_if(true, "unexpected token '#'");
         }
       } else {
-        if (GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(
-                p->value)) {
+        if (GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(p->value)) {
           this->g.getTheme()->getDefaultColor(
               options.color, this->convertToUnsignedShort(p->value));
         } else {
@@ -480,9 +467,7 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatLineColor
 
     void GnuplotInterpreter::PlotInterpreter::treatLineWidth(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(
@@ -494,20 +479,17 @@ namespace tfel {
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::treatWidth",
           "expected line type", p, pe);
-      throw_if(options.hasSpecifiedWidth,
-               "line width already specified");
-      throw_if(!GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(
-                   p->value),
-               "unexpected a number");
+      throw_if(options.hasSpecifiedWidth, "line width already specified");
+      throw_if(
+          !GnuplotInterpreter::PlotInterpreter::isUnsignedInteger(p->value),
+          "unexpected a number");
       options.width = this->convertToUnsignedShort(p->value);
       options.hasSpecifiedWidth = true;
       ++p;
     }  // end of GnuplotInterpreter::PlotInterpreter::treatLineWidth
 
     void GnuplotInterpreter::PlotInterpreter::treatAxes(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(
@@ -535,11 +517,8 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatAxes
 
     void GnuplotInterpreter::PlotInterpreter::treatUsing(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
-      if ((!options.using_decl_x.empty()) ||
-          (!options.using_decl_y.empty())) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
+      if ((!options.using_decl_x.empty()) || (!options.using_decl_y.empty())) {
         throw(std::runtime_error(
             "GnuplotInterpreter::PlotInterpreter::treatUsing: "
             "using option already specified."));
@@ -550,8 +529,7 @@ namespace tfel {
       GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(
           options.using_decl_x, p, pe);
       CxxTokenizer::readSpecifiedToken(
-          "GnuplotInterpreter::PlotInterpreter::treatUsing", ":", p,
-          pe);
+          "GnuplotInterpreter::PlotInterpreter::treatUsing", ":", p, pe);
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::treatUsing", "", p, pe);
       GnuplotInterpreterBase::readDataFunctionInUsingDeclaration(
@@ -559,9 +537,7 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatUsing
 
     void GnuplotInterpreter::PlotInterpreter::treatTitle(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       CxxTokenizer::checkNotEndOfLine(
           "GnuplotInterpreter::PlotInterpreter::treatTitle",
           "expected curve legend", p, pe);
@@ -575,9 +551,7 @@ namespace tfel {
     }  // end of GnuplotInterpreter::PlotInterpreter::treatTitle
 
     void GnuplotInterpreter::PlotInterpreter::treatWith(
-        CurveOptions& options,
-        const_iterator& p,
-        const const_iterator pe) {
+        CurveOptions& options, const_iterator& p, const const_iterator pe) {
       auto throw_if = [](const bool c, const std::string& m) {
         if (c) {
           throw(

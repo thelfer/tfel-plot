@@ -37,55 +37,36 @@ namespace tfel {
       emit updated(this);
     }  // end of DataCurve::DataCurve
 
-    DataCurve::DataCurve(
-        const QString& f,
-        const QString& s,
-        const QString& c1,
-        const unsigned short c2,
-        DataCurve::ExternalFunctionManagerPtr functions)
-        : fm(functions),
-          file(f),
-          separator(s),
-          cx(c1),
-          ucx(0),
-          ucy(c2) {
+    DataCurve::DataCurve(const QString& f,
+                         const QString& s,
+                         const QString& c1,
+                         const unsigned short c2,
+                         DataCurve::ExternalFunctionManagerPtr functions)
+        : fm(functions), file(f), separator(s), cx(c1), ucx(0), ucy(c2) {
       this->watcher = new QFileSystemWatcher(this);
       this->watcher->addPath(this->file);
       this->loadDataFromFile(true);
       emit updated(this);
     }  // end of DataCurve::DataCurve
 
-    DataCurve::DataCurve(
-        const QString& f,
-        const QString& s,
-        const unsigned short c1,
-        const QString& c2,
-        DataCurve::ExternalFunctionManagerPtr functions)
-        : fm(functions),
-          file(f),
-          separator(s),
-          cy(c2),
-          ucx(c1),
-          ucy(0) {
+    DataCurve::DataCurve(const QString& f,
+                         const QString& s,
+                         const unsigned short c1,
+                         const QString& c2,
+                         DataCurve::ExternalFunctionManagerPtr functions)
+        : fm(functions), file(f), separator(s), cy(c2), ucx(c1), ucy(0) {
       this->watcher = new QFileSystemWatcher(this);
       this->watcher->addPath(this->file);
       this->loadDataFromFile(true);
       emit updated(this);
     }  // end of DataCurve::DataCurve
 
-    DataCurve::DataCurve(
-        const QString& f,
-        const QString& s,
-        const QString& c1,
-        const QString& c2,
-        DataCurve::ExternalFunctionManagerPtr functions)
-        : fm(functions),
-          file(f),
-          separator(s),
-          cx(c1),
-          cy(c2),
-          ucx(0),
-          ucy(0) {
+    DataCurve::DataCurve(const QString& f,
+                         const QString& s,
+                         const QString& c1,
+                         const QString& c2,
+                         DataCurve::ExternalFunctionManagerPtr functions)
+        : fm(functions), file(f), separator(s), cx(c1), cy(c2), ucx(0), ucy(0) {
       this->watcher = new QFileSystemWatcher(this);
       this->watcher->addPath(this->file);
       this->loadDataFromFile(true);
@@ -105,13 +86,11 @@ namespace tfel {
     }  // end of DataCurve::hasRange
 
     qreal DataCurve::minRange() const {
-      return *(
-          std::min_element(this->xvalues.begin(), this->xvalues.end()));
+      return *(std::min_element(this->xvalues.begin(), this->xvalues.end()));
     }  // end of DataCurve::minRange
 
     qreal DataCurve::maxRange() const {
-      return *(
-          std::max_element(this->xvalues.begin(), this->xvalues.end()));
+      return *(std::max_element(this->xvalues.begin(), this->xvalues.end()));
     }  // end of DataCurve::maxRange
 
     void DataCurve::getValues(std::vector<Point>& points,
@@ -134,8 +113,7 @@ namespace tfel {
           points.push_back(point);
         }
       } else {
-        bool pinc =
-            false;  // true if the previous segments was selected
+        bool pinc = false;  // true if the previous segments was selected
         for (nbr = 0u; nbr != this->xvalues.size() - 1; ++nbr) {
           const qreal xl = this->xvalues[nbr];
           const qreal xr = this->xvalues[nbr + 1];
@@ -166,8 +144,7 @@ namespace tfel {
       return false;
     }  // end of DataCurve::hasSpecifiedNumberOfSamples
 
-    void DataCurve::setNumberOfSamples(const unsigned short,
-                                       const bool b) {
+    void DataCurve::setNumberOfSamples(const unsigned short, const bool b) {
       if (b) {
         emit updated(this);
       }
@@ -187,8 +164,8 @@ namespace tfel {
 
     void DataCurve::updateDataFile() {
       this->updatedDataFile(this->file);
-    } // end of DataCurve::updateDataFile
-    
+    }  // end of DataCurve::updateDataFile
+
     void DataCurve::updatedDataFile(const QString&) {
       this->watcher->removePath(this->file);
       if (!QFile(this->file).exists()) {
@@ -232,24 +209,20 @@ namespace tfel {
         for (const auto& vn : vnames) {
           if (vn[0] != '$') {
             if (d.hasColumn(QString::fromStdString(vn))) {
-              vars.push_back(
-                  {vn, d.findColumn(QString::fromStdString(vn))});
+              vars.push_back({vn, d.findColumn(QString::fromStdString(vn))});
             } else {
-              throw_if(this->fm == nullptr,
-                       "invalid variable '" + vn + "'");
+              throw_if(this->fm == nullptr, "invalid variable '" + vn + "'");
               const auto p4 = this->fm->find(vn);
-              throw_if(p4 == this->fm->end(),
-                       "invalid function '" + vn + "'");
+              throw_if(p4 == this->fm->end(), "invalid function '" + vn + "'");
               throw_if(p4->second->getNumberOfVariables() != 0,
                        "invalid variable '" + vn + "'.");
               e->setVariableValue(vn, p4->second->getValue());
             }
           } else {
-            throw_if(!DataCurve::isUnsignedInteger(vn.substr(1)),
-                     "invalid variable name '" + vn +
-                         "' in function '" + s + "'.");
-            const auto vc =
-                DataCurve::convertToUnsignedShort(vn.substr(1));
+            throw_if(
+                !DataCurve::isUnsignedInteger(vn.substr(1)),
+                "invalid variable name '" + vn + "' in function '" + s + "'.");
+            const auto vc = DataCurve::convertToUnsignedShort(vn.substr(1));
             throw_if(vc == 0,
                      "invalid variable name "
                      "'" +
@@ -272,8 +245,8 @@ namespace tfel {
     }  // end of DataCurve::getValues
 
     void DataCurve::executeDelayedDataLoading() {
-      QObject::connect(this->watcher, &QFileSystemWatcher::fileChanged,
-                       this, &DataCurve::updatedDataFile);
+      QObject::connect(this->watcher, &QFileSystemWatcher::fileChanged, this,
+                       &DataCurve::updatedDataFile);
       try {
         TextDataReader data(this->separator);
         data.extractData(this->file);
@@ -287,8 +260,8 @@ namespace tfel {
         } else {
           if (this->cx == "__DataCurve__::line_number") {
             this->xvalues.resize(this->yvalues.size());
-            for (std::vector<qreal>::size_type i = 0;
-                 i != this->xvalues.size(); ++i) {
+            for (std::vector<qreal>::size_type i = 0; i != this->xvalues.size();
+                 ++i) {
               this->xvalues[i] = i;
             }
           } else {
@@ -296,8 +269,7 @@ namespace tfel {
           }
         }
       } catch (std::exception& e) {
-        qDebug() << "DataCurve::executeDelayedDataLoading : "
-                 << e.what();
+        qDebug() << "DataCurve::executeDelayedDataLoading : " << e.what();
         this->xvalues.clear();
         this->yvalues.clear();
       } catch (...) {
@@ -315,19 +287,16 @@ namespace tfel {
       } else {
         // wait 100 micro-seconds for the data to be effectively ready
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-        QTimer::singleShot(100, this,SLOT(executeDelayedDataLoading()));
+        QTimer::singleShot(100, this, SLOT(executeDelayedDataLoading()));
 #else
-        QTimer::singleShot(100, this,
-                           &DataCurve::executeDelayedDataLoading);
+        QTimer::singleShot(100, this, &DataCurve::executeDelayedDataLoading);
 #endif
-        QObject::disconnect(this->watcher,
-                            &QFileSystemWatcher::fileChanged, this,
-                            &DataCurve::updatedDataFile);
+        QObject::disconnect(this->watcher, &QFileSystemWatcher::fileChanged,
+                            this, &DataCurve::updatedDataFile);
       }
     }
 
-    unsigned short DataCurve::convertToUnsignedShort(
-        const std::string& value) {
+    unsigned short DataCurve::convertToUnsignedShort(const std::string& value) {
       std::istringstream converter(value);
       for (const auto& c : value) {
         tfel::raise_if(!isdigit(c),
@@ -352,8 +321,7 @@ namespace tfel {
       return true;
     }  // end of DataCurve::isUnsignedInteger
 
-    double DataCurve::readDouble(const std::string& s,
-                                 const unsigned short l) {
+    double DataCurve::readDouble(const std::string& s, const unsigned short l) {
       std::istringstream is(s);
       double res;
       is >> res;

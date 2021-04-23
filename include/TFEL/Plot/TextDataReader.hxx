@@ -1,44 +1,40 @@
 /*!
  * \file   TextData.hxx
- * \brief    
+ * \brief
  * \author Helfer Thomas
  * \date   13 Nov 2007
  */
 
 #ifndef LIB_TFEL_PLOT_TEXTDATAREADER_H_
-#define LIB_TFEL_PLOT_TEXTDATAREADER_H_ 
+#define LIB_TFEL_PLOT_TEXTDATAREADER_H_
 
-#include<vector>
-#include<QtCore/QString>
-#include<QtCore/QTextStream>
-#include<QtCore/QStringList>
+#include <vector>
+#include <QtCore/QString>
+#include <QtCore/QTextStream>
+#include <QtCore/QStringList>
 
-#include"TFEL/Plot/Config.hxx"
+#include "TFEL/Plot/Config.hxx"
 
-namespace tfel
-{
+namespace tfel {
 
-  namespace plot
-  {
+  namespace plot {
 
     /*!
      * \brief class in charge of reading data in a text file
      */
-    struct TFELPLOT_VISIBILITY_EXPORT TextDataReader
-    {
+    struct TFELPLOT_VISIBILITY_EXPORT TextDataReader {
       /*!
        * \brief helper class in charge of storing of line of data line
        * starting with '#' ared considered comments and not stored.
        * If the first line begins with a '#', the following words are
        * intepreted as the title of each column
        */
-      struct Line
-      {
-	//! line number
-	unsigned short nbr;
-	//! line tokens
-	std::vector<double> values;
-      }; // end of struct Line
+      struct Line {
+        //! line number
+        unsigned short nbr;
+        //! line tokens
+        std::vector<double> values;
+      };  // end of struct Line
       //! \brief constructor
       TextDataReader();
       /*!
@@ -73,8 +69,7 @@ namespace tfel
        * specified column number or if a value can't be converted to
        * a double
        */
-      void getColumn(std::vector<double>&,
-		     const unsigned short) const;
+      void getColumn(std::vector<double>&, const unsigned short) const;
       /*!
        * \return if a column has the specified title
        * \param[in] n: column title
@@ -115,7 +110,8 @@ namespace tfel
       const QString& getSeparator() const;
       //! destructor
       ~TextDataReader();
-    private:
+
+     private:
       //! \brief move constructor (disabled)
       TextDataReader(TextDataReader&&) = delete;
       //! \brief copy constructor (disabled)
@@ -132,10 +128,10 @@ namespace tfel
       QStringList preamble;
       //! separator
       const QString separator;
-    }; // end of struct TextDataReader
+    };  // end of struct TextDataReader
 
-  } // end of namespace plot
+  }  // end of namespace plot
 
-} // end of namespace tfel
+}  // end of namespace tfel
 
 #endif /* LIB_TFEL_PLOT_TEXTDATAREADER_H */

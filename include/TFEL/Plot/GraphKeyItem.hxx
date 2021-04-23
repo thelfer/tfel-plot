@@ -19,7 +19,6 @@ namespace tfel {
     struct Graph;
 
     struct GraphKeyItem : public QGraphicsTextItem {
-
       GraphKeyItem(const QString &,
                    Curve *const,
                    Graph *const,

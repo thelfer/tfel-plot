@@ -35,11 +35,9 @@ namespace tfel {
       void remove();
 
      protected:
-      virtual void mouseDoubleClickEvent(
-          QGraphicsSceneMouseEvent *) override;
+      virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
 
-      virtual void contextMenuEvent(
-          QGraphicsSceneContextMenuEvent *) override;
+      virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *) override;
 
       Graph *const graph;
 

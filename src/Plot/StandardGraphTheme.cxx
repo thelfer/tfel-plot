@@ -114,9 +114,8 @@ namespace tfel {
       auto& cr = g.getScene();
       auto* t = new GraphTextItem(xlabel, &g, &Graph::setXLabel);
       const auto b = t->boundingRect();
-      t->setPos(
-          s.xh0 + 0.5 * (s.xh1 - s.xh0) - 0.5 * b.width(),
-          s.height - l.md - l.ttd - 0.5 * (l.ld) - 0.5 * b.height());
+      t->setPos(s.xh0 + 0.5 * (s.xh1 - s.xh0) - 0.5 * b.width(),
+                s.height - l.md - l.ttd - 0.5 * (l.ld) - 0.5 * b.height());
       cr.addItem(t);
     }  // end of StandardGraphTheme::printXLabel
 
@@ -133,11 +132,10 @@ namespace tfel {
       cr.addItem(t);
     }  // end of StandardGraphTheme::printYLabel
 
-    void StandardGraphTheme::printX2Label(
-        Graph& g,
-        const GraphLayout& l,
-        const GraphSize& s,
-        const QString& x2label) const {
+    void StandardGraphTheme::printX2Label(Graph& g,
+                                          const GraphLayout& l,
+                                          const GraphSize& s,
+                                          const QString& x2label) const {
       auto& cr = g.getScene();
       auto* t = new GraphTextItem(x2label, &g, &Graph::setX2Label);
       const auto b = t->boundingRect();
@@ -146,11 +144,10 @@ namespace tfel {
       cr.addItem(t);
     }  // end of StandardGraphTheme::printX2Label
 
-    void StandardGraphTheme::printY2Label(
-        Graph& g,
-        const GraphLayout& l,
-        const GraphSize& s,
-        const QString& y2label) const {
+    void StandardGraphTheme::printY2Label(Graph& g,
+                                          const GraphLayout& l,
+                                          const GraphSize& s,
+                                          const QString& y2label) const {
       auto& cr = g.getScene();
       auto* t = new GraphTextItem(y2label, &g, &Graph::setY2Label);
       const auto b = t->boundingRect();
@@ -167,14 +164,14 @@ namespace tfel {
         const std::map<qreal, QString>& xtics) const {
       auto& cr = g.getScene();
       auto p = xtics.begin();
-      while (p!=xtics.end()) {
+      while (p != xtics.end()) {
         auto* t = cr.addText("");
         t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
-        t->setPos((p->first - l.bx) / l.ax - 0.5 * b.width(),
-                  s.height - l.md - l.ttd - l.ld - 0.5 * (l.td) -
-                      0.5 * b.height());
+        t->setPos(
+            (p->first - l.bx) / l.ax - 0.5 * b.width(),
+            s.height - l.md - l.ttd - l.ld - 0.5 * (l.td) - 0.5 * b.height());
         ++p;
       }
     }  // end of StandardGraphTheme::printXTics
@@ -186,7 +183,7 @@ namespace tfel {
         const std::map<qreal, QString>& ytics) const {
       auto& cr = g.getScene();
       auto p = ytics.begin();
-      while (p!=ytics.end()) {
+      while (p != ytics.end()) {
         auto* t = cr.addText("");
         t->setHtml(p->second);
         t->setFont(g.getGraphFont());
@@ -209,9 +206,8 @@ namespace tfel {
         t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
-        t->setPos(
-            (p->first - l.bx2) / l.ax2 - 0.5 * b.width(),
-            l.mu + l.ttu + l.lu + 0.5 * (l.tu) - 0.5 * b.height());
+        t->setPos((p->first - l.bx2) / l.ax2 - 0.5 * b.width(),
+                  l.mu + l.ttu + l.lu + 0.5 * (l.tu) - 0.5 * b.height());
         ++p;
       }
     }  // end of StandardGraphTheme::printX2Tics
@@ -228,9 +224,8 @@ namespace tfel {
         t->setHtml(p->second);
         t->setFont(g.getGraphFont());
         const auto b = t->boundingRect();
-        t->setPos(
-            s.width - l.mr - l.ttr - l.lr - 0.5 * (l.tr + b.width()),
-            l.ay2 * (p->first) + l.by2 - 0.5 * b.height());
+        t->setPos(s.width - l.mr - l.ttr - l.lr - 0.5 * (l.tr + b.width()),
+                  l.ay2 * (p->first) + l.by2 - 0.5 * b.height());
         ++p;
       }
     }  // end of StandardGraphTheme::printY2Tics
@@ -302,12 +297,14 @@ namespace tfel {
       cr.setBackgroundBrush(brush);
     }  // end of StandardGraphTheme::drawBackGround
 
-    void StandardGraphTheme::drawGraphForeGround(
-        Graph&, const GraphLayout&, const GraphSize&) const {
+    void StandardGraphTheme::drawGraphForeGround(Graph&,
+                                                 const GraphLayout&,
+                                                 const GraphSize&) const {
     }  // end of StandardGraphTheme::drawGraphForeGround
 
-    void StandardGraphTheme::drawGraphBackGround(
-        Graph&, const GraphLayout&, const GraphSize&) const {
+    void StandardGraphTheme::drawGraphBackGround(Graph&,
+                                                 const GraphLayout&,
+                                                 const GraphSize&) const {
     }  // end of StandardGraphTheme::drawGraphBackGround
 
     void StandardGraphTheme::drawXAxis(QGraphicsItem& d,
@@ -381,7 +378,7 @@ namespace tfel {
         const qreal tmax) const {
       auto& cr = g.getScene();
       QPainterPath path;
-      for(const auto& t : tics){
+      for (const auto& t : tics) {
         if ((t.first >= tmin) && (t.first <= tmax)) {
           path.moveTo((t.first - l.bx) / l.ax, s.yh0);
           path.lineTo((t.first - l.bx) / l.ax, s.yh1);
@@ -419,7 +416,7 @@ namespace tfel {
         const qreal tmax) const {
       auto& cr = g.getScene();
       QPainterPath path;
-      for(const auto& t: tics){
+      for (const auto& t : tics) {
         if ((t.first >= tmin) && (t.first <= tmax)) {
           path.moveTo((t.first - l.bx) / l.ax, s.yh0);
           path.lineTo((t.first - l.bx) / l.ax, s.yh0 + 10.);
@@ -440,7 +437,7 @@ namespace tfel {
         const qreal tmax) const {
       auto& cr = g.getScene();
       QPainterPath path;
-      for(const auto& t : tics){
+      for (const auto& t : tics) {
         if ((t.first >= tmin) && (t.first <= tmax)) {
           path.moveTo(s.xh0, l.ay * (t.first) + l.by);
           path.lineTo(s.xh0 + 10, l.ay * (t.first) + l.by);
@@ -451,28 +448,27 @@ namespace tfel {
       cr.addPath(path, pen);
     }  // end of StandardGraphTheme::drawVerticalGridMark
 
-    void StandardGraphTheme::drawGrid(
-        Graph& g,
-        const GraphLayout& l,
-        const GraphSize& s,
-        const bool showGrid,
-        const unsigned short grid,
-        const std::map<qreal, QString>& xtics,
-        const std::map<qreal, QString>& ytics,
-        const std::map<qreal, QString>& x2tics,
-        const std::map<qreal, QString>& y2tics,
-        const qreal xmin,
-        const qreal xmax,
-        const qreal ymin,
-        const qreal ymax,
-        const qreal x2min,
-        const qreal x2max,
-        const qreal y2min,
-        const qreal y2max,
-        const bool x,
-        const bool y,
-        const bool x2,
-        const bool y2) const {
+    void StandardGraphTheme::drawGrid(Graph& g,
+                                      const GraphLayout& l,
+                                      const GraphSize& s,
+                                      const bool showGrid,
+                                      const unsigned short grid,
+                                      const std::map<qreal, QString>& xtics,
+                                      const std::map<qreal, QString>& ytics,
+                                      const std::map<qreal, QString>& x2tics,
+                                      const std::map<qreal, QString>& y2tics,
+                                      const qreal xmin,
+                                      const qreal xmax,
+                                      const qreal ymin,
+                                      const qreal ymax,
+                                      const qreal x2min,
+                                      const qreal x2max,
+                                      const qreal y2min,
+                                      const qreal y2max,
+                                      const bool x,
+                                      const bool y,
+                                      const bool x2,
+                                      const bool y2) const {
       if (showGrid) {
         QPen pen;
         pen.setDashPattern(QVector<qreal>() << 4. << 8.);
@@ -501,22 +497,20 @@ namespace tfel {
         this->drawVerticalGridMark(g, pen, l, s, ytics, ymin, ymax);
       }
       if (x2) {
-        this->drawHorizontalGridMark(g, pen, l, s, x2tics, x2min,
-                                     x2max);
+        this->drawHorizontalGridMark(g, pen, l, s, x2tics, x2min, x2max);
       }
       if (y2) {
         this->drawVerticalGridMark(g, pen, l, s, y2tics, y2min, y2max);
       }
     }  // end of StandardGraphTheme::drawGrid
 
-    void StandardGraphTheme::fillQPainterPath(
-        QPainterPath& path,
-        const Curve& curve,
-        const std::vector<Point>& pts,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by) const {
+    void StandardGraphTheme::fillQPainterPath(QPainterPath& path,
+                                              const Curve& curve,
+                                              const std::vector<Point>& pts,
+                                              const qreal ax,
+                                              const qreal bx,
+                                              const qreal ay,
+                                              const qreal by) const {
       const qreal w = curve.getWidth();
       const qreal w2 = w * w;
       bool found;
@@ -582,17 +576,16 @@ namespace tfel {
       }
     }  // end of StandardGraphTheme::fillQPainterPath
 
-    void StandardGraphTheme::drawCurveWithLines(
-        Graph& g,
-        QGraphicsItem& d,
-        Curve* const curve,
-        const std::vector<Point>& pts,
-        const QColor& c,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by,
-        const Qt::PenStyle s) const {
+    void StandardGraphTheme::drawCurveWithLines(Graph& g,
+                                                QGraphicsItem& d,
+                                                Curve* const curve,
+                                                const std::vector<Point>& pts,
+                                                const QColor& c,
+                                                const qreal ax,
+                                                const qreal bx,
+                                                const qreal ay,
+                                                const qreal by,
+                                                const Qt::PenStyle s) const {
       QPainterPath path;
       this->fillQPainterPath(path, *curve, pts, ax, bx, ay, by);
       const qreal w = curve->getWidth();
@@ -610,16 +603,15 @@ namespace tfel {
       }
     }  // end of StandardGraphTheme::drawCurveWithLines
 
-    void StandardGraphTheme::drawCurveWithSquares(
-        Graph& g,
-        QGraphicsItem& d,
-        Curve* const curve,
-        const std::vector<Point>& pts,
-        const QColor& c,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by) const {
+    void StandardGraphTheme::drawCurveWithSquares(Graph& g,
+                                                  QGraphicsItem& d,
+                                                  Curve* const curve,
+                                                  const std::vector<Point>& pts,
+                                                  const QColor& c,
+                                                  const qreal ax,
+                                                  const qreal bx,
+                                                  const qreal ay,
+                                                  const qreal by) const {
       const qreal w = curve->getWidth();
       const auto& pen = QPen(c);
       const auto& brush = QBrush(c);
@@ -712,16 +704,15 @@ namespace tfel {
       pi->setBrush(QBrush(c));
     }  // end of StandardGraphTheme::drawCurveWithDiamonds
 
-    void StandardGraphTheme::drawCurveWithCrosses(
-        Graph& g,
-        QGraphicsItem& d,
-        Curve* const curve,
-        const std::vector<Point>& pts,
-        const QColor& c,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by) const {
+    void StandardGraphTheme::drawCurveWithCrosses(Graph& g,
+                                                  QGraphicsItem& d,
+                                                  Curve* const curve,
+                                                  const std::vector<Point>& pts,
+                                                  const QColor& c,
+                                                  const qreal ax,
+                                                  const qreal bx,
+                                                  const qreal ay,
+                                                  const qreal by) const {
       const qreal w = curve->getWidth();
       const qreal extent = 3u * w;
       if (pts.empty()) {
@@ -748,16 +739,15 @@ namespace tfel {
       pi->setBrush(QBrush(c));
     }  // end of StandardGraphTheme::drawCurveWithCrosses
 
-    void StandardGraphTheme::drawCurveWithDots(
-        Graph& g,
-        QGraphicsItem& d,
-        Curve* const curve,
-        const std::vector<Point>& pts,
-        const QColor& c,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by) const {
+    void StandardGraphTheme::drawCurveWithDots(Graph& g,
+                                               QGraphicsItem& d,
+                                               Curve* const curve,
+                                               const std::vector<Point>& pts,
+                                               const QColor& c,
+                                               const qreal ax,
+                                               const qreal bx,
+                                               const qreal ay,
+                                               const qreal by) const {
       const qreal w = curve->getWidth();
       const qreal extent = 5u * w;
       QPainterPath path;
@@ -766,12 +756,10 @@ namespace tfel {
       }
       auto p = pts.begin();
       while (p != pts.end()) {
-        if (!(isInvalidValidQReal(p->x) ||
-              (isInvalidValidQReal(p->y)))) {
+        if (!(isInvalidValidQReal(p->x) || (isInvalidValidQReal(p->y)))) {
           const qreal x0 = (p->x - bx) / ax;
           const qreal x1 = ay * (p->y) + by;
-          path.addEllipse(x0 - 0.5 * extent, x1 - 0.5 * extent, extent,
-                          extent);
+          path.addEllipse(x0 - 0.5 * extent, x1 - 0.5 * extent, extent, extent);
         }
         ++p;
       }
@@ -783,16 +771,15 @@ namespace tfel {
       pi->setBrush(QBrush(c));
     }  // end of StandardGraphTheme::drawCurveWithDots
 
-    void StandardGraphTheme::drawCurveWithPlus(
-        Graph& g,
-        QGraphicsItem& d,
-        Curve* const curve,
-        const std::vector<Point>& pts,
-        const QColor& c,
-        const qreal ax,
-        const qreal bx,
-        const qreal ay,
-        const qreal by) const {
+    void StandardGraphTheme::drawCurveWithPlus(Graph& g,
+                                               QGraphicsItem& d,
+                                               Curve* const curve,
+                                               const std::vector<Point>& pts,
+                                               const QColor& c,
+                                               const qreal ax,
+                                               const qreal bx,
+                                               const qreal ay,
+                                               const qreal by) const {
       const qreal w = curve->getWidth();
       const qreal extent = 3u * w;
       QPainterPath path;
@@ -883,37 +870,33 @@ namespace tfel {
       } else if (style == Curve::PLUS) {
         this->drawCurveWithPlus(g, d, c, pts, color, ax, bx, ay, by);
       } else if (style == Curve::DIAMOND) {
-        this->drawCurveWithDiamonds(g, d, c, pts, color, ax, bx, ay,
-                                    by);
+        this->drawCurveWithDiamonds(g, d, c, pts, color, ax, bx, ay, by);
       } else if (style == Curve::SQUARE) {
         this->drawCurveWithSquares(g, d, c, pts, color, ax, bx, ay, by);
       } else if (style == Curve::TRIANGLE) {
-        this->drawCurveWithTriangles(g, d, c, pts, color, ax, bx, ay,
-                                     by);
+        this->drawCurveWithTriangles(g, d, c, pts, color, ax, bx, ay, by);
       } else {
         this->drawCurveWithCrosses(g, d, c, pts, color, ax, bx, ay, by);
       }
     }  // end of StandardGraphTheme::drawCurves
 
-    void StandardGraphTheme::getDefaultColor(
-        QColor& color, const unsigned short nbr) const {
+    void StandardGraphTheme::getDefaultColor(QColor& color,
+                                             const unsigned short nbr) const {
       const unsigned short index = static_cast<unsigned short>(
-          (nbr == 0)
-              ? 0
-              : (nbr - 1) % (StandardGraphTheme::defaultColorsNumber));
+          (nbr == 0) ? 0
+                     : (nbr - 1) % (StandardGraphTheme::defaultColorsNumber));
       color = QColor(StandardGraphTheme::defaultRedColors[index],
                      StandardGraphTheme::defaultGreenColors[index],
                      StandardGraphTheme::defaultBlueColors[index]);
     }  // end of StandardGraphTheme::getDefaultColor
 
-    void StandardGraphTheme::printKeys(
-        Graph& g,
-        std::vector<Graph::CurveHandler>& curves,
-        const GraphLayout& l,
-        const GraphSize& s,
-        const Graph::KeyHorizontalPosition& hp,
-        const Graph::KeyVerticalPosition& vp,
-        const Graph::KeyAlignment& a) const {
+    void StandardGraphTheme::printKeys(Graph& g,
+                                       std::vector<Graph::CurveHandler>& curves,
+                                       const GraphLayout& l,
+                                       const GraphSize& s,
+                                       const Graph::KeyHorizontalPosition& hp,
+                                       const Graph::KeyVerticalPosition& vp,
+                                       const Graph::KeyAlignment& a) const {
       auto& cr = g.getScene();
       auto* gr = new QGraphicsItemGroup();
       gr->setHandlesChildEvents(false);
@@ -948,16 +931,15 @@ namespace tfel {
           QString key = p->curve->getKey();
           if (!key.isEmpty()) {
             if (p->curve->hasSpecifiedColor()) {
-              auto size =
-                  this->printKey(g, *gr, p->curve.get(), l, s, key,
-                                 style, p->curve->getColor(), a, wa, h);
+              auto size = this->printKey(g, *gr, p->curve.get(), l, s, key,
+                                         style, p->curve->getColor(), a, wa, h);
               if (w <= size.width()) {
                 w = size.width();
               }
               h1 = size.height();
             } else {
-              auto size = this->printKey(g, *gr, p->curve.get(), l, s,
-                                         key, style, a, wa, h, nbr);
+              auto size = this->printKey(g, *gr, p->curve.get(), l, s, key,
+                                         style, a, wa, h, nbr);
               if (w <= size.width()) {
                 w = size.width();
               }
@@ -1024,8 +1006,7 @@ namespace tfel {
           this->getDefaultColor(color, nbr);
         }
       }
-      return this->printKey(g, gr, c, l, s, legend, style, color, a, wa,
-                            h);
+      return this->printKey(g, gr, c, l, s, legend, style, color, a, wa, h);
     }  // end of StandardGraphTheme::printKey
 
     QSize StandardGraphTheme::printKey(Graph& g,
@@ -1044,43 +1025,37 @@ namespace tfel {
       if (a == Graph::ALIGNLEFT) {
         t->setPos(-60. - wa, yh - 0.5 * b.height());
       } else if (a == Graph::ALIGNCENTER) {
-        t->setPos(-60. - 0.5 * wa - 0.5 * b.width(),
-                  yh - 0.5 * b.height());
+        t->setPos(-60. - 0.5 * wa - 0.5 * b.width(), yh - 0.5 * b.height());
       } else if (a == Graph::ALIGNRIGHT) {
         t->setPos(-60. - b.width(), yh - 0.5 * b.height());
       }
-      this->drawCurveKey(
-          gr, color, style, 0, yh,
-          std::min(qreal(c->getWidth()), 0.9 * b.height()));
+      this->drawCurveKey(gr, color, style, 0, yh,
+                         std::min(qreal(c->getWidth()), 0.9 * b.height()));
       return QSize(b.width() + 36, b.height() + 2);
     }  // end of StandardGraphTheme::printKey
 
-    qreal StandardGraphTheme::getXLabelHeight(Graph&,
-                                              const QString& l) const {
+    qreal StandardGraphTheme::getXLabelHeight(Graph&, const QString& l) const {
       QGraphicsTextItem text(l);
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getXLabelHeight;
 
-    qreal StandardGraphTheme::getX2LabelHeight(Graph&,
-                                               const QString& l) const {
+    qreal StandardGraphTheme::getX2LabelHeight(Graph&, const QString& l) const {
       QGraphicsTextItem text(l);
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getX2LabelHeight;
 
-    qreal StandardGraphTheme::getYLabelWidth(Graph&,
-                                             const QString& l) const {
+    qreal StandardGraphTheme::getYLabelWidth(Graph&, const QString& l) const {
       QGraphicsTextItem text(l);
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getYLabelWidth;
 
-    qreal StandardGraphTheme::getY2LabelWidth(Graph&,
-                                              const QString& l) const {
+    qreal StandardGraphTheme::getY2LabelWidth(Graph&, const QString& l) const {
       QGraphicsTextItem text(l);
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getY2LabelWidth;
 
-    qreal StandardGraphTheme::getDownTitleHeight(
-        Graph&, const QString& l) const {
+    qreal StandardGraphTheme::getDownTitleHeight(Graph&,
+                                                 const QString& l) const {
       if (l.size() == 0) {
         return 0;
       }
@@ -1089,8 +1064,8 @@ namespace tfel {
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getDownTitleHeight;
 
-    qreal StandardGraphTheme::getUpperTitleHeight(
-        Graph&, const QString& l) const {
+    qreal StandardGraphTheme::getUpperTitleHeight(Graph&,
+                                                  const QString& l) const {
       if (l.size() == 0) {
         return 0;
       }
@@ -1099,8 +1074,8 @@ namespace tfel {
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getUpperTitleHeight;
 
-    qreal StandardGraphTheme::getLeftTitleWidth(
-        Graph&, const QString& l) const {
+    qreal StandardGraphTheme::getLeftTitleWidth(Graph&,
+                                                const QString& l) const {
       if (l.size() == 0) {
         return 0;
       }
@@ -1109,8 +1084,8 @@ namespace tfel {
       return text.boundingRect().height() + 4;
     }  // end of StandardGraphTheme::getLeftTitleWidth;
 
-    qreal StandardGraphTheme::getRightTitleWidth(
-        Graph&, const QString& l) const {
+    qreal StandardGraphTheme::getRightTitleWidth(Graph&,
+                                                 const QString& l) const {
       if (l.size() == 0) {
         return 0;
       }
@@ -1131,8 +1106,7 @@ namespace tfel {
       QPen pen(c);
       if ((style == Curve::SOLIDLINE) || (style == Curve::DOTLINE) ||
           (style == Curve::DASHLINE) || (style == Curve::DASHDOTLINE) ||
-          (style == Curve::DASHDOTDOTLINE) ||
-          (style == Curve::LINEPLUS)) {
+          (style == Curve::DASHDOTDOTLINE) || (style == Curve::LINEPLUS)) {
         if (style == Curve::DOTLINE) {
           pen.setStyle(Qt::DotLine);
         } else if (style == Curve::DASHLINE) {
@@ -1153,8 +1127,7 @@ namespace tfel {
         const QBrush brush(c);
         auto pi = new QGraphicsEllipseItem(&gr);
         pen.setWidth(we / 2);
-        pi->setRect(xh - 20 - radius, yh - radius, 2 * radius,
-                    2 * radius);
+        pi->setRect(xh - 20 - radius, yh - radius, 2 * radius, 2 * radius);
         pi->setPen(pen);
         pi->setBrush(brush);
       } else if ((style == Curve::PLUS) || (style == Curve::LINEPLUS)) {
@@ -1241,8 +1214,7 @@ namespace tfel {
       cr.addLine(x0, y0, x1, y1, pen);
     }  // end of StandardGraphTheme::drawArrow
 
-    void StandardGraphTheme::drawRubberBand(Graph& g,
-                                            const QRectF& r) const {
+    void StandardGraphTheme::drawRubberBand(Graph& g, const QRectF& r) const {
       auto& cr = g.getScene();
       QPen p;
       p.setColor(Qt::black);
