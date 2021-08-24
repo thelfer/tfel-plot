@@ -14,8 +14,8 @@
 #include "TFEL/Math/Parser/KrigedFunction.hxx"
 #include "TFEL/Math/Parser/ExternalFunctionManager.hxx"
 #include "TFEL/Math/LevenbergMarquardt.hxx"
-#include "TFEL/Math/LevenbergMarquardt/LevenbergMarquardtFunctionWrapper.hxx"
-#include "TFEL/Math/LevenbergMarquardt/LevenbergMarquardtExternalFunctionWrapper.hxx"
+#include "TFEL/Math/Minimization/LevenbergMarquardtFunctionWrapper.hxx"
+#include "TFEL/Math/Parser/LevenbergMarquardtExternalFunctionWrapper.hxx"
 #include "TFEL/Plot/TextDataReader.hxx"
 #include "TFEL/Plot/GnuplotFitInterpreter.hxx"
 
