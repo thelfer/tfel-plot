@@ -26,7 +26,7 @@ namespace tfel {
           return false;
         } catch (...) {
           //	  QMessageBox::critical(this,"TPlotApplication","unknown
-          //exception");
+          // exception");
           abort();
         }
       }
