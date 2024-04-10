@@ -64,10 +64,10 @@ namespace tfel {
       while (((p != pe)) && (p->value == ",")) {
         ++p;
         CxxTokenizer::checkNotEndOfLine(m, "expected variable name", p, pe);
-        const auto v = tfel::unicode::getMangledString(p->value);
-        tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(v),
-                       p->value + " is not a valid variable name.");
-        vars.push_back(p->value);
+        const auto vn = tfel::unicode::getMangledString(p->value);
+        tfel::raise_if(!GnuplotInterpreterBase::isValidIdentifier(vn),
+                       "'" + vn + "' is not a valid variable name.");
+        vars.push_back(vn);
         ++p;
         throw_if(b && (p == pe), "unexpected end of line");
       }  // p!=pe
