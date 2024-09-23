@@ -55,10 +55,11 @@ target_link_libraries(TFELPlot
   TFELSystem
   TFELUnicodeSupport
   TFELException
-  Qt5::Widgets
-  Qt5::Svg
-  Qt5::PrintSupport
-  Qt5::Xml)
+  Qt6::Widgets
+  Qt6::Svg
+  Qt6::SvgWidgets
+  Qt6::PrintSupport
+  Qt6::Xml)
 
 qt_sources(TFELGnuplotInterpreter_SOURCES  
   "${PROJECT_SOURCE_DIR}/include/TFEL/Plot"

@@ -24,8 +24,8 @@ tfel_plot_executable(tplot-gui
 if(TPLOT_ENABLE_CLI)
   target_link_libraries(tplot 
     ${READLINE_LIBRARY}
-    Qt5::Core
-    Qt5::Network)
+    Qt6::Core
+    Qt6::Network)
   target_link_libraries(tplot-gui
     TFELGnuplotInterpreter
     TFELPlot
@@ -34,13 +34,13 @@ if(TPLOT_ENABLE_CLI)
     TFELUtilities
     TFELSystem
     TFELException
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Network
-    Qt5::PrintSupport)
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Network
+    Qt6::PrintSupport)
 else(TPLOT_ENABLE_CLI)
   target_link_libraries(tplot 
-    Qt5::Core)
+    Qt6::Core)
   target_link_libraries(tplot-gui
     TFELGnuplotInterpreter
     TFELPlot
@@ -49,7 +49,7 @@ else(TPLOT_ENABLE_CLI)
     TFELUtilities
     TFELSystem
     TFELException
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::PrintSupport)
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::PrintSupport)
 endif(TPLOT_ENABLE_CLI)

@@ -7,9 +7,8 @@
 
 #include <QtCore/QtDebug>
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QGraphicsSceneContextMenuEvent>
-
+#include <QtGui/QAction>
 #include "TFEL/Plot/Graph.hxx"
 #include "TFEL/Plot/Curve.hxx"
 #include "TFEL/Plot/CurveConfigurationDialog.hxx"

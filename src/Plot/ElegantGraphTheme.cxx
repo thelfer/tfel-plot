@@ -9,7 +9,7 @@
 #include <cstdlib>
 
 #include <QtWidgets/QGraphicsTextItem>
-#include <QtSvg/QGraphicsSvgItem>
+#include <QtSvgWidgets/QGraphicsSvgItem>
 
 #include "TFEL/Plot/ThemeManager.hxx"
 #include "TFEL/Plot/GraphTextItem.hxx"

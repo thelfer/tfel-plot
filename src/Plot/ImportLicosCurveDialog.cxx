@@ -30,7 +30,7 @@ namespace tfel {
       k.push_back("time");
       ++p;
       while (p != pe) {
-        const auto& tokens = p->split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        const auto& tokens = p->split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
         if (tokens.size() < 3) {
           return k;
         }

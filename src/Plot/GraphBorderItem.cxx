@@ -7,7 +7,7 @@
 
 #include <QtCore/QtDebug>
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QAction>
+#include <QtGui/QAction>
 #include <QtWidgets/QGraphicsSceneContextMenuEvent>
 
 #include "TFEL/Plot/GraphBorderItem.hxx"

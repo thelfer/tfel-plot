@@ -17,11 +17,11 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QtAlgorithms>
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QGraphicsSceneContextMenuEvent>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QGraphicsItem>
 #include <QtPrintSupport/QPrinter>
+#include <QtGui/QAction>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QResizeEvent>
 #include <QtSvg/QSvgGenerator>
@@ -1047,9 +1047,10 @@ namespace tfel {
       printer.setOutputFormat(QPrinter::PdfFormat);
       printer.setOutputFileName(file);
       //      printer.setPaperSize(QPrinter::Custom);
-      printer.setPaperSize(this->scene->sceneRect().size().toSize(),
-                           QPrinter::Point);
-      printer.setPageMargins(0, 0, 0, 0, QPrinter::Point);
+#pragma "warning"
+      // printer.setPageSize(this->scene->sceneRect().size().toSize(),
+      // 			  QPrinter::Point);
+      //      printer.setPageMargins(0, 0, 0, 0, QPrinter::Point);
       QPainter painter(&printer);
       this->scene->render(&painter);
     }  // end of Graph::print

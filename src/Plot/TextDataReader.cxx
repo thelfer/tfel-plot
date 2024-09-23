@@ -9,7 +9,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <QtCore/QFile>
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 #include <QtCore/QTextStream>
 #include "TFEL/Raise.hxx"
 #include "TFEL/Plot/TextDataReader.hxx"
@@ -37,10 +37,10 @@ namespace tfel {
     void TextDataReader::extractData(QTextStream& in) {
       auto splitLine = [this](const QString& line) {
         if (this->separator.isEmpty()) {
-          return line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+          return line.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
         }
-        return line.split(QRegExp("\\s?" + this->separator + "\\s?"),
-                          QString::SkipEmptyParts);
+        return line.split(QRegularExpression("\\s?" + this->separator + "\\s?"),
+                          Qt::SkipEmptyParts);
       };
       this->lines.clear();
       this->legends.clear();

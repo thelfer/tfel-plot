@@ -6,13 +6,11 @@
  */
 
 #include <QtCore/QtDebug>
-
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QGraphicsSceneContextMenuEvent>
+#include <QtGui/QAction>
 #include <QtGui/QFocusEvent>
 #include <QtGui/QTextDocument>
-
 #include "TFEL/Plot/Graph.hxx"
 #include "TFEL/Plot/GraphTextItem.hxx"
 

@@ -7,11 +7,11 @@
 
 #include <QtCore/QtDebug>
 #include <QtCore/QMimeData>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QShortcut>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
+#include <QtGui/QAction>
+#include <QtGui/QShortcut>
 #include <QtGui/QKeySequence>
 #include <QtGui/QTextBlock>
 #include <QtGui/QClipboard>
@@ -159,7 +159,7 @@ namespace tfel {
 
     void GraphShell::insertFromMimeData(const QMimeData* m) {
       if (m->hasText()) {
-        const auto slist = m->text().split("\n", QString::SkipEmptyParts);
+        const auto slist = m->text().split("\n", Qt::SkipEmptyParts);
         QString line;
         for (const auto& l : slist) {
           line += l;

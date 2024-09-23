@@ -8,7 +8,7 @@
 
 #include <QtCore/QDebug>
 #include <QtWidgets/QGraphicsTextItem>
-#include <QtSvg/QGraphicsSvgItem>
+#include <QtSvgWidgets/QGraphicsSvgItem>
 #include <QtSvg/QSvgRenderer>
 
 #include "TFEL/Plot/ThemeManager.hxx"

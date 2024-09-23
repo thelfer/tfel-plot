@@ -12,9 +12,6 @@
 #include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtCore/QBuffer>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextDecoder>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QFileDialog>
@@ -26,6 +23,7 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QApplication>
 #include <QtPrintSupport/QPrintDialog>
+#include <QtGui/QAction>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QClipboard>
 #include <QtGui/QImageReader>
@@ -1056,11 +1054,12 @@ namespace tfel {
         o.hasColor = true;
         o.color = Qt::yellow;
       } else {
-        QRegExp expr("rgb:(\\d+):(\\d+):(\\d+)");
-        if (expr.exactMatch(color)) {
-          const auto c_r = expr.cap(1);
-          const auto c_g = expr.cap(2);
-          const auto c_b = expr.cap(3);
+        QRegularExpression expr(QRegularExpression::anchoredPattern("rgb:(\\d+):(\\d+):(\\d+)"));
+	const auto m = expr.match(color);
+        if (m.hasMatch()) {
+          const auto c_r = m.captured(1);
+          const auto c_g = m.captured(2);
+          const auto c_b = m.captured(3);
           o.hasColor = true;
           o.color = QColor(c_r.toInt(), c_g.toInt(), c_b.toInt());
         } else {
