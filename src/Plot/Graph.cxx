@@ -1047,9 +1047,9 @@ namespace tfel {
       printer.setOutputFormat(QPrinter::PdfFormat);
       printer.setOutputFileName(file);
       //      printer.setPaperSize(QPrinter::Custom);
-#pragma "warning"
-      // printer.setPageSize(this->scene->sceneRect().size().toSize(),
-      // 			  QPrinter::Point);
+      const auto paperSize =
+          QPageSize(this->scene->sceneRect().size().toSize(), QPageSize::Point);
+      printer.setPageSize(paperSize);
       //      printer.setPageMargins(0, 0, 0, 0, QPrinter::Point);
       QPainter painter(&printer);
       this->scene->render(&painter);
