@@ -31,13 +31,13 @@ namespace tfel {
       char szBuffer[512];
       DWORD dwBufferSize = sizeof(szBuffer);
       LONG nError;
-      LONG lRes = RegOpenKeyEx(HKEY_CLASSES_ROOT, "TFELPLOTHOME-" VERSION, 0,
+      LONG lRes = RegOpenKeyEx(HKEY_CLASSES_ROOT, L"TFELPLOTHOME-" VERSION, 0,
                                KEY_READ, &hKey);
       if (ERROR_SUCCESS != lRes) {
         return false;
       }
       nError =
-          RegQueryValueEx(hKey, "", nullptr, nullptr,
+          RegQueryValueEx(hKey, L"", nullptr, nullptr,
                           reinterpret_cast<LPBYTE>(szBuffer), &dwBufferSize);
       RegCloseKey(hKey);
       if (ERROR_SUCCESS == nError) {
