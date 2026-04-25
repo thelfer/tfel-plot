@@ -1,9 +1,15 @@
 # find the tfel library
-if(TFEL_INSTALL_PATH)
-  set(TFELHOME "${TFEL_INSTALL_PATH}")
-else(TFEL_INSTALL_PATH)
-  set(TFELHOME $ENV{TFELHOME})
-endif(TFEL_INSTALL_PATH)
+if(TFEL_DIR)
+    set(TFELHOME "${TFEL_DIR}")
+else(TFEL_DIR)
+  if(TFEL_INSTALL_PATH)
+    set(TFELHOME "${TFEL_INSTALL_PATH}")
+  else(TFEL_INSTALL_PATH)
+    if(DEFINED ENV{TFELHOME})
+       set(TFELHOME $ENV{TFELHOME})
+    endif()
+  endif(TFEL_INSTALL_PATH)
+endif(TFEL_DIR)
 
 if(LIB_SUFFIX)
   add_definitions("-DLIB_SUFFIX=\\\"\"${LIB_SUFFIX}\"\\\"")
@@ -30,12 +36,7 @@ EXECUTE_PROCESS(COMMAND ${TFEL_CONFIG} "--library-path"
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 macro(find_tfel_library name)
-  find_library(${name}
-    NAMES ${name}
-    HINTS ${TFEL_LIBRARY_PATH})
-  if(NOT ${name})
-    MESSAGE(FATAL_ERROR "${name} library not found")
-  endif(NOT ${name})
+  find_package(${name} REQUIRED HINTS "${TFELHOME}/share/tfel/cmake")
 endmacro(find_tfel_library name)
 
 find_tfel_library(TFELTests)
