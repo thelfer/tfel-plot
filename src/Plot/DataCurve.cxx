@@ -11,6 +11,7 @@
 #include <cassert>
 #include <iterator>
 #include <algorithm>
+#include <limits>
 #include <stdexcept>
 
 #include <QtCore/QtDebug>
@@ -86,10 +87,16 @@ namespace tfel {
     }  // end of DataCurve::hasRange
 
     qreal DataCurve::minRange() const {
+      if (this->xvalues.empty()) {
+        return std::numeric_limits<qreal>::quiet_NaN();
+      }
       return *(std::min_element(this->xvalues.begin(), this->xvalues.end()));
     }  // end of DataCurve::minRange
 
     qreal DataCurve::maxRange() const {
+      if (this->xvalues.empty()) {
+        return std::numeric_limits<qreal>::quiet_NaN();
+      }
       return *(std::max_element(this->xvalues.begin(), this->xvalues.end()));
     }  // end of DataCurve::maxRange
 
