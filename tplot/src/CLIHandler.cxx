@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <cstring>
+#include <stdexcept>
+#include <QtCore/QtDebug>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "TFEL/Plot/CLIHandler.hxx"
@@ -18,8 +20,21 @@ namespace tfel {
     CLIHandler::CLIHandler(const QString& fout, QObject* p) : QObject(p) {
       this->sout = new QLocalServer(this);
       this->sout->listen(fout);
-      this->sout->waitForNewConnection(-1);
+      if (!this->sout->waitForNewConnection(-1)) {
+        throw(
+            std::runtime_error("CLIHandler::CLIHandler: "
+                               "can't connect to the GUI through socket "
+                               "'" +
+                               fout.toStdString() + "'"));
+      }
       this->out = this->sout->nextPendingConnection();
+      if (this->out == nullptr) {
+        throw(
+            std::runtime_error("CLIHandler::CLIHandler: "
+                               "no pending connection on socket "
+                               "'" +
+                               fout.toStdString() + "'"));
+      }
       QObject::connect(this->out, &QLocalSocket::disconnected, this,
                        &CLIHandler::socketDisconnected);
     }  // end of CLIHandler::CLIHandler
