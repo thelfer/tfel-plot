@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
+#include <memory>
 #include <stdexcept>
 #include <QtCore/QtDebug>
 #include <readline/readline.h>
@@ -61,12 +63,16 @@ namespace tfel {
           r.chop(1);
           return r;
         };
-        auto l = readline("tplot> ");
+        // the buffer returned by readline is allocated with malloc:
+        // own it in a unique_ptr so that it is released on every
+        // exit path of the loop
+        using LineDeleter = void (*)(void*);
+        std::unique_ptr<char, LineDeleter> l{readline("tplot> "), std::free};
         if (l == nullptr) {
           emit finished();
           return;
         }
-        const auto l2 = std::string(l) + '\n';
+        const auto l2 = std::string(l.get()) + '\n';
         this->out->write(l2.c_str());
         this->out->waitForBytesWritten();
         const auto s = read();
@@ -87,8 +93,7 @@ namespace tfel {
         if (!e.isEmpty()) {
           std::cout << e.toStdString() << std::endl;
         }
-        add_history(l);
-        std::free(l);
+        add_history(l.get());
       }
     }  // end of CLIHandler::process()
 
