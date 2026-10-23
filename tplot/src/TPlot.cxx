@@ -806,12 +806,13 @@ namespace tfel {
       } else {
         write("0");
       }
-      QMessageBox msgBox;
-      msgBox.exec();
+      // note: the command outputs used to be sent between three modal
+      // empty QMessageBox::exec() calls, which blocked the command
+      // loop until each dialog was manually closed (leftover debug
+      // code). The command/output/error triple is now sent directly:
+      // the CLI handler waits on each line.
       write(r.output);
-      msgBox.exec();
       write(r.error);
-      msgBox.exec();
       if (r.status == GnuplotInterpreter::ParsingResult::QUIT) {
         this->out->waitForReadyRead();
         this->in->readLine();

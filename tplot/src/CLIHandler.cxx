@@ -42,23 +42,43 @@ namespace tfel {
     }  // end of CLIHandler::CLIHandler
 
     void CLIHandler::connect(const QString& fin) {
+      // the GUI process is started before it listens to its output
+      // socket: the connection attempt can be refused. Retry until
+      // the socket becomes available (the GUI is considered unreachable
+      // after a few seconds).
       this->in = new QLocalSocket(this);
-      this->in->connectToServer(fin, QIODevice::ReadOnly);
-      if (this->in->state() != QLocalSocket::ConnectedState) {
+      bool connected = false;
+      for (int count = 0; (count != 50) && (!connected); ++count) {
+        this->in->connectToServer(fin, QIODevice::ReadOnly);
+        connected = this->in->waitForConnected(100);
+        if (!connected) {
+          this->in->abort();
+        }
+      }
+      if (!connected) {
         throw(
             std::runtime_error("CLIHandler::connect: "
                                "can't connect to socket "
                                "'" +
                                fin.toStdString() + "'"));
       }
-    }
+    }  // end of CLIHandler::connect
 
     void CLIHandler::socketDisconnected() { emit finished(); }
 
     void CLIHandler::process() {
       while (true) {
         auto read = [this]() {
-          this->in->waitForReadyRead();
+          // the status, output and error lines may be sent by the GUI
+          // in a single packet: only wait for new data when no complete
+          // line is buffered, as waitForReadyRead() waits for new data
+          // and would otherwise time out while the requested line is
+          // already available
+          while (!this->in->canReadLine()) {
+            if (!this->in->waitForReadyRead()) {
+              break;
+            }
+          }
           auto r = QString::fromLatin1(this->in->readLine());
           r.chop(1);
           return r;
