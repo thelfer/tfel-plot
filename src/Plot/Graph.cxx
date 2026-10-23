@@ -900,6 +900,9 @@ namespace tfel {
 
     QByteArray Graph::exportToSVG() {
       QBuffer b;
+      // a default constructed QBuffer is closed: the SVG generator
+      // would silently write nothing if the buffer was not opened
+      b.open(QIODevice::WriteOnly);
       if (this->cursorPosition != nullptr) {
         this->scene->removeItem(this->cursorPosition);
         delete this->cursorPosition;
@@ -914,6 +917,7 @@ namespace tfel {
       painter.setRenderHint(QPainter::Antialiasing);
       this->scene->render(&painter);
       painter.end();
+      b.close();
       return b.buffer();
     }
 
