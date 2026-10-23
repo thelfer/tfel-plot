@@ -9,7 +9,6 @@
 #include <QtCore/QDebug>
 #include <QtWidgets/QGraphicsTextItem>
 #include <QtSvgWidgets/QGraphicsSvgItem>
-#include <QtSvg/QSvgRenderer>
 
 #include "TFEL/Plot/ThemeManager.hxx"
 #include "TFEL/Plot/GraphTextItem.hxx"
@@ -56,9 +55,11 @@ namespace tfel {
         auto& cr = g.getScene();
         // upper banner
         QGraphicsSvgItem* i;
-        i = new QGraphicsSvgItem();
-        QSvgRenderer* r = new QSvgRenderer(QString(":/CEABanner2012.svg"));
-        i->setSharedRenderer(r);
+        // the QGraphicsSvgItem constructor loading the file from a
+        // resource creates and owns its QSvgRenderer. setSharedRenderer
+        // does not take ownership of the renderer, which used to leak
+        // a QSvgRenderer on every replot.
+        i = new QGraphicsSvgItem(":/CEABanner2012.svg");
         QRectF ir = i->boundingRect();
         qreal sv;
         qreal sh;
