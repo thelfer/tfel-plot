@@ -268,6 +268,19 @@ namespace tfel {
             this->getValues(this->xvalues, data, this->cx);
           }
         }
+        // the x-data and y-data are loaded independently (one may come
+        // from a column, the other from an evaluated function): check
+        // that their sizes match to avoid out-of-bounds reads when the
+        // values are used (see DataCurve::getValues)
+        const auto n = std::min(this->xvalues.size(), this->yvalues.size());
+        if (n != this->xvalues.size()) {
+          qDebug() << "DataCurve::executeDelayedDataLoading : "
+                   << "the number of x-values (" << this->xvalues.size()
+                   << ") does not match the number of y-values ("
+                   << this->yvalues.size() << ")";
+        }
+        this->xvalues.resize(n);
+        this->yvalues.resize(n);
       } catch (std::exception& e) {
         qDebug() << "DataCurve::executeDelayedDataLoading : " << e.what();
         this->xvalues.clear();
