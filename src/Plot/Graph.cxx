@@ -751,7 +751,12 @@ namespace tfel {
                      const unsigned short pheight) {
       using namespace std;
 
-      qDeleteAll(this->scene->items());
+      // QGraphicsScene::items() also returns child items, which are
+      // already deleted by their parent item. Using qDeleteAll on
+      // this list would delete those items twice (double free).
+      // QGraphicsScene::clear() removes and deletes all the items of
+      // the scene exactly once.
+      this->scene->clear();
       this->cursorPosition = nullptr;
 
       GraphSize s;
