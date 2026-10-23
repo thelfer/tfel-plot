@@ -37,6 +37,10 @@ namespace tfel {
     }  // end of ThemeManager::getTheme
 
     void ThemeManager::addTheme(const ThemeProxy* const proxy) {
+      // the proxy is owned by this object: it must be wrapped in a
+      // shared_ptr before the duplicate name check is performed,
+      // otherwise it leaks when the check throws
+      std::shared_ptr<const ThemeProxy> p2(proxy);
       const auto& name = proxy->getName();
       const auto p = this->proxies.find(name);
       if (p != this->proxies.end()) {
@@ -45,7 +49,7 @@ namespace tfel {
             "'" +
             name.toStdString() + "' has already been registred.");
       }
-      this->proxies.insert({name, std::shared_ptr<const ThemeProxy>(proxy)});
+      this->proxies.insert({name, std::move(p2)});
     }  // end of ThemeManager::getTheme
 
     QStringList ThemeManager::getAvailableThemesNames() const {
