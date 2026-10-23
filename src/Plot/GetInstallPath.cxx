@@ -30,6 +30,7 @@ namespace tfel {
       HKEY hKey;
       char szBuffer[512];
       DWORD dwBufferSize = sizeof(szBuffer);
+      DWORD dwType = REG_NONE;
       LONG nError;
       LONG lRes = RegOpenKeyEx(HKEY_CLASSES_ROOT, L"TFELPLOTHOME-" VERSION, 0,
                                KEY_READ, &hKey);
@@ -37,10 +38,18 @@ namespace tfel {
         return false;
       }
       nError =
-          RegQueryValueEx(hKey, L"", nullptr, nullptr,
+          RegQueryValueEx(hKey, L"", nullptr, &dwType,
                           reinterpret_cast<LPBYTE>(szBuffer), &dwBufferSize);
       RegCloseKey(hKey);
       if (ERROR_SUCCESS == nError) {
+        if (dwType != REG_SZ) {
+          return false;
+        }
+        // RegQueryValueEx does not guarantee the value to be
+        // NUL terminated (for instance if it exactly fills the
+        // buffer): terminate it explicitly before use.
+        const DWORD last = static_cast<DWORD>(sizeof(szBuffer) - 1u);
+        szBuffer[std::min(dwBufferSize, last)] = '\0';
         value = szBuffer;
         return true;
       }
