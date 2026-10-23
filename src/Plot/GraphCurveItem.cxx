@@ -32,6 +32,11 @@ namespace tfel {
     void GraphCurveItem::configure() {
       CurveConfigurationDialog *d;
       d = new CurveConfigurationDialog(this->curve, this->graph);
+      // the curve may be removed from the graph while this modeless
+      // dialog is still shown. As the dialog stores a raw pointer to
+      // the curve, it must be closed as soon as the curve is
+      // destroyed to avoid accessing a dangling pointer.
+      QObject::connect(this->curve, &QObject::destroyed, d, &QDialog::close);
       d->setModal(false);
       d->show();
     }
