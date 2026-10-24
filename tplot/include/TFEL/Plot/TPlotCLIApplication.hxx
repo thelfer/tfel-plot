@@ -16,11 +16,12 @@
 namespace tfel {
   namespace plot {
 
-    class TPlotCLIApplication : QCoreApplication {
+    class TPlotCLIApplication : public QCoreApplication {
       Q_OBJECT
 
      public:
       TPlotCLIApplication(int, char **);
+      ~TPlotCLIApplication() override;
 
      public slots:
 

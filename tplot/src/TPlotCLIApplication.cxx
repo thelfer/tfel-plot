@@ -42,23 +42,35 @@ namespace tfel {
                        &QThread::quit);
       QObject::connect(this->h, &CLIHandler::finished, this->h,
                        &CLIHandler::deleteLater);
-      QObject::connect(this->th, &QTread::finished, this,
-                       TPlotCLIApplication::quit);
+      QObject::connect(this->th, &QThread::finished, this,
+                       &TPlotCLIApplication::quit);
       QObject::connect(this->th, &QThread::finished, this->th,
                        &QThread::deleteLater);
+      // in Qt6, QProcess::finished has a unique two argument signature
       QObject::connect(this->g, &QProcess::finished, this,
-                       &TPlotCLIApplication::exit);
+                       [this](const int exit_code, const QProcess::ExitStatus) {
+                         this->exit(exit_code);
+                       });
       this->th->start();
     }
 
     void TPlotCLIApplication::quit() {
-      QObject::disconnect(this->g, &QProcess::finished, this,
-                          &TPlotCLIApplication::exit);
+      // the connection to QProcess::finished was established with a
+      // lambda: disconnect using a null slot
+      QObject::disconnect(this->g, &QProcess::finished, this, nullptr);
       this->g->waitForFinished();
       QCoreApplication::quit();
     }  // end of TPlotCLIApplication::quit
 
     void TPlotCLIApplication::exit(int s) { QCoreApplication::exit(s); }
+
+    TPlotCLIApplication::~TPlotCLIApplication() {
+      // wait for the GUI process to complete, to avoid the
+      // 'QProcess: Destroyed while process is still running' warning
+      if (this->g->state() != QProcess::NotRunning) {
+        this->g->waitForFinished();
+      }
+    }  // end of TPlotCLIApplication::~TPlotCLIApplication
 
   }  // namespace plot
 }  // namespace tfel
