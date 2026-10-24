@@ -322,7 +322,13 @@ namespace tfel {
         tfel::raise_if(c, "GnuplotInterpreter::treatRePlot: " + m);
       };
       throw_if(this->previousPlot.isEmpty(), "no previous plot");
-      throw_if(p != pe, "unexpected token '" + p->value + "'");
+      // note: the error message can not be built eagerly here: for a
+      // plain 'replot' command, p == pe and dereferencing p would
+      // read past the end of the token sequence.
+      if (p != pe) {
+        tfel::raise("GnuplotInterpreter::treatRePlot: unexpected token '" +
+                    p->value + "'");
+      }
       return this->parseString(this->previousPlot);
     }  // end of GnuplotInterpreter::treatRePlot
 
